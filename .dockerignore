@@ -1,0 +1,35 @@
+# Keep the build context small and stop host artefacts leaking into the image.
+# Anything the image needs is produced inside a build stage, not copied from here.
+.git
+.gitignore
+.github
+.agents
+
+node_modules
+vendor
+
+# Vite output is rebuilt inside the builder stage.
+public/build
+public/hot
+public/storage
+public/fonts-manifest.dev.json
+bootstrap/ssr
+
+# Never bake real secrets into an image.
+.env
+.env.*
+!.env.production.example
+
+# Runtime state belongs in a volume, not in the image.
+storage/logs
+storage/framework/cache
+storage/framework/sessions
+storage/framework/views
+storage/app/public
+
+.phpunit.cache
+.phpunit.result.cache
+.DS_Store
+.idea
+.vscode
+*.md

@@ -1,0 +1,98 @@
+# HeyEvent production stack: app (nginx + PHP-FPM), a queue worker, and MySQL.
+#
+# Always invoke this through ./deploy.sh, which passes
+# `--env-file .env.production`. That flag is what makes the ${DB_*} references
+# below resolve; Compose would otherwise read a `.env` file that does not exist
+# and substitute empty strings into the MySQL credentials.
+
+name: heyevent
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    image: heyevent/app:latest
+    container_name: heyevent-app
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+    ports:
+      - "${APP_PORT:-80}:80"
+    volumes:
+      # Uploads, logs and compiled views. Everything else in the image is
+      # immutable and gets replaced on each deploy.
+      - app-storage:/var/www/html/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+    logging: *default-logging
+
+  # QUEUE_CONNECTION=database, so password-reset and verification mails only go
+  # out while this is running. Without it, those jobs pile up in the jobs table
+  # and nobody is ever reset.
+  queue:
+    image: heyevent/app:latest
+    container_name: heyevent-queue
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+    command:
+      - php
+      - artisan
+      - queue:work
+      - --sleep=3
+      - --tries=3
+      - --max-time=3600
+    volumes:
+      - app-storage:/var/www/html/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+    logging: *default-logging
+
+  mysql:
+    image: mysql:8.4
+    container_name: heyevent-mysql
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      # 128 MB leaves the bulk of a 2 GB instance to PHP, nginx and the OS.
+      - --innodb-buffer-pool-size=128M
+      - --max-connections=60
+      - --skip-name-resolve
+    # No env_file here on purpose: `environment:` below is sufficient, and adding
+    # env_file would inject APP_KEY and the rest of the app secrets into the
+    # database container for no benefit.
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent", "-h", "127.0.0.1", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    logging: *default-logging
+
+volumes:
+  app-storage:
+  db-data:
