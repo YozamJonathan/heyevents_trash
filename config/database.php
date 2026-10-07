@@ -52,7 +52,7 @@ return [
             'database' => env('DB_DATABASE', 'eventManagement'),
             'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock'),
+            'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8mb4'),
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
             'prefix' => '',
