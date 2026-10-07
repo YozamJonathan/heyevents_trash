@@ -19,6 +19,10 @@ const { getInitials } = useInitials();
 const showAvatar = computed(
     () => props.user.avatar && props.user.avatar !== '',
 );
+
+const roleName = computed(() => {
+    return props.user.roles && props.user.roles.length ? props.user.roles[0] : null;
+});
 </script>
 
 <template>
@@ -34,5 +38,8 @@ const showAvatar = computed(
         <span v-if="showEmail" class="text-muted-foreground truncate text-xs">{{
             user.email
         }}</span>
+        <span v-else-if="roleName" class="text-muted-foreground truncate text-[11px]">
+            {{ roleName }}
+        </span>
     </div>
 </template>
