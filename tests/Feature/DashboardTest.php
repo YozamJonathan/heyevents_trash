@@ -14,7 +14,7 @@ test('guests are redirected to the login page when accessing dashboard', functio
 });
 
 test('super admin accesses the unified dashboard', function () {
-    $user = User::where('email', 'superadmin@heyevent.com')->first();
+    $user = User::where('email', 'superadmin@heyevents.com')->first();
     $this->actingAs($user);
 
     $response = $this->get(route('dashboard'));
@@ -26,7 +26,7 @@ test('super admin accesses the unified dashboard', function () {
 });
 
 test('admin accesses the unified dashboard', function () {
-    $user = User::where('email', 'admin@heyevent.com')->first();
+    $user = User::where('email', 'admin@heyevents.com')->first();
     $this->actingAs($user);
 
     $response = $this->get(route('dashboard'));
@@ -38,7 +38,7 @@ test('admin accesses the unified dashboard', function () {
 });
 
 test('service provider accesses the unified dashboard', function () {
-    $user = User::where('email', 'provider@heyevent.com')->first();
+    $user = User::where('email', 'provider@heyevents.com')->first();
     $this->actingAs($user);
 
     $response = $this->get(route('dashboard'));
@@ -50,7 +50,7 @@ test('service provider accesses the unified dashboard', function () {
 });
 
 test('client accesses the unified dashboard', function () {
-    $user = User::where('email', 'client@heyevent.com')->first();
+    $user = User::where('email', 'client@heyevents.com')->first();
     $this->actingAs($user);
 
     $response = $this->get(route('dashboard'));

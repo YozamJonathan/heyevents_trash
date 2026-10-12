@@ -119,22 +119,22 @@ class RolesAndPermissionsSeeder extends Seeder
         $users = [
             [
                 'name' => 'Sarah Connor (Super Admin)',
-                'email' => 'superadmin@heyevent.com',
+                'email' => 'superadmin@heyevents.com',
                 'role' => $superAdminRole,
             ],
             [
                 'name' => 'Marcus Vance (Admin)',
-                'email' => 'admin@heyevent.com',
+                'email' => 'admin@heyevents.com',
                 'role' => $adminRole,
             ],
             [
                 'name' => 'Elena Rostova (Photography & DJ Pro)',
-                'email' => 'provider@heyevent.com',
+                'email' => 'provider@heyevents.com',
                 'role' => $providerRole,
             ],
             [
                 'name' => 'David Kim (Event Organizer & Client)',
-                'email' => 'client@heyevent.com',
+                'email' => 'client@heyevents.com',
                 'role' => $clientRole,
             ],
         ];

@@ -22,10 +22,10 @@ const metrics = [
 ];
 
 const auditLogs = [
-    { action: 'Role Permissions Updated', target: 'Organizer Role', user: 'superadmin@heyevent.com', time: '12 mins ago', status: 'Success' },
+    { action: 'Role Permissions Updated', target: 'Organizer Role', user: 'superadmin@heyevents.com', time: '12 mins ago', status: 'Success' },
     { action: 'Database Backup Completed', target: 'Automated Snapshot #492', user: 'System Worker', time: '1 hour ago', status: 'Success' },
-    { action: 'Admin Privileges Granted', target: 'admin@heyevent.com', user: 'superadmin@heyevent.com', time: '3 hours ago', status: 'Security' },
-    { action: 'API Gateway Rate Limit Adjusted', target: 'Production Cluster', user: 'superadmin@heyevent.com', time: 'Yesterday', status: 'Config' },
+    { action: 'Admin Privileges Granted', target: 'admin@heyevents.com', user: 'superadmin@heyevents.com', time: '3 hours ago', status: 'Security' },
+    { action: 'API Gateway Rate Limit Adjusted', target: 'Production Cluster', user: 'superadmin@heyevents.com', time: 'Yesterday', status: 'Config' },
 ];
 
 const systemServices = [
