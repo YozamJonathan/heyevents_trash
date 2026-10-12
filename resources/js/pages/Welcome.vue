@@ -7,6 +7,7 @@ import LandingHowItWorks from '@/components/landing/LandingHowItWorks.vue';
 import LandingExplore from '@/components/landing/LandingExplore.vue';
 import LandingReviews from '@/components/landing/LandingReviews.vue';
 import LandingFooter from '@/components/landing/LandingFooter.vue';
+import PwaBanner from '@/components/pwa/PwaBanner.vue';
 </script>
 
 <template>
@@ -57,5 +58,8 @@ import LandingFooter from '@/components/landing/LandingFooter.vue';
             <!-- Minimalist Clean Footer -->
             <LandingFooter />
         </div>
+
+        <!-- PWA Status and Install Notification -->
+        <PwaBanner />
     </div>
 </template>

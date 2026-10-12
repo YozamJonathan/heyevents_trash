@@ -37,6 +37,15 @@
         <link rel="alternate icon" href="/favicon-dark.png" type="image/png">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
+        {{-- PWA Manifest and Mobile Configuration --}}
+        <link rel="manifest" href="/manifest.json">
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+        <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="{{ config('app.name', 'HEY Events') }}">
+
         @fonts
 
         @vite(['resources/css/app.css', 'resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
