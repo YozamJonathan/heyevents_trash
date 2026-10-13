@@ -66,20 +66,20 @@ const { activePipelinePhase, pipelinePhases, currentPipeline } = useLandingData(
                             <div v-if="currentPipeline.moduleType === 'budget'" class="rounded-2xl border border-zinc-100 bg-zinc-50 p-5 dark:border-zinc-800 dark:bg-zinc-950">
                                 <div class="flex justify-between text-xs font-bold">
                                     <span>Budget Allocation vs Spend</span>
-                                    <span class="text-emerald-600">$38,400 of $45,000</span>
+                                    <span class="text-emerald-600">TZS 38.4M of 45M</span>
                                 </div>
                                 <div class="mt-3 space-y-2 text-xs">
                                     <div class="flex justify-between rounded-lg bg-white p-2.5 dark:bg-zinc-900">
                                         <span>Venue & Decor</span>
-                                        <span class="font-mono font-bold">$18,000 / $20,000</span>
+                                        <span class="font-mono font-bold">TZS 18M / 20M</span>
                                     </div>
                                     <div class="flex justify-between rounded-lg bg-white p-2.5 dark:bg-zinc-900">
                                         <span>Catering & Drinks</span>
-                                        <span class="font-mono font-bold">$12,400 / $15,000</span>
+                                        <span class="font-mono font-bold">TZS 12.4M / 15M</span>
                                     </div>
                                     <div class="flex justify-between rounded-lg bg-white p-2.5 dark:bg-zinc-900">
                                         <span>Sound & Lighting</span>
-                                        <span class="font-mono font-bold">$8,000 / $10,000</span>
+                                        <span class="font-mono font-bold">TZS 8M / 10M</span>
                                     </div>
                                 </div>
                             </div>
@@ -90,15 +90,15 @@ const { activePipelinePhase, pipelinePhases, currentPipeline } = useLandingData(
                                 <div class="mt-3 space-y-2 text-xs">
                                     <div class="flex items-center justify-between rounded-lg bg-white p-2.5 dark:bg-zinc-900">
                                         <div><strong>Early Bird Pass</strong><p class="text-[10px] text-zinc-400">Sold Out (500/500)</p></div>
-                                        <span class="font-bold text-emerald-600">$25.00</span>
+                                        <span class="font-bold text-emerald-600">TZS 25,000</span>
                                     </div>
                                     <div class="flex items-center justify-between rounded-lg bg-white p-2.5 dark:bg-zinc-900">
                                         <div><strong>Standard Admission</strong><p class="text-[10px] text-zinc-400">Available (1,240 sold)</p></div>
-                                        <span class="font-bold">$40.00</span>
+                                        <span class="font-bold">TZS 40,000</span>
                                     </div>
                                     <div class="flex items-center justify-between rounded-lg bg-white p-2.5 dark:bg-zinc-900">
                                         <div><strong>VIP Table Package</strong><p class="text-[10px] text-zinc-400">Includes Dinner & Valet</p></div>
-                                        <span class="font-bold text-indigo-600">$150.00</span>
+                                        <span class="font-bold text-indigo-600">TZS 150,000</span>
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +127,7 @@ const { activePipelinePhase, pipelinePhases, currentPipeline } = useLandingData(
                                 <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
                                     <div class="rounded-lg bg-white p-3 dark:bg-zinc-900">
                                         <div class="text-[10px] text-zinc-400">Gross Ticket Sales</div>
-                                        <div class="text-base font-bold text-zinc-900 dark:text-white">$64,500</div>
+                                        <div class="text-base font-bold text-zinc-900 dark:text-white">TZS 64.5M</div>
                                     </div>
                                     <div class="rounded-lg bg-white p-3 dark:bg-zinc-900">
                                         <div class="text-[10px] text-zinc-400">Attendance Rate</div>

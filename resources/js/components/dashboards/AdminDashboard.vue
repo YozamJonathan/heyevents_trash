@@ -1,35 +1,40 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import {
     Users,
     CheckCircle,
-    XCircle,
-    AlertCircle,
     Calendar,
     Briefcase,
-    TrendingUp,
     ShieldCheck,
-    ArrowUpRight,
     MessageSquare,
-    Eye,
+    CheckCircle2,
+    Inbox,
 } from '@lucide/vue';
 
-const metrics = [
-    { title: 'Pending Vendor KYC', value: '7 Applications', change: 'Action Needed', icon: ShieldCheck, alert: true },
-    { title: 'Events in Moderation', value: '14 Active', change: '3 flagged', icon: Calendar, alert: false },
-    { title: 'Open Dispute Tickets', value: '2 Pending', change: '-50% this week', icon: AlertCircle, alert: true },
-    { title: 'Monthly Booking GMV', value: '$34,120', change: '+14.5%', icon: TrendingUp, alert: false },
-];
+const props = defineProps<{
+    stats?: {
+        users_count: number;
+        roles_count: number;
+        permissions_count: number;
+    };
+}>();
 
-const pendingVendors = [
-    { name: 'Aurora Sound & Lighting', owner: 'Michael Chen', category: 'Audio/Visual & DJ', submitted: '2 hours ago', kycStatus: 'Documents Uploaded' },
-    { name: 'Grand Royale Catering', owner: 'Chef Isabella', category: 'Catering & Dining', submitted: '5 hours ago', kycStatus: 'Pending Review' },
-    { name: 'Luxe Floral Artistry', owner: 'Amara Okafor', category: 'Floral & Decor', submitted: 'Yesterday', kycStatus: 'Documents Uploaded' },
-];
+const metrics = computed(() => [
+    { title: 'Pending Vendor KYC', value: '0 Pending', change: 'All Clear', icon: ShieldCheck, alert: false },
+    { title: 'Events in Moderation', value: '0 Flagged', change: 'Queue Clear', icon: Calendar, alert: false },
+    { title: 'Open Dispute Tickets', value: '0 Open', change: 'No Conflicts', icon: MessageSquare, alert: false },
+    {
+        title: 'Platform Accounts',
+        value: props.stats?.users_count !== undefined ? `${props.stats.users_count} Users` : '4 Users',
+        change: 'Active',
+        icon: Users,
+        alert: false,
+    },
+]);
 
-const flaggedEvents = [
-    { title: 'Neon Nights Summer Gala 2026', organizer: 'Club Pulse', reason: 'Venue capacity check', date: 'Oct 24, 2026' },
-    { title: 'Global Tech Leadership Expo', organizer: 'Apex Media', reason: 'Pricing clarification', date: 'Nov 12, 2026' },
-];
+// Real items (starts empty)
+const pendingVendors = computed<Array<{ name: string; owner: string; category: string; submitted: string }>>(() => []);
+const flaggedEvents = computed<Array<{ title: string; organizer: string; reason: string; date: string }>>(() => []);
 </script>
 
 <template>
@@ -43,19 +48,13 @@ const flaggedEvents = [
             >
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-medium uppercase tracking-wider text-muted-foreground">{{ metric.title }}</span>
-                    <div
-                        class="rounded-lg p-2"
-                        :class="metric.alert ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400' : 'bg-blue-500/10 text-blue-600 dark:text-blue-400'"
-                    >
+                    <div class="rounded-lg p-2 bg-blue-500/10 text-blue-600 dark:text-blue-400">
                         <component :is="metric.icon" class="size-4" />
                     </div>
                 </div>
                 <div class="mt-3 flex items-baseline gap-2">
                     <span class="text-2xl font-bold tracking-tight text-foreground">{{ metric.value }}</span>
-                    <span
-                        class="inline-flex items-center text-xs font-medium"
-                        :class="metric.alert ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'"
-                    >
+                    <span class="inline-flex items-center text-xs font-medium text-emerald-600 dark:text-emerald-400">
                         {{ metric.change }}
                     </span>
                 </div>
@@ -71,12 +70,24 @@ const flaggedEvents = [
                         <h2 class="text-lg font-semibold text-foreground">Service Provider Verifications (KYC)</h2>
                         <p class="text-xs text-muted-foreground">Approve or reject service provider onboarding applications.</p>
                     </div>
-                    <span class="rounded-full bg-blue-500/10 px-2.5 py-1 text-xs font-semibold text-blue-600 dark:text-blue-400">
-                        3 Awaiting Review
+                    <span class="rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                        0 Awaiting Review
                     </span>
                 </div>
 
-                <div class="mt-4 divide-y divide-border/40">
+                <!-- Empty state when no pending KYC -->
+                <div v-if="pendingVendors.length === 0" class="flex flex-col items-center justify-center py-16 text-center">
+                    <div class="rounded-full bg-blue-500/10 p-3.5 text-blue-600 dark:text-blue-400 mb-3">
+                        <CheckCircle class="size-7" />
+                    </div>
+                    <h3 class="text-sm font-semibold text-foreground">All Provider Applications Reviewed</h3>
+                    <p class="mt-1 text-xs text-muted-foreground max-w-sm">
+                        There are currently no pending vendor KYC verifications. New provider submissions will appear here for review and onboarding.
+                    </p>
+                </div>
+
+                <!-- Populated list if vendors present -->
+                <div v-else class="mt-4 divide-y divide-border/40">
                     <div
                         v-for="(vendor, idx) in pendingVendors"
                         :key="idx"
@@ -91,25 +102,7 @@ const flaggedEvents = [
                                 Owner: <span class="text-foreground">{{ vendor.owner }}</span> • Applied {{ vendor.submitted }}
                             </p>
                         </div>
-
-                        <div class="flex items-center gap-2">
-                            <button class="inline-flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-muted">
-                                <Eye class="size-3.5" /> Review Files
-                            </button>
-                            <button class="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-emerald-700">
-                                <CheckCircle class="size-3.5" /> Approve
-                            </button>
-                            <button class="inline-flex items-center gap-1 rounded-lg border border-rose-500/30 bg-rose-500/10 px-2 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-500/20 dark:text-rose-400">
-                                <XCircle class="size-3.5" />
-                            </button>
-                        </div>
                     </div>
-                </div>
-
-                <div class="mt-4 border-t border-border/50 pt-4 flex justify-end">
-                    <button class="text-xs font-medium text-primary hover:underline">
-                        View all 7 verification requests &rarr;
-                    </button>
                 </div>
             </div>
 
@@ -124,7 +117,19 @@ const flaggedEvents = [
                         <Calendar class="size-4 text-blue-600 dark:text-blue-400" />
                     </div>
 
-                    <div class="mt-4 space-y-3">
+                    <!-- Empty state when no flagged events -->
+                    <div v-if="flaggedEvents.length === 0" class="flex flex-col items-center justify-center py-10 text-center">
+                        <div class="rounded-full bg-emerald-500/10 p-2.5 text-emerald-600 dark:text-emerald-400 mb-2.5">
+                            <CheckCircle2 class="size-5" />
+                        </div>
+                        <h4 class="text-xs font-semibold text-foreground">Moderation Queue Clear</h4>
+                        <p class="mt-0.5 text-[11px] text-muted-foreground max-w-[200px]">
+                            No community flags or listings requiring review.
+                        </p>
+                    </div>
+
+                    <!-- Populated list if flagged events present -->
+                    <div v-else class="mt-4 space-y-3">
                         <div
                             v-for="(ev, idx) in flaggedEvents"
                             :key="idx"
@@ -137,27 +142,20 @@ const flaggedEvents = [
                             <p class="mt-1 text-[11px] text-amber-600 dark:text-amber-400 font-medium">
                                 Reason: {{ ev.reason }}
                             </p>
-                            <div class="mt-2 flex items-center justify-end gap-2">
-                                <button class="text-[11px] font-medium text-primary hover:underline">Approve</button>
-                                <button class="text-[11px] font-medium text-rose-600 hover:underline">Inquire</button>
-                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="rounded-xl border border-border/70 bg-card p-5 shadow-sm">
                     <div class="flex items-center gap-3">
-                        <div class="rounded-lg bg-blue-500/10 p-2 text-blue-600 dark:text-blue-400">
+                        <div class="rounded-lg bg-emerald-500/10 p-2 text-emerald-600 dark:text-emerald-400">
                             <MessageSquare class="size-4" />
                         </div>
                         <div>
                             <h3 class="text-sm font-semibold text-foreground">Dispute Resolution Desk</h3>
-                            <p class="text-xs text-muted-foreground">2 client-vendor dispute cases need mediation.</p>
+                            <p class="text-xs text-muted-foreground">0 open dispute cases. All client-vendor transactions peaceful.</p>
                         </div>
                     </div>
-                    <button class="mt-4 w-full rounded-lg bg-primary py-2 text-xs font-medium text-primary-foreground hover:bg-primary/90">
-                        Open Resolution Desk
-                    </button>
                 </div>
             </div>
         </div>

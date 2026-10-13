@@ -118,7 +118,7 @@ export function useLandingData() {
             ],
             previewTitle: 'Education Foundation Annual Gala',
             previewMetrics: [
-                { label: 'Pledges Raised', value: '$84,500' },
+                { label: 'Pledges Raised', value: 'TZS 84.5M' },
                 { label: 'Volunteers Active', value: '45 Crew' },
             ],
             sampleAction: 'Broadcast Event Updates',

@@ -67,7 +67,7 @@ const page = usePage();
                     <div class="mt-4 grid grid-cols-3 gap-3">
                         <div class="rounded-xl bg-zinc-50 p-3 dark:bg-zinc-800/60">
                             <div class="text-[10px] text-zinc-400 uppercase font-semibold">Budget Spend</div>
-                            <div class="text-base font-bold text-zinc-900 dark:text-white">$38.4k <span class="text-[10px] font-normal text-zinc-400">/ $45k</span></div>
+                            <div class="text-base font-bold text-zinc-900 dark:text-white">TZS 38.4M <span class="text-[10px] font-normal text-zinc-400">/ 45M</span></div>
                         </div>
                         <div class="rounded-xl bg-zinc-50 p-3 dark:bg-zinc-800/60">
                             <div class="text-[10px] text-zinc-400 uppercase font-semibold">Gate Check-in</div>

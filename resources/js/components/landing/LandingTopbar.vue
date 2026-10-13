@@ -7,12 +7,12 @@ const page = usePage();
 const user = page.props.auth?.user;
 
 const selectedLanguage = ref('EN');
-const selectedCurrency = ref('USD');
+const selectedCurrency = ref('TZS');
 const isLangOpen = ref(false);
 const isCurrOpen = ref(false);
 
-const languages = ['EN', 'FR', 'SW', 'ES', 'DE'];
-const currencies = ['USD', 'EUR', 'GBP', 'TZS', 'KES'];
+const languages = ['EN', 'SW', 'FR', 'ES', 'DE'];
+const currencies = ['TZS', 'USD', 'KES', 'EUR', 'GBP'];
 </script>
 
 <template>

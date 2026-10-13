@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import AdminDashboard from '@/components/dashboards/AdminDashboard.vue';
 import ClientDashboard from '@/components/dashboards/ClientDashboard.vue';
 import ServiceProviderDashboard from '@/components/dashboards/ServiceProviderDashboard.vue';
 import SuperAdminDashboard from '@/components/dashboards/SuperAdminDashboard.vue';
 import { usePermission } from '@/composables/usePermission';
 import { dashboard } from '@/routes';
-import { ShieldAlert, ShieldCheck, Briefcase, User, Sparkles } from '@lucide/vue';
+import { ShieldCheck, Eye, EyeOff } from '@lucide/vue';
 
 defineOptions({
     layout: {
@@ -20,57 +20,41 @@ defineOptions({
     },
 });
 
+const { stats } = defineProps<{
+    stats?: {
+        users_count: number;
+        roles_count: number;
+        permissions_count: number;
+    };
+}>();
+
 const { user, roles, permissions, isSuperAdmin, can, canAny } = usePermission();
 
-// 1. Evaluate permission capabilities
-const hasGovernanceAccess = computed(() =>
-    isSuperAdmin.value || canAny(['manage platform settings', 'manage roles and permissions', 'view audit logs', 'manage commission rates'])
+// 1. Permission Gates for each dashboard section
+const showGovernance = computed(() =>
+    isSuperAdmin.value || canAny(['manage platform settings', 'manage roles and permissions', 'manage admin accounts'])
 );
 
-const hasModerationAccess = computed(() =>
-    !isSuperAdmin.value && canAny(['verify service providers', 'moderate events', 'resolve disputes', 'view platform analytics'])
+const showModeration = computed(() =>
+    canAny(['verify service providers', 'moderate events', 'resolve disputes']) && !isSuperAdmin.value
 );
 
-const hasProviderAccess = computed(() =>
-    !isSuperAdmin.value && canAny(['create services', 'edit services', 'view provider bookings', 'view provider earnings', 'manage service packages'])
+const showProviderWorkspace = computed(() =>
+    canAny(['create services', 'edit services', 'view provider earnings', 'manage service packages']) && !isSuperAdmin.value
 );
 
-const hasClientAccess = computed(() =>
-    !isSuperAdmin.value && canAny(['browse services', 'create bookings', 'view my bookings', 'submit reviews'])
-);
-
-// 2. Build unlocked dashboard views based on actual permissions
-const availableViews = computed(() => {
-    const views: { id: string; label: string; icon: any }[] = [];
-
-    if (hasGovernanceAccess.value) {
-        views.push({ id: 'governance', label: 'Platform Governance', icon: ShieldAlert });
+const showClientExperience = computed(() => {
+    // Show client tools if user has client booking permissions
+    if (canAny(['browse services', 'create bookings', 'view my bookings'])) {
+        // If not super admin or if specifically a client/organizer
+        return !isSuperAdmin.value && !showModeration.value;
     }
-    if (hasModerationAccess.value) {
-        views.push({ id: 'moderation', label: 'Operations & Moderation', icon: ShieldCheck });
-    }
-    if (hasProviderAccess.value) {
-        views.push({ id: 'provider', label: 'Provider Workspace', icon: Briefcase });
-    }
-    if (hasClientAccess.value || views.length === 0) {
-        views.push({ id: 'client', label: 'Client Events', icon: User });
-    }
-
-    return views;
+    // Default fallback if no admin or provider rights
+    return !showGovernance.value && !showModeration.value && !showProviderWorkspace.value;
 });
 
-// Default active view to the first available module
-const activeView = ref(availableViews.value[0]?.id || 'client');
-
-watch(
-    availableViews,
-    (newViews) => {
-        if (!newViews.some((v) => v.id === activeView.value) && newViews.length > 0) {
-            activeView.value = newViews[0].id;
-        }
-    },
-    { immediate: true }
-);
+// Optional toggle for Super Admin to preview client tools on demand
+const superAdminShowClientPreview = ref(false);
 
 const primaryRoleName = computed(() => {
     return roles.value[0] || 'Member';
@@ -93,8 +77,8 @@ const roleBadgeColor = computed(() => {
 <template>
     <Head title="Dashboard" />
 
-    <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4 md:p-6" v-if="user">
-        <!-- Clean, Minimal Header with Name & Role Badge -->
+    <div class="flex h-full flex-1 flex-col gap-8 overflow-x-auto rounded-xl p-4 md:p-6" v-if="user">
+        <!-- Clean, Single Dashboard Header -->
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-border/60 pb-4">
             <div>
                 <div class="flex items-center gap-2.5">
@@ -108,36 +92,49 @@ const roleBadgeColor = computed(() => {
                         {{ primaryRoleName }}
                     </span>
                 </div>
-                <p class="mt-0.5 text-xs text-muted-foreground">
-                    Event Management Workspace
+                <p class="mt-0.5 text-xs text-muted-foreground flex items-center gap-1.5">
+                    <ShieldCheck class="size-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <span>Permission-governed workspace • Active Session</span>
                 </p>
             </div>
 
-            <!-- Multi-Permission View Selector (If multiple workspaces unlocked) -->
-            <div v-if="availableViews.length > 1" class="flex flex-wrap items-center gap-1.5">
+            <!-- Super Admin quick toggle to preview client portal if desired -->
+            <div v-if="isSuperAdmin" class="flex items-center gap-2">
                 <button
-                    v-for="v in availableViews"
-                    :key="v.id"
-                    @click="activeView = v.id"
-                    class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all"
-                    :class="
-                        activeView === v.id
-                            ? 'bg-primary text-primary-foreground shadow-sm'
-                            : 'border border-border/70 bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
-                    "
+                    type="button"
+                    @click="superAdminShowClientPreview = !superAdminShowClientPreview"
+                    class="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground transition hover:bg-muted"
                 >
-                    <component :is="v.icon" class="size-3.5" />
-                    {{ v.label }}
+                    <component :is="superAdminShowClientPreview ? EyeOff : Eye" class="size-3.5" />
+                    <span>{{ superAdminShowClientPreview ? 'Hide Client View' : 'Preview Client View' }}</span>
                 </button>
             </div>
         </div>
 
-        <!-- Render Dynamic Permission-Driven Dashboard Module -->
-        <div class="transition-opacity duration-200">
-            <SuperAdminDashboard v-if="activeView === 'governance'" />
-            <AdminDashboard v-else-if="activeView === 'moderation'" />
-            <ServiceProviderDashboard v-else-if="activeView === 'provider'" />
-            <ClientDashboard v-else />
+        <!-- Single Unified Dashboard Items: Displayed based on User's Permissions -->
+        <div class="space-y-8">
+            <!-- 1. Platform Governance & Infrastructure (Super Admin / Governance) -->
+            <section v-if="showGovernance" aria-labelledby="section-governance" class="space-y-4">
+                <SuperAdminDashboard :stats="stats" />
+            </section>
+
+            <!-- 2. Operations & KYC Moderation (Admin Staff) -->
+            <section v-if="showModeration" aria-labelledby="section-moderation" class="space-y-4">
+                <AdminDashboard :stats="stats" />
+            </section>
+
+            <!-- 3. Provider Workspace (Service Providers / Vendors) -->
+            <section v-if="showProviderWorkspace" aria-labelledby="section-provider" class="space-y-4">
+                <ServiceProviderDashboard />
+            </section>
+
+            <!-- 4. Client Planning, Bookings & Portfolio (Clients & Event Organizers) -->
+            <section v-if="showClientExperience || (isSuperAdmin && superAdminShowClientPreview)" aria-labelledby="section-client" class="space-y-4">
+                <div v-if="isSuperAdmin && superAdminShowClientPreview" class="rounded-lg border border-purple-500/30 bg-purple-500/5 p-3 text-xs text-purple-700 dark:text-purple-300">
+                    Previewing Client & Organizer Experience as Super Admin
+                </div>
+                <ClientDashboard />
+            </section>
         </div>
     </div>
 </template>
