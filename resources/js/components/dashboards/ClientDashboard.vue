@@ -1,26 +1,119 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed } from 'vue';
+import { usePage, Link } from '@inertiajs/vue3';
 import {
     Calendar,
     CalendarCheck,
     Clock,
     CreditCard,
     Heart,
-    Search,
     MapPin,
-    ArrowUpRight,
+    CalendarPlus,
+    CheckCircle2,
+    Sparkles,
+    Cake,
+    Music,
+    Mic,
+    Camera,
+    Car,
+    Palette,
+    Mail,
+    ArrowRight,
 } from '@lucide/vue';
 
-// 1. Client Bookings State (Starts clean and empty)
-const myBookedEvents = ref<Array<{ title: string; date: string; time: string; location: string; status: string }>>([]);
+interface BookedEvent {
+    id: number;
+    name: string;
+    event_type: string;
+    services: string[];
+    budget?: number | string | null;
+    event_date?: string | null;
+    location?: string | null;
+    notes?: string | null;
+    status: string;
+    created_at: string;
+}
 
-// 2. Metrics (Clean and accurate)
-const metrics = [
-    { title: 'My Booked Events', value: '0 Upcoming', subtitle: 'No active bookings', icon: Calendar },
-    { title: 'Active Inquiries', value: '0 Pending', subtitle: 'All quotes up to date', icon: Clock },
-    { title: 'Total Investment', value: 'TZS 0', subtitle: 'Completed payments', icon: CreditCard },
-    { title: 'Saved Favorites', value: '0 Saved', subtitle: 'Shortlisted vendors', icon: Heart },
-];
+const props = withDefaults(
+    defineProps<{
+        bookedEvents?: BookedEvent[];
+    }>(),
+    {
+        bookedEvents: () => [],
+    }
+);
+
+const page = usePage();
+const flashSuccess = computed(() => (page.props as any).flash?.success || (page.props as any).flash?.toast?.message);
+
+const serviceMeta: Record<string, { label: string; icon: any }> = {
+    cake: { label: 'Cake', icon: Cake },
+    music_dj: { label: 'Music & DJ', icon: Music },
+    mc: { label: 'MC', icon: Mic },
+    photography: { label: 'Photography', icon: Camera },
+    transportation: { label: 'Transportation', icon: Car },
+    decoration: { label: 'Decoration', icon: Palette },
+    card: { label: 'Card', icon: Mail },
+};
+
+const formatCurrency = (amount: number | string | null | undefined) => {
+    if (!amount) return 'Flexible / TBA';
+    const num = Number(amount);
+    return isNaN(num) ? String(amount) : `TZS ${num.toLocaleString()}`;
+};
+
+const formatDate = (dateStr?: string | null) => {
+    if (!dateStr) return 'Date TBA';
+    try {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+        });
+    } catch {
+        return dateStr;
+    }
+};
+
+// 2. Dynamic Metrics computed from actual client bookings
+const metrics = computed(() => {
+    const totalEvents = props.bookedEvents.length;
+    const pendingEvents = props.bookedEvents.filter(
+        (e) => (e.status || '').toLowerCase().includes('pending')
+    ).length;
+    const totalBudget = props.bookedEvents.reduce(
+        (sum, e) => sum + (Number(e.budget) || 0),
+        0
+    );
+
+    return [
+        {
+            title: 'My Booked Events',
+            value: totalEvents > 0 ? `${totalEvents} Upcoming` : '0 Upcoming',
+            subtitle: totalEvents > 0 ? `${totalEvents} event${totalEvents === 1 ? '' : 's'} registered` : 'No active bookings',
+            icon: Calendar,
+        },
+        {
+            title: 'Active Inquiries',
+            value: pendingEvents > 0 ? `${pendingEvents} Pending` : '0 Pending',
+            subtitle: pendingEvents > 0 ? 'Under review by our team' : 'All quotes up to date',
+            icon: Clock,
+        },
+        {
+            title: 'Total Investment',
+            value: totalBudget > 0 ? `TZS ${totalBudget.toLocaleString()}` : 'TZS 0',
+            subtitle: totalBudget > 0 ? 'Planned budget across events' : 'Completed payments',
+            icon: CreditCard,
+        },
+        {
+            title: 'Saved Favorites',
+            value: '0 Saved',
+            subtitle: 'Shortlisted vendors',
+            icon: Heart,
+        },
+    ];
+});
 
 // 3. Portfolio Showcase ("Kazi Ambazo Tumezisimamia")
 const managedProjects = [
@@ -53,6 +146,18 @@ const managedProjects = [
 
 <template>
     <div class="space-y-6">
+        <!-- Notification Pop Message Banner if newly booked -->
+        <div
+            v-if="flashSuccess"
+            class="flex items-start gap-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-4 text-emerald-800 dark:text-emerald-200 shadow-sm animate-in fade-in slide-in-from-top-2"
+        >
+            <CheckCircle2 class="size-5 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
+            <div class="space-y-1">
+                <h4 class="text-sm font-bold">Booking Request Received</h4>
+                <p class="text-xs leading-relaxed opacity-90">{{ flashSuccess }}</p>
+            </div>
+        </div>
+
         <!-- Discovery & Planning Banner -->
         <div class="relative flex flex-col gap-4 overflow-hidden rounded-xl border border-border/80 bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent p-5 sm:flex-row sm:items-center sm:justify-between">
             <div class="space-y-1">
@@ -60,12 +165,12 @@ const managedProjects = [
                 <p class="text-xs text-muted-foreground">Manage your event bookings, coordinate with verified service providers, and explore our portfolio.</p>
             </div>
             <div class="flex items-center gap-2">
-                <a
-                    href="/events"
+                <Link
+                    href="/events/book"
                     class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3.5 py-2 text-xs font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-all"
                 >
-                    <Search class="size-3.5" /> Explore Events & Services
-                </a>
+                    <CalendarPlus class="size-3.5" /> Book an Event
+                </Link>
             </div>
         </div>
 
@@ -90,16 +195,25 @@ const managedProjects = [
         </div>
 
         <!-- 2. Upcoming Bookings Section -->
-        <div class="rounded-xl border border-border/70 bg-card p-6 shadow-sm">
+        <div class="rounded-xl border border-border/70 bg-card p-6 shadow-sm space-y-4">
             <div class="flex items-center justify-between border-b border-border/50 pb-4">
                 <div>
                     <h2 class="text-lg font-semibold text-foreground">My Upcoming Events & Bookings</h2>
                     <p class="text-xs text-muted-foreground">Your confirmed event contracts and operational schedule.</p>
                 </div>
+
+                <Link
+                    v-if="props.bookedEvents.length > 0"
+                    href="/events/my-bookings"
+                    class="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
+                >
+                    <span>View All ({{ props.bookedEvents.length }})</span>
+                    <ArrowRight class="size-3" />
+                </Link>
             </div>
 
             <!-- Clean Empty State when no events are booked -->
-            <div v-if="myBookedEvents.length === 0" class="flex flex-col items-center justify-center py-12 text-center">
+            <div v-if="props.bookedEvents.length === 0" class="flex flex-col items-center justify-center py-12 text-center">
                 <div class="rounded-full bg-amber-500/10 p-3.5 text-amber-600 dark:text-amber-400 mb-3">
                     <CalendarCheck class="size-7" />
                 </div>
@@ -107,24 +221,58 @@ const managedProjects = [
                 <p class="mt-1 text-xs text-muted-foreground max-w-sm">
                     You have no scheduled bookings currently. Once you confirm an event or reserve a service provider, your timeline and details will appear here.
                 </p>
-                <a
-                    href="/events"
+                <Link
+                    href="/events/book"
                     class="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors"
                 >
-                    <Search class="size-3.5" /> Browse Services & Events
-                </a>
+                    <CalendarPlus class="size-3.5" /> Book Your First Event
+                </Link>
             </div>
 
-            <!-- Populated list if bookings exist in the future -->
-            <div v-else class="mt-4 space-y-3">
+            <!-- Populated list if bookings exist -->
+            <div v-else class="grid gap-3.5 sm:grid-cols-2">
                 <div
-                    v-for="(ev, idx) in myBookedEvents"
-                    :key="idx"
-                    class="rounded-lg border border-border/60 bg-muted/20 p-4"
+                    v-for="ev in props.bookedEvents"
+                    :key="ev.id"
+                    class="rounded-xl border border-border/60 bg-muted/20 p-4 space-y-3 transition-all hover:border-primary/40"
                 >
-                    <div class="flex items-center justify-between">
-                        <h4 class="text-sm font-semibold text-foreground">{{ ev.title }}</h4>
-                        <span class="rounded bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-600">{{ ev.status }}</span>
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <span class="inline-block rounded bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary mb-1">
+                                {{ ev.event_type }}
+                            </span>
+                            <h4 class="text-sm font-bold text-foreground leading-tight">{{ ev.name }}</h4>
+                        </div>
+                        <span class="shrink-0 rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                            <Clock class="size-2.5" />
+                            {{ ev.status || 'Pending Review' }}
+                        </span>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                        <span class="flex items-center gap-1">
+                            <Calendar class="size-3 text-primary" />
+                            {{ formatDate(ev.event_date) }}
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <MapPin class="size-3 text-primary" />
+                            {{ ev.location || 'Location TBA' }}
+                        </span>
+                        <span class="font-semibold text-foreground">
+                            {{ formatCurrency(ev.budget) }}
+                        </span>
+                    </div>
+
+                    <!-- Services Tags -->
+                    <div class="flex flex-wrap gap-1 border-t border-border/40 pt-2">
+                        <span
+                            v-for="s in ev.services"
+                            :key="s"
+                            class="inline-flex items-center gap-1 rounded bg-background border border-border/60 px-1.5 py-0.5 text-[10px] font-medium text-foreground"
+                        >
+                            <component :is="serviceMeta[s]?.icon || Sparkles" class="size-2.5 text-primary" />
+                            <span>{{ serviceMeta[s]?.label || s }}</span>
+                        </span>
                     </div>
                 </div>
             </div>

@@ -17,12 +17,16 @@ class DashboardController extends Controller
      */
     public function index(Request $request): Response
     {
+        $user = $request->user();
+        $bookedEvents = $user ? $user->eventBookings()->latest()->get() : [];
+
         return Inertia::render('Dashboard', [
             'stats' => [
                 'users_count' => User::count(),
                 'roles_count' => Role::count(),
                 'permissions_count' => Permission::count(),
             ],
+            'booked_events' => $bookedEvents,
         ]);
     }
 }

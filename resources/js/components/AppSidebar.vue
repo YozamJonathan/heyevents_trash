@@ -13,6 +13,7 @@ import {
     Heart,
     BookOpen,
     TrendingUp,
+    CalendarPlus,
 } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
@@ -127,6 +128,14 @@ const mainNavItems = computed<NavItem[]>(() => {
     }
 
     // Client / Discovery Permissions
+    if (can('create bookings')) {
+        items.push({
+            title: 'Book Event',
+            href: '/events/book',
+            icon: CalendarPlus,
+        });
+    }
+
     if (can('browse services')) {
         items.push({
             title: 'Find Services',
@@ -138,7 +147,7 @@ const mainNavItems = computed<NavItem[]>(() => {
     if (can('view my bookings')) {
         items.push({
             title: 'My Booked Events',
-            href: '#',
+            href: '/events/my-bookings',
             icon: Calendar,
         });
     }

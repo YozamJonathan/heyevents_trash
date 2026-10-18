@@ -20,12 +20,13 @@ defineOptions({
     },
 });
 
-const { stats } = defineProps<{
+const { stats, booked_events = [] } = defineProps<{
     stats?: {
         users_count: number;
         roles_count: number;
         permissions_count: number;
     };
+    booked_events?: any[];
 }>();
 
 const { user, roles, permissions, isSuperAdmin, can, canAny } = usePermission();
@@ -133,7 +134,7 @@ const roleBadgeColor = computed(() => {
                 <div v-if="isSuperAdmin && superAdminShowClientPreview" class="rounded-lg border border-purple-500/30 bg-purple-500/5 p-3 text-xs text-purple-700 dark:text-purple-300">
                     Previewing Client & Organizer Experience as Super Admin
                 </div>
-                <ClientDashboard />
+                <ClientDashboard :booked-events="booked_events" />
             </section>
         </div>
     </div>
