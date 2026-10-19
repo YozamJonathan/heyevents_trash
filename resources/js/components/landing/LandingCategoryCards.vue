@@ -1,55 +1,52 @@
 <script setup lang="ts">
-import { 
-    Heart, 
-    Briefcase, 
-    Music2, 
-    Users2,
-    ArrowRight
-} from '@lucide/vue';
+import { Heart, Briefcase, Music2, Users2, ArrowRight } from '@lucide/vue';
+import { useLanguage, type TranslationKey } from '@/composables/useLanguage';
 
 interface StandardCategory {
     id: string;
-    title: string;
-    badge: string;
-    listings: string;
-    subtitle: string;
+    titleKey: TranslationKey;
+    badgeKey: TranslationKey;
+    listingsKey: TranslationKey;
+    subtitleKey: TranslationKey;
     icon: any;
 }
 
 const categories: StandardCategory[] = [
     {
         id: 'social',
-        title: 'Social & Celebrations',
-        badge: 'Weddings & Galas',
-        listings: 'Weddings, Birthdays & Galas',
-        subtitle: 'Interactive seating charts, RSVP dietary tracking & contribution planners.',
-        icon: Heart
+        titleKey: 'category.social.title',
+        badgeKey: 'category.social.badge',
+        listingsKey: 'category.social.listings',
+        subtitleKey: 'category.social.subtitle',
+        icon: Heart,
     },
     {
         id: 'corporate',
-        title: 'Corporate & Business',
-        badge: 'Conferences & Summits',
-        listings: 'Conferences & Summits',
-        subtitle: 'Multi-track session agendas, speaker directories & automated QR badge generation.',
-        icon: Briefcase
+        titleKey: 'category.corporate.title',
+        badgeKey: 'category.corporate.badge',
+        listingsKey: 'category.corporate.listings',
+        subtitleKey: 'category.corporate.subtitle',
+        icon: Briefcase,
     },
     {
         id: 'entertainment',
-        title: 'Entertainment & Festivals',
-        badge: 'Festivals & Stadiums',
-        listings: 'Concerts & Stadiums',
-        subtitle: 'High-volume tiered ticketing, real-time gate flow & cashless system.',
-        icon: Music2
+        titleKey: 'category.entertainment.title',
+        badgeKey: 'category.entertainment.badge',
+        listingsKey: 'category.entertainment.listings',
+        subtitleKey: 'category.entertainment.subtitle',
+        icon: Music2,
     },
     {
         id: 'community',
-        title: 'Community & Non-Profit',
-        badge: 'Galas & Ministries',
-        listings: 'Fundraising & Galas',
-        subtitle: 'Donor tier tracking, pledge reconciliation & volunteer shift coordination.',
-        icon: Users2
-    }
+        titleKey: 'category.community.title',
+        badgeKey: 'category.community.badge',
+        listingsKey: 'category.community.listings',
+        subtitleKey: 'category.community.subtitle',
+        icon: Users2,
+    },
 ];
+
+const { t } = useLanguage();
 
 const scrollToExplore = () => {
     const el = document.getElementById('explore');
@@ -58,7 +55,7 @@ const scrollToExplore = () => {
 </script>
 
 <template>
-    <section id="standards" class="relative z-20 -mt-14 sm:-mt-20 mb-16">
+    <section id="standards" class="relative z-20 -mt-14 mb-16 sm:-mt-20">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 <div
@@ -70,34 +67,51 @@ const scrollToExplore = () => {
                     <div>
                         <!-- Top Icon & Badge with High Contrast -->
                         <div class="flex items-center justify-between">
-                            <div class="flex size-14 items-center justify-center rounded-2xl bg-red-50/90 border border-red-100 text-[#ff545a] shadow-xs transition-transform duration-300 group-hover:scale-110 group-hover:bg-[#ff545a] group-hover:text-white dark:bg-zinc-800 dark:border-zinc-700 dark:text-red-400 dark:group-hover:bg-[#ff545a] dark:group-hover:text-white">
-                                <component :is="cat.icon" class="size-6 stroke-[2]" />
+                            <div
+                                class="flex size-14 items-center justify-center rounded-2xl border border-red-100 bg-red-50/90 text-[#ff545a] shadow-xs transition-transform duration-300 group-hover:scale-110 group-hover:bg-[#ff545a] group-hover:text-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-red-400 dark:group-hover:bg-[#ff545a] dark:group-hover:text-white"
+                            >
+                                <component
+                                    :is="cat.icon"
+                                    class="size-6 stroke-[2]"
+                                />
                             </div>
-                            <span class="rounded-full bg-zinc-100 px-3 py-1 text-[11px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700">
-                                {{ cat.badge }}
+                            <span
+                                class="rounded-full border border-zinc-200/60 bg-zinc-100 px-3 py-1 text-[11px] font-bold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
+                            >
+                                {{ t(cat.badgeKey) }}
                             </span>
                         </div>
 
                         <!-- Category Title -->
-                        <h3 class="mt-5 text-base font-extrabold text-zinc-900 transition group-hover:text-[#ff545a] dark:text-white font-['Poppins',sans-serif]">
-                            {{ cat.title }}
+                        <h3
+                            class="mt-5 font-['Poppins',sans-serif] text-base font-extrabold text-zinc-900 transition group-hover:text-[#ff545a] dark:text-white"
+                        >
+                            {{ t(cat.titleKey) }}
                         </h3>
 
                         <!-- Listings / Domain Label -->
-                        <p class="mt-1 text-xs font-semibold text-[#ff545a] dark:text-red-400">
-                            {{ cat.listings }}
+                        <p
+                            class="mt-1 text-xs font-semibold text-[#ff545a] dark:text-red-400"
+                        >
+                            {{ t(cat.listingsKey) }}
                         </p>
 
                         <!-- Subtitle Detail -->
-                        <p class="mt-2.5 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
-                            {{ cat.subtitle }}
+                        <p
+                            class="mt-2.5 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300"
+                        >
+                            {{ t(cat.subtitleKey) }}
                         </p>
                     </div>
 
                     <!-- Bottom Action Bar -->
-                    <div class="mt-6 flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-800 text-xs font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-[#ff545a] dark:group-hover:text-[#ff545a]">
-                        <span>Explore Standard</span>
-                        <ArrowRight class="size-4 transition group-hover:translate-x-1" />
+                    <div
+                        class="mt-6 flex items-center justify-between border-t border-zinc-100 pt-3 text-xs font-bold text-zinc-800 group-hover:text-[#ff545a] dark:border-zinc-800 dark:text-zinc-200 dark:group-hover:text-[#ff545a]"
+                    >
+                        <span>{{ t('category.explore') }}</span>
+                        <ArrowRight
+                            class="size-4 transition group-hover:translate-x-1"
+                        />
                     </div>
                 </div>
             </div>

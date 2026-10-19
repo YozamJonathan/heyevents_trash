@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
+import { useLanguage, type TranslationKey } from '@/composables/useLanguage';
 import {
     Card,
     CardContent,
@@ -10,10 +11,12 @@ import {
 } from '@/components/ui/card';
 import { home } from '@/routes';
 
-defineProps<{
-    title?: string;
-    description?: string;
+const props = defineProps<{
+    title?: TranslationKey;
+    description?: TranslationKey;
 }>();
+
+const { t } = useLanguage();
 </script>
 
 <template>
@@ -31,9 +34,11 @@ defineProps<{
             <div class="flex flex-col gap-6">
                 <Card class="rounded-xl">
                     <CardHeader class="px-10 pt-8 pb-0 text-center">
-                        <CardTitle class="text-xl">{{ title }}</CardTitle>
+                        <CardTitle class="text-xl">{{
+                            props.title ? t(props.title) : ''
+                        }}</CardTitle>
                         <CardDescription>
-                            {{ description }}
+                            {{ props.description ? t(props.description) : '' }}
                         </CardDescription>
                     </CardHeader>
                     <CardContent class="px-10 py-8">

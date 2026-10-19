@@ -1,37 +1,51 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { useLanguage, type TranslationKey } from '@/composables/useLanguage';
 
 const reviews = [
     {
         name: 'Elena Rostova',
-        role: 'Wedding Coordinator',
-        eventType: 'Social & Celebrations',
-        content: 'The interactive seating arrangement tool and digital RSVP dietary tracking saved us weeks of manual work. Our guests checked in seamlessly via QR code.'
+        roleKey: 'review.1.role',
+        eventTypeKey: 'review.1.category',
+        contentKey: 'review.1.content',
     },
     {
         name: 'David Mwangi',
-        role: 'Festival Director',
-        eventType: 'Entertainment & Festivals',
-        content: 'Multi-lane gate check-ins were completely flawless. Even when cell network dipped, offline sync kept lines moving with zero delay.'
+        roleKey: 'review.2.role',
+        eventTypeKey: 'review.2.category',
+        contentKey: 'review.2.content',
     },
     {
         name: 'Sarah Jenkins',
-        role: 'Corporate VP',
-        eventType: 'Corporate & Business',
-        content: 'Multi-track session scheduling, instant badge generation, and sponsor lead retrieval made our summit our highest rated conference ever.'
-    }
-];
+        roleKey: 'review.3.role',
+        eventTypeKey: 'review.3.category',
+        contentKey: 'review.3.content',
+    },
+] satisfies {
+    name: string;
+    roleKey: TranslationKey;
+    eventTypeKey: TranslationKey;
+    contentKey: TranslationKey;
+}[];
+
+const { t } = useLanguage();
 </script>
 
 <template>
-    <section id="reviews" class="py-16 sm:py-20 bg-zinc-50/70 border-t border-zinc-200/60 dark:bg-zinc-900/30 dark:border-zinc-850">
+    <section
+        id="reviews"
+        class="dark:border-zinc-850 border-t border-zinc-200/60 bg-zinc-50/70 py-16 sm:py-20 dark:bg-zinc-900/30"
+    >
         <div class="mx-auto max-w-7xl px-6 sm:px-8">
             <div class="max-w-xl">
-                <span class="text-xs font-semibold tracking-wider uppercase text-[#ff545a]">
-                    Trusted by Organizers
+                <span
+                    class="text-xs font-semibold tracking-wider text-[#ff545a] uppercase"
+                >
+                    {{ t('reviews.eyebrow') }}
                 </span>
-                <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl dark:text-white">
-                    What hosts say about HEY Events.
+                <h2
+                    class="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl dark:text-white"
+                >
+                    {{ t('reviews.title') }}
                 </h2>
             </div>
 
@@ -42,21 +56,29 @@ const reviews = [
                     :key="idx"
                     class="flex flex-col justify-between rounded-2xl border border-zinc-200/70 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900"
                 >
-                    <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
-                        "{{ rev.content }}"
+                    <p
+                        class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300"
+                    >
+                        "{{ t(rev.contentKey) }}"
                     </p>
 
-                    <div class="mt-6 border-t border-zinc-100 pt-4 dark:border-zinc-800 flex items-center justify-between">
+                    <div
+                        class="mt-6 flex items-center justify-between border-t border-zinc-100 pt-4 dark:border-zinc-800"
+                    >
                         <div>
-                            <div class="text-xs font-bold text-zinc-900 dark:text-white">
+                            <div
+                                class="text-xs font-bold text-zinc-900 dark:text-white"
+                            >
                                 {{ rev.name }}
                             </div>
                             <div class="text-[11px] text-zinc-400">
-                                {{ rev.role }}
+                                {{ t(rev.roleKey) }}
                             </div>
                         </div>
-                        <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-                            {{ rev.eventType }}
+                        <span
+                            class="rounded-md bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+                        >
+                            {{ t(rev.eventTypeKey) }}
                         </span>
                     </div>
                 </div>

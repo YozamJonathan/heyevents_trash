@@ -1,0 +1,388 @@
+{
+    "language": {
+        "label": "Language",
+        "english": "English",
+        "swahili": "Kiswahili"
+    },
+    "nav": {
+        "standards": "Standards",
+        "howItWorks": "How It Works",
+        "exploreEvents": "Explore Events",
+        "reviews": "Reviews",
+        "contact": "Contact",
+        "toggleTheme": "Toggle theme",
+        "dark": "Dark",
+        "light": "Light",
+        "dashboard": "Dashboard",
+        "signIn": "Sign in",
+        "getStarted": "Get Started",
+        "toggleMenu": "Toggle menu",
+        "settings": "Settings",
+        "logOut": "Log out",
+        "search": "Search",
+        "repository": "Repository",
+        "documentation": "Documentation",
+        "userManagement": "User Management",
+        "rolesPermissions": "Roles & Permissions",
+        "platformConfig": "Platform Config",
+        "vendorApprovals": "Vendor Approvals (KYC)",
+        "eventModeration": "Event Moderation",
+        "disputeDesk": "Dispute Desk",
+        "businessAnalytics": "Business Analytics",
+        "myServices": "My Services & Packages",
+        "providerSchedule": "Provider Schedule",
+        "earningsPayouts": "Earnings & Payouts",
+        "findServices": "Find Services",
+        "myBookedEvents": "My Booked Events",
+        "platformHelp": "Platform Help",
+        "platform": "Platform"
+    },
+    "page": {
+        "title": "HEY Events — Event Management & Ticketing Infrastructure",
+        "cityAlt": "City waterfront skyline"
+    },
+    "hero": {
+        "title": "The best place to find and explore everything you need",
+        "description": "From milestone weddings and corporate summits to stadium concerts and charity galas, find, book, and manage it all in one click.",
+        "eventLabel": "Event or category",
+        "eventPlaceholder": "Gala, summit, concert, fundraiser...",
+        "locationLabel": "Location or venue",
+        "locationPlaceholder": "Ballroom, arena, convention center...",
+        "search": "Search"
+    },
+    "category": {
+        "social": {
+            "title": "Social & Celebrations",
+            "badge": "Weddings & Galas",
+            "listings": "Weddings, birthdays & galas",
+            "subtitle": "Interactive seating charts, dietary RSVPs, and contribution planning."
+        },
+        "corporate": {
+            "title": "Corporate & Business",
+            "badge": "Conferences & Summits",
+            "listings": "Conferences & summits",
+            "subtitle": "Multi-track agendas, speaker directories, and automatic QR badges."
+        },
+        "entertainment": {
+            "title": "Entertainment & Festivals",
+            "badge": "Festivals & Stadiums",
+            "listings": "Concerts & stadiums",
+            "subtitle": "High-volume ticketing, live gate flow, and cashless payments."
+        },
+        "community": {
+            "title": "Community & Non-Profit",
+            "badge": "Galas & Ministries",
+            "listings": "Fundraising & galas",
+            "subtitle": "Donor tracking, pledge reports, and volunteer coordination."
+        },
+        "explore": "Explore category"
+    },
+    "steps": {
+        "eyebrow": "A simple process",
+        "title": "How it works",
+        "description": "A clear path from creating an event to welcoming guests.",
+        "label": "Step",
+        "select": {
+            "title": "Choose a category",
+            "description": "Choose a setup for social, corporate, entertainment, or community events."
+        },
+        "plan": {
+            "title": "Plan & invite",
+            "description": "Arrange seating, schedules, ticket options, and guest invitations."
+        },
+        "execute": {
+            "title": "Welcome guests",
+            "description": "Scan tickets offline and follow guest arrivals in real time."
+        }
+    },
+    "explore": {
+        "eyebrow": "Event directory",
+        "title": "Featured events",
+        "all": "All categories",
+        "social": "Social",
+        "corporate": "Corporate",
+        "entertainment": "Entertainment",
+        "community": "Community"
+    },
+    "listing": {
+        "1": {
+            "category": "Weddings & celebrations",
+            "status": "RSVP open",
+            "capacity": "400 guests",
+            "description": "Interactive seating, meal preferences, and a live wedding gift registry."
+        },
+        "2": {
+            "category": "Conferences & summits",
+            "status": "Registration open",
+            "capacity": "2,500 delegates",
+            "description": "Eight session halls, keynote speakers, and QR badge check-in."
+        },
+        "3": {
+            "category": "Festivals & stadiums",
+            "status": "Early bird tickets",
+            "capacity": "15,000 attendees",
+            "description": "Fast QR entry and cashless wristband zones for a smooth festival."
+        },
+        "4": {
+            "category": "Fundraising & galas",
+            "status": "Donations open",
+            "capacity": "600 donors",
+            "description": "Live pledge totals, WhatsApp updates, and coordinated volunteers."
+        }
+    },
+    "reviews": {
+        "eyebrow": "Trusted by organizers",
+        "title": "What hosts say about HEY Events."
+    },
+    "review": {
+        "1": {
+            "role": "Wedding coordinator",
+            "category": "Social & celebrations",
+            "content": "The seating planner and digital RSVP tracking saved us weeks of work. Guests checked in smoothly with QR codes."
+        },
+        "2": {
+            "role": "Festival director",
+            "category": "Entertainment & festivals",
+            "content": "Gate check-in stayed smooth even when the mobile network dropped. Offline syncing kept everyone moving."
+        },
+        "3": {
+            "role": "Corporate vice president",
+            "category": "Corporate & business",
+            "content": "Session scheduling, instant badges, and sponsor tools helped make our summit our best-rated conference."
+        }
+    },
+    "footer": {
+        "rights": "All rights reserved.",
+        "support": "Support",
+        "darkMode": "Dark mode",
+        "lightMode": "Light mode"
+    },
+    "common": {
+        "email": "Email address",
+        "password": "Password",
+        "confirmPassword": "Confirm password",
+        "name": "Name",
+        "fullName": "Full name",
+        "rememberMe": "Remember me",
+        "forgotPassword": "Forgot your password?",
+        "orReturnTo": "Or, return to",
+        "logIn": "Log in",
+        "signUp": "Sign up",
+        "createAccount": "Create account",
+        "loading": "Please wait...",
+        "users": "Users"
+    },
+    "auth": {
+        "login": {
+            "title": "Log in to your account",
+            "description": "Enter your email and password below to log in",
+            "pageTitle": "Log in",
+            "noAccount": "Don't have an account?",
+            "googleButton": "Continue with Google",
+            "orContinueWith": "Or log in with"
+        },
+        "register": {
+            "title": "Create an account",
+            "description": "Enter your details below to create your account",
+            "pageTitle": "Register",
+            "alreadyHaveAccount": "Already have an account?",
+            "googleButton": "Continue with Google",
+            "orContinueWith": "Or sign up with"
+        },
+        "forgot": {
+            "title": "Forgot password",
+            "description": "Enter your email to receive a password reset link",
+            "pageTitle": "Forgot password",
+            "sendLink": "Email password reset link"
+        },
+        "reset": {
+            "title": "Reset password",
+            "description": "Please enter your new password below",
+            "pageTitle": "Reset password",
+            "submit": "Reset password"
+        },
+        "confirm": {
+            "title": "Confirm password",
+            "description": "This is a secure area of the application. Please confirm your password before continuing.",
+            "pageTitle": "Confirm password",
+            "submit": "Confirm password"
+        }
+    },
+    "settings": {
+        "title": "Settings",
+        "description": "Manage your profile and account settings",
+        "navigation": "Settings",
+        "profile": "Profile",
+        "profileTitle": "Profile settings",
+        "profileDescription": "Update your name and email address",
+        "security": "Security",
+        "securityTitle": "Security settings",
+        "passwordTitle": "Update password",
+        "passwordDescription": "Ensure your account is using a long, random password to stay secure",
+        "appearance": "Appearance",
+        "appearanceTitle": "Appearance settings",
+        "appearanceDescription": "Update the appearance settings for your account",
+        "currentPassword": "Current password",
+        "newPassword": "New password",
+        "save": "Save",
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+    },
+    "app": {
+        "navigationMenu": "Navigation menu",
+        "settings": "Settings",
+        "logout": "Log out",
+        "dashboard": "Dashboard",
+        "permissionSession": "Permission-governed workspace • Active Session",
+        "hideClientView": "Hide Client View",
+        "previewClientView": "Preview Client View",
+        "previewBanner": "Previewing Client & Organizer Experience as Super Admin"
+    },
+    "roles": {
+        "superAdmin": "Super Admin",
+        "admin": "Admin",
+        "provider": "Service Provider",
+        "client": "Client",
+        "member": "Member"
+    },
+    "clientDashboard": {
+        "welcome": "Welcome to HEY Events",
+        "intro": "Manage your event bookings, coordinate with verified service providers, and explore our portfolio.",
+        "explore": "Explore Events & Services",
+        "metricEvents": "My Booked Events",
+        "metricEventsValue": "0 Upcoming",
+        "metricEventsNote": "No active bookings",
+        "metricInquiries": "Active Inquiries",
+        "metricInquiriesValue": "0 Pending",
+        "metricInquiriesNote": "All quotes up to date",
+        "metricInvestment": "Total Investment",
+        "metricInvestmentValue": "TZS 0",
+        "metricInvestmentNote": "Completed payments",
+        "metricFavorites": "Saved Favorites",
+        "metricFavoritesValue": "0 Saved",
+        "metricFavoritesNote": "Shortlisted vendors",
+        "upcoming": "My Upcoming Events & Bookings",
+        "upcomingDescription": "Your confirmed event contracts and operational schedule.",
+        "noEvents": "No Booked Events Yet",
+        "noEventsDescription": "You have no scheduled bookings currently. Once you confirm an event or reserve a service provider, your timeline and details will appear here.",
+        "browse": "Browse Services & Events",
+        "portfolio": "Events We Have Managed",
+        "portfolioDescription": "Portfolio of events directly managed by HEY Events.",
+        "managed": "100% In-House Managed",
+        "project1Type": "Corporate Summit & Banquet",
+        "project1Location": "Dar es Salaam Waterfront",
+        "project1Service1": "Sound & Stage Rig",
+        "project1Service2": "Banquet Catering",
+        "project1Service3": "Protocol Security",
+        "project1Praise": "Flawless execution from sound engineering to VIP protocol.",
+        "project2Type": "Luxury Wedding Celebration",
+        "project2Location": "Sunset Beachfront Resort",
+        "project2Service1": "Floral & Decor",
+        "project2Service2": "Drone Cinematography",
+        "project2Service3": "Live DJ Band",
+        "project2Praise": "The decor transformation and photography exceeded every expectation.",
+        "project3Type": "Exclusive Executive Summit",
+        "project3Location": "Alpine Mountain Lodge",
+        "project3Service1": "Full AV Rig",
+        "project3Service2": "MC Hosting",
+        "project3Service3": "Photography",
+        "project3Praise": "Punctual, organized, and totally stress-free for our executive team."
+    },
+    "adminDashboard": {
+        "pendingKyc": "Pending Vendor KYC",
+        "pending": "0 Pending",
+        "allClear": "All Clear",
+        "moderation": "Events in Moderation",
+        "flagged": "0 Flagged",
+        "queueClear": "Queue Clear",
+        "disputes": "Open Dispute Tickets",
+        "open": "0 Open",
+        "noConflicts": "No Conflicts",
+        "accounts": "Platform Accounts",
+        "active": "Active",
+        "verifications": "Service Provider Verifications (KYC)",
+        "verificationDescription": "Approve or reject service provider onboarding applications.",
+        "awaitingReview": "0 Awaiting Review",
+        "reviewed": "All Provider Applications Reviewed",
+        "noPending": "There are currently no pending vendor KYC verifications. New provider submissions will appear here for review and onboarding.",
+        "moderationQueue": "Event Moderation Queue",
+        "reviewListings": "Review flagged listings",
+        "moderationClear": "Moderation Queue Clear",
+        "noFlags": "No community flags or listings requiring review.",
+        "reason": "Reason",
+        "disputeDesk": "Dispute Resolution Desk",
+        "noDisputes": "0 open dispute cases. All client-vendor transactions peaceful."
+    },
+    "providerDashboard": {
+        "earnings": "Total Net Earnings",
+        "newAccount": "New Account",
+        "upcomingBookings": "Upcoming Bookings",
+        "events": "0 Events",
+        "scheduleClear": "Schedule Clear",
+        "packages": "Active Service Packages",
+        "listed": "0 Listed",
+        "addPackage": "Add First Package",
+        "rating": "Client Rating",
+        "newProvider": "New Provider",
+        "awaitReviews": "Awaiting Reviews",
+        "verified": "Verified Service Provider",
+        "active": "Active",
+        "ready": "Your account is ready. List your services and packages to start receiving bookings and client inquiries.",
+        "addService": "Add New Service",
+        "schedule": "Upcoming Event Schedule",
+        "scheduleDescription": "Direct client bookings assigned to your vendor schedule.",
+        "noBookings": "No Bookings Scheduled Yet",
+        "noBookingsDescription": "You have no confirmed gigs or client reservations currently. Once clients select your packages, your timeline will appear here.",
+        "client": "Client",
+        "catalog": "My Service Catalog",
+        "noPackages": "No Packages Created",
+        "noPackagesDescription": "Publish your service packages with pricing so clients can discover and book you.",
+        "createPackage": "Create First Package",
+        "payoutBalance": "Available Payout Balance",
+        "requestPayout": "Request Payout"
+    },
+    "superAdminDashboard": {
+        "users": "Total Registered Users",
+        "database": "In Database",
+        "health": "System Uptime & Health",
+        "optimal": "Optimal",
+        "servicesUp": "All Services Up",
+        "permissions": "Configured Permissions",
+        "guard": "Spatie Guard",
+        "roles": "Active System Roles",
+        "rbac": "RBAC Active",
+        "infrastructure": "Platform Infrastructure & Governance",
+        "infrastructureDescription": "High-privilege system controls and operational configuration.",
+        "rootAccess": "Root Access",
+        "roleMatrix": "Role & Permission Matrix",
+        "roleMatrixDescription": "Define roles and manage granular Spatie permission gates.",
+        "configuredRoles": "Configured Roles",
+        "protected": "System Protected",
+        "commission": "Platform Commission & Tariffs",
+        "commissionDescription": "Configure global booking fee margins and transaction tiers.",
+        "platformStandard": "Platform Standard",
+        "activePolicy": "Active Policy",
+        "databaseBackup": "Database & Backup Vault",
+        "databaseDescription": "Database migrations, connection pool, and automated jobs.",
+        "connected": "Database Connected",
+        "healthy": "Healthy",
+        "delegation": "Admin Staff Delegation",
+        "delegationDescription": "Assign operational administrators and manage access levels.",
+        "rbacGuard": "RBAC Guard",
+        "enforced": "Enforced",
+        "coreServices": "System Core Services",
+        "auditLog": "Security Audit Log",
+        "systemEvents": "Real-time system events",
+        "allClear": "All Clear & Monitored",
+        "noWarnings": "No critical audit warnings. System permissions and authentication are running securely.",
+        "target": "Target",
+        "auditStreaming": "Audit streaming active via Laravel internal logging.",
+        "rbacEngine": "Spatie RBAC Engine",
+        "activeCached": "Active & Cached",
+        "databaseCluster": "Database Cluster",
+        "eventQueue": "Event Queue & Jobs",
+        "listening": "Listening",
+        "securityAuth": "Security & Auth Guard"
+    }
+}

@@ -29,15 +29,17 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { usePermission } from '@/composables/usePermission';
+import { useLanguage } from '@/composables/useLanguage';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
 const { can, canAny } = usePermission();
+const { t } = useLanguage();
 
 const mainNavItems = computed<NavItem[]>(() => {
     const items: NavItem[] = [
         {
-            title: 'Dashboard',
+            title: t('nav.dashboard'),
             href: dashboard(),
             icon: LayoutGrid,
         },
@@ -46,7 +48,7 @@ const mainNavItems = computed<NavItem[]>(() => {
     // System Administration Permissions
     if (can('view users')) {
         items.push({
-            title: 'User Management',
+            title: t('nav.userManagement'),
             href: '#',
             icon: Users,
         });
@@ -54,7 +56,7 @@ const mainNavItems = computed<NavItem[]>(() => {
 
     if (can('manage roles and permissions')) {
         items.push({
-            title: 'Roles & Permissions',
+            title: t('nav.rolesPermissions'),
             href: '#',
             icon: Shield,
         });
@@ -62,7 +64,7 @@ const mainNavItems = computed<NavItem[]>(() => {
 
     if (can('manage platform settings')) {
         items.push({
-            title: 'Platform Config',
+            title: t('nav.platformConfig'),
             href: '#',
             icon: Sliders,
         });
@@ -71,7 +73,7 @@ const mainNavItems = computed<NavItem[]>(() => {
     // Operational & Moderation Permissions
     if (can('verify service providers')) {
         items.push({
-            title: 'Vendor Approvals (KYC)',
+            title: t('nav.vendorApprovals'),
             href: '#',
             icon: CheckSquare,
         });
@@ -79,7 +81,7 @@ const mainNavItems = computed<NavItem[]>(() => {
 
     if (can('moderate events')) {
         items.push({
-            title: 'Event Moderation',
+            title: t('nav.eventModeration'),
             href: '#',
             icon: Calendar,
         });
@@ -87,7 +89,7 @@ const mainNavItems = computed<NavItem[]>(() => {
 
     if (can('resolve disputes')) {
         items.push({
-            title: 'Dispute Desk',
+            title: t('nav.disputeDesk'),
             href: '#',
             icon: Shield,
         });
@@ -95,16 +97,18 @@ const mainNavItems = computed<NavItem[]>(() => {
 
     if (can('view platform analytics')) {
         items.push({
-            title: 'Business Analytics',
+            title: t('nav.businessAnalytics'),
             href: '#',
             icon: TrendingUp,
         });
     }
 
     // Service Provider Permissions
-    if (canAny(['create services', 'edit services', 'manage service packages'])) {
+    if (
+        canAny(['create services', 'edit services', 'manage service packages'])
+    ) {
         items.push({
-            title: 'My Services & Packages',
+            title: t('nav.myServices'),
             href: '#',
             icon: Briefcase,
         });
@@ -112,7 +116,7 @@ const mainNavItems = computed<NavItem[]>(() => {
 
     if (can('view provider bookings')) {
         items.push({
-            title: 'Provider Schedule',
+            title: t('nav.providerSchedule'),
             href: '#',
             icon: Calendar,
         });
@@ -120,7 +124,7 @@ const mainNavItems = computed<NavItem[]>(() => {
 
     if (can('view provider earnings')) {
         items.push({
-            title: 'Earnings & Payouts',
+            title: t('nav.earningsPayouts'),
             href: '#',
             icon: DollarSign,
         });
@@ -129,7 +133,7 @@ const mainNavItems = computed<NavItem[]>(() => {
     // Client / Discovery Permissions
     if (can('browse services')) {
         items.push({
-            title: 'Find Services',
+            title: t('nav.findServices'),
             href: '#',
             icon: Search,
         });
@@ -137,7 +141,7 @@ const mainNavItems = computed<NavItem[]>(() => {
 
     if (can('view my bookings')) {
         items.push({
-            title: 'My Booked Events',
+            title: t('nav.myBookedEvents'),
             href: '#',
             icon: Calendar,
         });
@@ -146,13 +150,13 @@ const mainNavItems = computed<NavItem[]>(() => {
     return items;
 });
 
-const footerNavItems: NavItem[] = [
+const footerNavItems = computed<NavItem[]>(() => [
     {
-        title: 'Platform Help',
+        title: t('nav.platformHelp'),
         href: '#',
         icon: BookOpen,
     },
-];
+]);
 </script>
 
 <template>
