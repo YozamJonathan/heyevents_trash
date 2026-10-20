@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { Form, Head } from '@inertiajs/vue3';
+import { Form, Head, usePage } from '@inertiajs/vue3';
+import GoogleIcon from '@/components/GoogleIcon.vue';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
 import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
 import { login } from '@/routes';
 import { store } from '@/routes/register';
+import { useLanguage } from '@/composables/useLanguage';
+
+const { t } = useLanguage();
+const page = usePage();
 
 defineProps<{
     passwordRules: string;
@@ -16,14 +20,14 @@ defineProps<{
 
 defineOptions({
     layout: {
-        title: 'Create an account',
-        description: 'Enter your details below to create your account',
+        title: 'auth.register.title',
+        description: 'auth.register.description',
     },
 });
 </script>
 
 <template>
-    <Head title="Register" />
+    <Head :title="t('auth.register.pageTitle')" />
 
     <Form
         v-bind="store.form()"
@@ -33,7 +37,7 @@ defineOptions({
     >
         <div class="grid gap-6">
             <div class="grid gap-2">
-                <Label for="name">Name</Label>
+                <Label for="name">{{ t('common.name') }}</Label>
                 <Input
                     id="name"
                     type="text"
@@ -42,13 +46,13 @@ defineOptions({
                     :tabindex="1"
                     autocomplete="name"
                     name="name"
-                    placeholder="Full name"
+                    :placeholder="t('common.fullName')"
                 />
                 <InputError :message="errors.name" />
             </div>
 
             <div class="grid gap-2">
-                <Label for="email">Email address</Label>
+                <Label for="email">{{ t('common.email') }}</Label>
                 <Input
                     id="email"
                     type="email"
@@ -62,28 +66,30 @@ defineOptions({
             </div>
 
             <div class="grid gap-2">
-                <Label for="password">Password</Label>
+                <Label for="password">{{ t('common.password') }}</Label>
                 <PasswordInput
                     id="password"
                     required
                     :tabindex="3"
                     autocomplete="new-password"
                     name="password"
-                    placeholder="Password"
+                    :placeholder="t('common.password')"
                     :passwordrules="passwordRules"
                 />
                 <InputError :message="errors.password" />
             </div>
 
             <div class="grid gap-2">
-                <Label for="password_confirmation">Confirm password</Label>
+                <Label for="password_confirmation">{{
+                    t('common.confirmPassword')
+                }}</Label>
                 <PasswordInput
                     id="password_confirmation"
                     required
                     :tabindex="4"
                     autocomplete="new-password"
                     name="password_confirmation"
-                    placeholder="Confirm password"
+                    :placeholder="t('common.confirmPassword')"
                     :passwordrules="passwordRules"
                 />
                 <InputError :message="errors.password_confirmation" />
@@ -97,18 +103,37 @@ defineOptions({
                 data-test="register-user-button"
             >
                 <Spinner v-if="processing" />
-                Create account
+                {{ t('common.createAccount') }}
             </Button>
         </div>
-
-        <div class="text-muted-foreground text-center text-sm">
-            Already have an account?
-            <TextLink
-                :href="login()"
-                class="underline underline-offset-4"
-                :tabindex="6"
-                >Log in</TextLink
-            >
-        </div>
     </Form>
+
+    <div class="mt-6 space-y-4">
+        <div class="text-muted-foreground flex items-center gap-3 text-xs">
+            <div class="bg-border h-px flex-1"></div>
+            <span>{{ t('auth.register.orContinueWith') }}</span>
+            <div class="bg-border h-px flex-1"></div>
+        </div>
+
+        <InputError :message="page.props.errors?.google" />
+
+        <a
+            href="/auth/google/redirect"
+            class="border-input bg-background hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring inline-flex h-10 w-full items-center justify-center gap-2 rounded-md border px-4 text-sm font-medium shadow-xs transition-colors focus-visible:ring-2 focus-visible:outline-none"
+        >
+            <GoogleIcon class="h-4 w-4" />
+            {{ t('auth.register.googleButton') }}
+        </a>
+    </div>
+
+    <div class="text-muted-foreground text-center text-sm">
+        {{ t('auth.register.alreadyHaveAccount') }}
+        <TextLink
+            :href="login()"
+            class="underline underline-offset-4"
+            :tabindex="6"
+        >
+            {{ t('common.logIn') }}
+        </TextLink>
+    </div>
 </template>

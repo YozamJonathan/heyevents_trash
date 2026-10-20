@@ -1,0 +1,389 @@
+{
+    "language": {
+        "label": "Lugha",
+        "english": "English",
+        "swahili": "Kiswahili"
+    },
+    "nav": {
+        "standards": "Aina za Matukio",
+        "howItWorks": "Jinsi Inavyofanya Kazi",
+        "exploreEvents": "Gundua Matukio",
+        "reviews": "Maoni",
+        "contact": "Wasiliana Nasi",
+        "toggleTheme": "Badili mandhari",
+        "dark": "Giza",
+        "light": "Mwanga",
+        "dashboard": "Dashibodi",
+        "signIn": "Ingia",
+        "getStarted": "Anza Sasa",
+        "toggleMenu": "Fungua au funga menyu",
+        "settings": "Mipangilio",
+        "logOut": "Toka",
+        "search": "Tafuta",
+        "repository": "Hifadhi ya msimbo",
+        "documentation": "Nyaraka",
+        "userManagement": "Usimamizi wa Watumiaji",
+        "rolesPermissions": "Majukumu na Ruhusa",
+        "platformConfig": "Mipangilio ya Mfumo",
+        "vendorApprovals": "Uidhinishaji wa Watoa Huduma (KYC)",
+        "eventModeration": "Ukaguzi wa Matukio",
+        "disputeDesk": "Dawati la Migogoro",
+        "businessAnalytics": "Takwimu za Biashara",
+        "myServices": "Huduma na Vifurushi Vyangu",
+        "providerSchedule": "Ratiba ya Mtoa Huduma",
+        "earningsPayouts": "Mapato na Malipo",
+        "findServices": "Tafuta Huduma",
+        "myBookedEvents": "Matukio Yangu Niliyoweka Nafasi",
+        "bookEvent": "Weka Nafasi ya Tukio",
+        "platformHelp": "Msaada wa Mfumo",
+        "platform": "Mfumo"
+    },
+    "page": {
+        "title": "HEY Events — Usimamizi wa Matukio na Tiketi",
+        "cityAlt": "Mandhari ya jiji kando ya maji"
+    },
+    "hero": {
+        "title": "Mahali bora pa kupata na kugundua kila unachohitaji",
+        "description": "Kuanzia harusi muhimu na mikutano ya kampuni hadi tamasha za viwanjani na hafla za kuchangisha fedha, tafuta, weka nafasi na simamia kila kitu kwa kubofya mara moja.",
+        "eventLabel": "Tukio au aina",
+        "eventPlaceholder": "Gala, mkutano, tamasha, uchangishaji...",
+        "locationLabel": "Mahali au ukumbi",
+        "locationPlaceholder": "Ukumbi wa sherehe, uwanja, kituo cha mikutano...",
+        "search": "Tafuta"
+    },
+    "category": {
+        "social": {
+            "title": "Sherehe na Hafla za Kijamii",
+            "badge": "Harusi na Gala",
+            "listings": "Harusi, siku za kuzaliwa na gala",
+            "subtitle": "Mipango ya viti, mahitaji ya chakula na michango kwa njia ya kidijitali."
+        },
+        "corporate": {
+            "title": "Kampuni na Biashara",
+            "badge": "Mikutano na Kongamano",
+            "listings": "Mikutano na makongamano",
+            "subtitle": "Ratiba za vipindi, orodha za wazungumzaji na beji za QR za kiotomatiki."
+        },
+        "entertainment": {
+            "title": "Burudani na Tamasha",
+            "badge": "Tamasha na Viwanja",
+            "listings": "Matamasha na viwanja",
+            "subtitle": "Tiketi nyingi, ufuatiliaji wa viingilio na malipo bila fedha taslimu."
+        },
+        "community": {
+            "title": "Jamii na Mashirika Yasiyo ya Faida",
+            "badge": "Gala na Huduma za Dini",
+            "listings": "Uchangishaji na gala",
+            "subtitle": "Ufuatiliaji wa wafadhili, ripoti za ahadi na uratibu wa wajitoleaji."
+        },
+        "explore": "Gundua aina hii"
+    },
+    "steps": {
+        "eyebrow": "Mchakato rahisi",
+        "title": "Jinsi inavyofanya kazi",
+        "description": "Hatua rahisi kutoka kuunda tukio hadi kuwakaribisha wageni.",
+        "label": "Hatua",
+        "select": {
+            "title": "Chagua aina ya tukio",
+            "description": "Chagua mpangilio wa sherehe, kampuni, burudani au shughuli za jamii."
+        },
+        "plan": {
+            "title": "Panga na alika",
+            "description": "Panga viti, ratiba, aina za tiketi na mialiko ya wageni."
+        },
+        "execute": {
+            "title": "Karibisha wageni",
+            "description": "Changanua tiketi bila intaneti na fuatilia wageni wanapowasili."
+        }
+    },
+    "explore": {
+        "eyebrow": "Orodha ya matukio",
+        "title": "Matukio maalum",
+        "all": "Aina zote",
+        "social": "Kijamii",
+        "corporate": "Kampuni",
+        "entertainment": "Burudani",
+        "community": "Jamii"
+    },
+    "listing": {
+        "1": {
+            "category": "Harusi na sherehe",
+            "status": "Uthibitisho wazi",
+            "capacity": "Wageni 400",
+            "description": "Mpangilio wa viti, mapendeleo ya chakula na orodha ya zawadi za harusi."
+        },
+        "2": {
+            "category": "Mikutano na makongamano",
+            "status": "Usajili wazi",
+            "capacity": "Washiriki 2,500",
+            "description": "Kumbi nane za vipindi, wazungumzaji wakuu na kuingia kwa beji za QR."
+        },
+        "3": {
+            "category": "Tamasha na viwanja",
+            "status": "Tiketi za mapema",
+            "capacity": "Wahudhuriaji 15,000",
+            "description": "Kuingia kwa QR kwa haraka na maeneo ya bangili za malipo yasiyo ya pesa taslimu."
+        },
+        "4": {
+            "category": "Uchangishaji na gala",
+            "status": "Michango wazi",
+            "capacity": "Wafadhili 600",
+            "description": "Jumla ya ahadi papo hapo, taarifa za WhatsApp na uratibu wa wajitoleaji."
+        }
+    },
+    "reviews": {
+        "eyebrow": "Waandaaji wanatuamini",
+        "title": "Waandaaji wanasemaje kuhusu HEY Events?"
+    },
+    "review": {
+        "1": {
+            "role": "Mratibu wa harusi",
+            "category": "Sherehe na hafla za kijamii",
+            "content": "Mpangilio wa viti na ufuatiliaji wa majibu ya mialiko ulituokoa wiki kadhaa za kazi. Wageni waliingia kwa urahisi kwa kutumia QR."
+        },
+        "2": {
+            "role": "Mkurugenzi wa tamasha",
+            "category": "Burudani na tamasha",
+            "content": "Uingizaji langoni uliendelea vizuri hata mtandao wa simu ulipokatika. Usawazishaji wa nje ya mtandao uliendeleza foleni."
+        },
+        "3": {
+            "role": "Makamu wa rais wa kampuni",
+            "category": "Kampuni na biashara",
+            "content": "Ratiba za vipindi, beji za papo hapo na zana za wadhamini zilifanya kongamano letu liwe bora zaidi."
+        }
+    },
+    "footer": {
+        "rights": "Haki zote zimehifadhiwa.",
+        "support": "Msaada",
+        "darkMode": "Mandhari ya giza",
+        "lightMode": "Mandhari ya mwanga"
+    },
+    "common": {
+        "email": "Barua pepe",
+        "password": "Nenosiri",
+        "confirmPassword": "Thibitisha nenosiri",
+        "name": "Jina",
+        "fullName": "Jina kamili",
+        "rememberMe": "Nikumbuke",
+        "forgotPassword": "Umesahau nenosiri?",
+        "orReturnTo": "Au, rudi kwenye",
+        "logIn": "Ingia",
+        "signUp": "Jisajili",
+        "createAccount": "Fungua akaunti",
+        "loading": "Tafadhali subiri...",
+        "users": "Watumiaji"
+    },
+    "auth": {
+        "login": {
+            "title": "Ingia kwenye akaunti yako",
+            "description": "Weka barua pepe na nenosiri lako ili kuingia",
+            "pageTitle": "Ingia",
+            "noAccount": "Huna akaunti?",
+            "googleButton": "Endelea na Google",
+            "orContinueWith": "Au ingia kwa kutumia"
+        },
+        "register": {
+            "title": "Fungua akaunti",
+            "description": "Jaza taarifa zako hapa chini ili kufungua akaunti",
+            "pageTitle": "Jisajili",
+            "alreadyHaveAccount": "Tayari una akaunti?",
+            "googleButton": "Endelea na Google",
+            "orContinueWith": "Au jisajili kwa kutumia"
+        },
+        "forgot": {
+            "title": "Umesahau nenosiri",
+            "description": "Weka barua pepe yako ili upokee kiungo cha kubadilisha nenosiri",
+            "pageTitle": "Umesahau nenosiri",
+            "sendLink": "Tuma kiungo cha kubadilisha nenosiri"
+        },
+        "reset": {
+            "title": "Badilisha nenosiri",
+            "description": "Weka nenosiri lako jipya hapa chini",
+            "pageTitle": "Badilisha nenosiri",
+            "submit": "Badilisha nenosiri"
+        },
+        "confirm": {
+            "title": "Thibitisha nenosiri",
+            "description": "Hili ni eneo salama la programu. Thibitisha nenosiri lako kabla ya kuendelea.",
+            "pageTitle": "Thibitisha nenosiri",
+            "submit": "Thibitisha nenosiri"
+        }
+    },
+    "settings": {
+        "title": "Mipangilio",
+        "description": "Simamia wasifu na mipangilio ya akaunti yako",
+        "navigation": "Mipangilio",
+        "profile": "Wasifu",
+        "profileTitle": "Mipangilio ya wasifu",
+        "profileDescription": "Sasisha jina na barua pepe yako",
+        "security": "Usalama",
+        "securityTitle": "Mipangilio ya usalama",
+        "passwordTitle": "Sasisha nenosiri",
+        "passwordDescription": "Tumia nenosiri refu na la kipekee ili kulinda akaunti yako",
+        "appearance": "Mwonekano",
+        "appearanceTitle": "Mipangilio ya mwonekano",
+        "appearanceDescription": "Sasisha mwonekano wa akaunti yako",
+        "currentPassword": "Nenosiri la sasa",
+        "newPassword": "Nenosiri jipya",
+        "save": "Hifadhi",
+        "light": "Mwanga",
+        "dark": "Giza",
+        "system": "Mfumo"
+    },
+    "app": {
+        "navigationMenu": "Menyu ya urambazaji",
+        "settings": "Mipangilio",
+        "logout": "Toka",
+        "dashboard": "Dashibodi",
+        "permissionSession": "Eneo linalodhibitiwa kwa ruhusa • Kipindi kinatumika",
+        "hideClientView": "Ficha Mwonekano wa Mteja",
+        "previewClientView": "Onyesha Mwonekano wa Mteja",
+        "previewBanner": "Unaangalia mwonekano wa mteja na mwandaaji kama Msimamizi Mkuu"
+    },
+    "roles": {
+        "superAdmin": "Msimamizi Mkuu",
+        "admin": "Msimamizi",
+        "provider": "Mtoa Huduma",
+        "client": "Mteja",
+        "member": "Mwanachama"
+    },
+    "clientDashboard": {
+        "welcome": "Karibu HEY Events",
+        "intro": "Simamia nafasi zako za matukio, wasiliana na watoa huduma waliothibitishwa na tazama kazi zetu.",
+        "explore": "Gundua Matukio na Huduma",
+        "metricEvents": "Matukio Niliyoweka Nafasi",
+        "metricEventsValue": "0 Yajayo",
+        "metricEventsNote": "Hakuna nafasi zinazotumika",
+        "metricInquiries": "Maombi Yanayoendelea",
+        "metricInquiriesValue": "0 Yanayosubiri",
+        "metricInquiriesNote": "Bei zote zimesasishwa",
+        "metricInvestment": "Jumla ya Matumizi",
+        "metricInvestmentValue": "TZS 0",
+        "metricInvestmentNote": "Malipo yaliyokamilika",
+        "metricFavorites": "Vipendwa Vilivyohifadhiwa",
+        "metricFavoritesValue": "0 Vimehifadhiwa",
+        "metricFavoritesNote": "Watoa huduma waliochaguliwa",
+        "upcoming": "Matukio na Nafasi Zangu Zijazo",
+        "upcomingDescription": "Mikataba ya matukio iliyothibitishwa na ratiba yako.",
+        "noEvents": "Bado Hujahifadhi Tukio",
+        "noEventsDescription": "Kwa sasa huna nafasi zilizopangwa. Ukithibitisha tukio au kuhifadhi mtoa huduma, ratiba na maelezo vitaonekana hapa.",
+        "browse": "Vinjari Huduma na Matukio",
+        "portfolio": "Matukio Tuliyosimamia",
+        "portfolioDescription": "Orodha ya matukio yaliyosimamiwa moja kwa moja na HEY Events.",
+        "managed": "Yamesimamiwa na Timu Yetu 100%",
+        "project1Type": "Kongamano la Kampuni na Karamu",
+        "project1Location": "Ufukwe wa Dar es Salaam",
+        "project1Service1": "Sauti na Jukwaa",
+        "project1Service2": "Huduma ya Chakula",
+        "project1Service3": "Ulinzi wa Itifaki",
+        "project1Praise": "Utekelezaji bora kuanzia uhandisi wa sauti hadi itifaki ya wageni maalum.",
+        "project2Type": "Sherehe ya Harusi ya Kifahari",
+        "project2Location": "Hoteli ya Ufukweni ya Sunset",
+        "project2Service1": "Maua na Mapambo",
+        "project2Service2": "Upigaji Picha kwa Drone",
+        "project2Service3": "Bendi ya DJ ya Moja kwa Moja",
+        "project2Praise": "Mabadiliko ya mapambo na upigaji picha yalizidi matarajio yote.",
+        "project3Type": "Kongamano Maalum la Viongozi",
+        "project3Location": "Alpine Mountain Lodge",
+        "project3Service1": "Vifaa Kamili vya Sauti na Picha",
+        "project3Service2": "Uongozaji wa MC",
+        "project3Service3": "Upigaji Picha",
+        "project3Praise": "Huduma ya wakati, iliyopangwa vizuri na isiyo na usumbufu kwa timu yetu ya viongozi."
+    },
+    "adminDashboard": {
+        "pendingKyc": "Uthibitishaji wa Watoa Huduma Unaosubiri",
+        "pending": "0 Inasubiri",
+        "allClear": "Yote Sawa",
+        "moderation": "Matukio Yanayokaguliwa",
+        "flagged": "0 Yameripotiwa",
+        "queueClear": "Foleni Tupu",
+        "disputes": "Malalamiko Wazi",
+        "open": "0 Wazi",
+        "noConflicts": "Hakuna Migogoro",
+        "accounts": "Akaunti za Mfumo",
+        "active": "Inatumika",
+        "verifications": "Uthibitishaji wa Watoa Huduma (KYC)",
+        "verificationDescription": "Kubali au kataa maombi ya usajili wa watoa huduma.",
+        "awaitingReview": "0 Zinasubiri Ukaguzi",
+        "reviewed": "Maombi Yote ya Watoa Huduma Yamekaguliwa",
+        "noPending": "Hakuna uthibitishaji wa KYC unaosubiri. Maombi mapya ya watoa huduma yataonekana hapa kwa ukaguzi na usajili.",
+        "moderationQueue": "Foleni ya Ukaguzi wa Matukio",
+        "reviewListings": "Kagua matangazo yaliyoripotiwa",
+        "moderationClear": "Foleni ya Ukaguzi Iko Sawa",
+        "noFlags": "Hakuna malalamiko ya jamii au matangazo yanayohitaji ukaguzi.",
+        "reason": "Sababu",
+        "disputeDesk": "Dawati la Kutatua Migogoro",
+        "noDisputes": "Hakuna migogoro iliyo wazi. Miamala ya wateja na watoa huduma iko salama."
+    },
+    "providerDashboard": {
+        "earnings": "Jumla ya Mapato Halisi",
+        "newAccount": "Akaunti Mpya",
+        "upcomingBookings": "Nafasi Zijazo",
+        "events": "Matukio 0",
+        "scheduleClear": "Ratiba Haina Matukio",
+        "packages": "Vifurushi vya Huduma Vinavyotumika",
+        "listed": "0 Vimeorodheshwa",
+        "addPackage": "Ongeza Kifurushi cha Kwanza",
+        "rating": "Tathmini ya Mteja",
+        "newProvider": "Mtoa Huduma Mpya",
+        "awaitReviews": "Inasubiri Tathmini",
+        "verified": "Mtoa Huduma Aliyethibitishwa",
+        "active": "Inatumika",
+        "ready": "Akaunti yako iko tayari. Orodhesha huduma na vifurushi vyako ili kupokea nafasi na maombi ya wateja.",
+        "addService": "Ongeza Huduma",
+        "schedule": "Ratiba ya Matukio Yajayo",
+        "scheduleDescription": "Nafasi za moja kwa moja za wateja kwenye ratiba yako.",
+        "noBookings": "Bado Hakuna Nafasi Zilizopangwa",
+        "noBookingsDescription": "Kwa sasa huna kazi au nafasi zilizothibitishwa. Wateja wakichagua vifurushi vyako, ratiba itaonekana hapa.",
+        "client": "Mteja",
+        "catalog": "Orodha Yangu ya Huduma",
+        "noPackages": "Hakuna Vifurushi Vilivyoundwa",
+        "noPackagesDescription": "Chapisha vifurushi vyako pamoja na bei ili wateja wakupate na kuweka nafasi.",
+        "createPackage": "Unda Kifurushi cha Kwanza",
+        "payoutBalance": "Salio Linalopatikana kwa Malipo",
+        "requestPayout": "Omba Malipo"
+    },
+    "superAdminDashboard": {
+        "users": "Watumiaji Waliosajiliwa",
+        "database": "Kwenye Hifadhidata",
+        "health": "Hali ya Mfumo",
+        "optimal": "Nzuri",
+        "servicesUp": "Huduma Zote Ziko Tayari",
+        "permissions": "Ruhusa Zilizowekwa",
+        "guard": "Ulinzi wa Spatie",
+        "roles": "Majukumu ya Mfumo",
+        "rbac": "RBAC Inatumika",
+        "infrastructure": "Miundombinu na Usimamizi wa Mfumo",
+        "infrastructureDescription": "Udhibiti wa mfumo wenye ruhusa za juu na mipangilio ya uendeshaji.",
+        "rootAccess": "Ufikiaji Mkuu",
+        "roleMatrix": "Jedwali la Majukumu na Ruhusa",
+        "roleMatrixDescription": "Fafanua majukumu na udhibiti ruhusa za Spatie.",
+        "configuredRoles": "Majukumu Yaliyowekwa",
+        "protected": "Mfumo Umelindwa",
+        "commission": "Kamisheni na Ada za Mfumo",
+        "commissionDescription": "Weka ada za nafasi na viwango vya miamala.",
+        "platformStandard": "Kiwango cha Mfumo",
+        "activePolicy": "Sera Inatumika",
+        "databaseBackup": "Hifadhidata na Nakala Rudufu",
+        "databaseDescription": "Uhamishaji wa hifadhidata, miunganisho na kazi za kiotomatiki.",
+        "connected": "Hifadhidata Imeunganishwa",
+        "healthy": "Salama",
+        "delegation": "Ugawaji wa Majukumu ya Wasimamizi",
+        "delegationDescription": "Wateue wasimamizi na udhibiti viwango vya ufikiaji.",
+        "rbacGuard": "Ulinzi wa RBAC",
+        "enforced": "Umetekelezwa",
+        "coreServices": "Huduma Kuu za Mfumo",
+        "auditLog": "Rekodi ya Ukaguzi wa Usalama",
+        "systemEvents": "Matukio ya mfumo kwa wakati halisi",
+        "allClear": "Yote Sawa na Yanakaguliwa",
+        "noWarnings": "Hakuna tahadhari muhimu za ukaguzi. Ruhusa na uthibitishaji wa mfumo vinafanya kazi kwa usalama.",
+        "target": "Lengo",
+        "auditStreaming": "Utiririshaji wa ukaguzi unatumia rekodi za ndani za Laravel.",
+        "rbacEngine": "Injini ya RBAC ya Spatie",
+        "activeCached": "Inatumika na Imehifadhiwa",
+        "databaseCluster": "Kundi la Hifadhidata",
+        "eventQueue": "Foleni ya Matukio na Kazi",
+        "listening": "Inasikiliza",
+        "securityAuth": "Usalama na Uthibitishaji"
+    }
+}

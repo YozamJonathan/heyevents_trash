@@ -8,30 +8,44 @@ import LandingExplore from '@/components/landing/LandingExplore.vue';
 import LandingReviews from '@/components/landing/LandingReviews.vue';
 import LandingFooter from '@/components/landing/LandingFooter.vue';
 import PwaBanner from '@/components/pwa/PwaBanner.vue';
+import { useLanguage } from '@/composables/useLanguage';
+
+const { t } = useLanguage();
 </script>
 
 <template>
-    <Head title="HEY Events — Event Management & Ticketing Infrastructure">
+    <Head :title="t('page.title')">
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossorigin="anonymous"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+            rel="stylesheet"
+        />
     </Head>
 
-    <div class="relative min-h-screen bg-slate-100 font-['Poppins',sans-serif] text-zinc-900 antialiased selection:bg-[#ff545a] selection:text-white dark:bg-zinc-950 dark:text-zinc-100">
+    <div
+        class="relative min-h-screen bg-slate-100 font-['Poppins',sans-serif] text-zinc-900 antialiased selection:bg-[#ff545a] selection:text-white dark:bg-zinc-950 dark:text-zinc-100"
+    >
         <!-- Persistent Background Layer (City Day for Light Mode, City Night for Dark Mode) -->
-        <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden">
             <img
                 src="/images/hero-city-day.jpg"
-                alt="City Waterfront Skyline"
+                :alt="t('page.cityAlt')"
                 class="h-full w-full object-cover object-center dark:hidden"
             />
             <img
                 src="/images/hero-city-night.jpg"
-                alt="City Night Skyline"
-                class="h-full w-full object-cover object-center hidden dark:block"
+                :alt="t('page.cityAlt')"
+                class="hidden h-full w-full object-cover object-center dark:block"
             />
             <!-- Atmospheric Contrast Layer: balanced so skyline & lights are clearly visible while text has high readability -->
-            <div class="absolute inset-0 bg-white/45 dark:bg-black/55 backdrop-blur-[0.5px]"></div>
+            <div
+                class="absolute inset-0 bg-white/45 backdrop-blur-[0.5px] dark:bg-black/55"
+            ></div>
         </div>
 
         <div class="relative z-10 flex min-h-screen flex-col">

@@ -53,6 +53,19 @@ test('users can not authenticate with invalid password', function () {
     $this->assertGuest();
 });
 
+test('invalid credentials use the selected Swahili locale', function () {
+    $user = User::factory()->create();
+
+    $response = $this->withUnencryptedCookie('heyevents_locale', 'sw')->post(route('login.store'), [
+        'email' => $user->email,
+        'password' => 'wrong-password',
+    ]);
+
+    $response->assertSessionHasErrors([
+        'email' => 'Taarifa hizi za kuingia hazilingani na rekodi zetu.',
+    ]);
+});
+
 test('users can logout', function () {
     $user = User::factory()->create();
 

@@ -6,18 +6,20 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { store } from '@/routes/password/confirm';
+import { useLanguage } from '@/composables/useLanguage';
+
+const { t } = useLanguage();
 
 defineOptions({
     layout: {
-        title: 'Confirm password',
-        description:
-            'This is a secure area of the application. Please confirm your password before continuing.',
+        title: 'auth.confirm.title',
+        description: 'auth.confirm.description',
     },
 });
 </script>
 
 <template>
-    <Head title="Confirm password" />
+    <Head :title="t('auth.confirm.pageTitle')" />
 
     <Form
         v-bind="store.form()"
@@ -26,7 +28,7 @@ defineOptions({
     >
         <div class="space-y-6">
             <div class="grid gap-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{{ t('common.password') }}</Label>
                 <PasswordInput
                     id="password"
                     name="password"
@@ -46,7 +48,7 @@ defineOptions({
                     data-test="confirm-password-button"
                 >
                     <Spinner v-if="processing" />
-                    Confirm password
+                    {{ t('auth.confirm.submit') }}
                 </Button>
             </div>
         </div>

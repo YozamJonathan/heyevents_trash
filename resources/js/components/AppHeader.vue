@@ -34,6 +34,7 @@ import {
 import UserMenuContent from '@/components/UserMenuContent.vue';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
 import { getInitials } from '@/composables/useInitials';
+import { useLanguage, type TranslationKey } from '@/composables/useLanguage';
 import { toUrl } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import type { BreadcrumbItem, NavItem } from '@/types';
@@ -47,32 +48,47 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const page = usePage();
+const { t } = useLanguage();
 const auth = computed(() => page.props.auth);
 const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl();
+const breadcrumbKeys: Record<string, TranslationKey> = {
+    Dashboard: 'nav.dashboard',
+    'Profile settings': 'settings.profileTitle',
+    'Security settings': 'settings.securityTitle',
+    'Appearance settings': 'settings.appearanceTitle',
+};
+
+const localizedBreadcrumbs = computed(() =>
+    props.breadcrumbs.map((item) => {
+        const key = breadcrumbKeys[item.title];
+
+        return key ? { ...item, title: t(key) } : item;
+    }),
+);
 
 const activeItemStyles =
     'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
 
-const mainNavItems: NavItem[] = [
+const mainNavItems = computed<NavItem[]>(() => [
     {
-        title: 'Dashboard',
+        title: t('nav.dashboard'),
         href: dashboard(),
         icon: LayoutGrid,
     },
-];
+]);
 
-const rightNavItems: NavItem[] = [
+const rightNavItems = computed<NavItem[]>(() => [
     {
-        title: 'Repository',
+        title: t('nav.repository'),
         href: 'https://github.com/laravel/vue-starter-kit',
         icon: Folder,
     },
     {
-        title: 'Documentation',
+        title: t('nav.documentation'),
         href: 'https://laravel.com/docs/starter-kits#vue',
         icon: BookOpen,
     },
-];
+]);
 </script>
 
 <template>
@@ -92,9 +108,9 @@ const rightNavItems: NavItem[] = [
                             </Button>
                         </SheetTrigger>
                         <SheetContent side="left" class="w-[300px] p-6">
-                            <SheetTitle class="sr-only"
-                                >Navigation menu</SheetTitle
-                            >
+                            <SheetTitle class="sr-only">{{
+                                t('app.navigationMenu')
+                            }}</SheetTitle>
                             <SheetHeader class="flex justify-start text-left">
                                 <AppLogoIcon
                                     class="size-6 fill-current text-black dark:text-white"
@@ -198,6 +214,7 @@ const rightNavItems: NavItem[] = [
                             <Search
                                 class="size-5 opacity-80 group-hover:opacity-100"
                             />
+                            <span class="sr-only">{{ t('nav.search') }}</span>
                         </Button>
 
                         <div class="hidden space-x-1 lg:flex">
@@ -276,7 +293,7 @@ const rightNavItems: NavItem[] = [
             <div
                 class="mx-auto flex h-12 w-full items-center justify-start px-4 text-neutral-500 md:max-w-7xl"
             >
-                <Breadcrumbs :breadcrumbs="breadcrumbs" />
+                <Breadcrumbs :breadcrumbs="localizedBreadcrumbs" />
             </div>
         </div>
     </div>
