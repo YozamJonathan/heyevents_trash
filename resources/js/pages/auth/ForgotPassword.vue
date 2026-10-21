@@ -51,7 +51,7 @@ defineProps<{
 
             <div class="my-6 flex items-center justify-start">
                 <Button
-                    class="w-full"
+                    class="h-10 w-full rounded-xl bg-gradient-to-r from-[#ff545a] to-[#ff2a55] font-semibold text-white shadow-md shadow-[#ff545a]/25 transition-all hover:from-[#e0454a] hover:to-[#e02045] hover:shadow-lg hover:shadow-[#ff545a]/35 active:scale-[0.99] disabled:opacity-50"
                     :disabled="processing"
                     data-test="email-password-reset-link-button"
                 >
@@ -61,9 +61,9 @@ defineProps<{
             </div>
         </Form>
 
-        <div class="text-muted-foreground space-x-1 text-center text-sm">
+        <div class="text-zinc-500 dark:text-zinc-400 space-x-1 text-center text-sm">
             <span>{{ t('common.orReturnTo') }}</span>
-            <TextLink :href="login()">{{ t('common.logIn') }}</TextLink>
+            <TextLink :href="login()" class="font-semibold text-[#ff545a] hover:text-[#e0454a] hover:underline">{{ t('common.logIn') }}</TextLink>
         </div>
     </div>
 </template>

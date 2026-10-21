@@ -97,7 +97,7 @@ defineOptions({
 
             <Button
                 type="submit"
-                class="mt-2 w-full"
+                class="mt-2 h-10 w-full rounded-xl bg-gradient-to-r from-[#ff545a] to-[#ff2a55] font-semibold text-white shadow-md shadow-[#ff545a]/25 transition-all hover:from-[#e0454a] hover:to-[#e02045] hover:shadow-lg hover:shadow-[#ff545a]/35 active:scale-[0.99] disabled:opacity-50"
                 tabindex="5"
                 :disabled="processing"
                 data-test="register-user-button"
@@ -109,28 +109,28 @@ defineOptions({
     </Form>
 
     <div class="mt-6 space-y-4">
-        <div class="text-muted-foreground flex items-center gap-3 text-xs">
-            <div class="bg-border h-px flex-1"></div>
+        <div class="text-zinc-400 dark:text-zinc-500 flex items-center gap-3 text-xs">
+            <div class="bg-zinc-200 dark:bg-zinc-800 h-px flex-1"></div>
             <span>{{ t('auth.register.orContinueWith') }}</span>
-            <div class="bg-border h-px flex-1"></div>
+            <div class="bg-zinc-200 dark:bg-zinc-800 h-px flex-1"></div>
         </div>
 
         <InputError :message="page.props.errors?.google" />
 
         <a
             href="/auth/google/redirect"
-            class="border-input bg-background hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring inline-flex h-10 w-full items-center justify-center gap-2 rounded-md border px-4 text-sm font-medium shadow-xs transition-colors focus-visible:ring-2 focus-visible:outline-none"
+            class="inline-flex h-10 w-full items-center justify-center gap-2.5 rounded-xl border border-zinc-200/90 bg-white/90 px-4 text-sm font-semibold text-zinc-800 shadow-2xs backdrop-blur-xs transition hover:bg-zinc-50 hover:border-zinc-300 dark:border-zinc-700/80 dark:bg-zinc-800/90 dark:text-zinc-100 dark:hover:bg-zinc-750 dark:hover:border-zinc-600 focus-visible:ring-2 focus-visible:outline-none"
         >
-            <GoogleIcon class="h-4 w-4" />
-            {{ t('auth.register.googleButton') }}
+            <GoogleIcon class="size-4" />
+            <span>{{ t('auth.register.googleButton') }}</span>
         </a>
     </div>
 
-    <div class="text-muted-foreground text-center text-sm">
+    <div class="text-zinc-500 dark:text-zinc-400 text-center text-sm">
         {{ t('auth.register.alreadyHaveAccount') }}
         <TextLink
             :href="login()"
-            class="underline underline-offset-4"
+            class="font-semibold text-[#ff545a] hover:text-[#e0454a] hover:underline"
             :tabindex="6"
         >
             {{ t('common.logIn') }}

@@ -35,6 +35,9 @@
         "findServices": "Tafuta Huduma",
         "myBookedEvents": "Matukio Yangu Niliyoweka Nafasi",
         "bookEvent": "Weka Nafasi ya Tukio",
+        "backToHome": "Rudi Mwanzo",
+        "secureAuth": "Ulinzi wa SSL wa Biti 256 • Miundombinu Iliyothibitishwa",
+        "themeToggle": "Badili mandhari",
         "platformHelp": "Msaada wa Mfumo",
         "platform": "Mfumo"
     },

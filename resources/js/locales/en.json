@@ -35,6 +35,9 @@
         "findServices": "Find Services",
         "myBookedEvents": "My Booked Events",
         "bookEvent": "Book Event",
+        "backToHome": "Back to Home",
+        "secureAuth": "256-Bit SSL Encrypted • Verified Event Infrastructure",
+        "themeToggle": "Toggle theme",
         "platformHelp": "Platform Help",
         "platform": "Platform"
     },
