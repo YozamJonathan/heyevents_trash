@@ -97,7 +97,7 @@ defineOptions({
 
             <Button
                 type="submit"
-                class="mt-2 h-10 w-full rounded-xl bg-gradient-to-r from-[#ff545a] to-[#ff2a55] font-semibold text-white shadow-md shadow-[#ff545a]/25 transition-all hover:from-[#e0454a] hover:to-[#e02045] hover:shadow-lg hover:shadow-[#ff545a]/35 active:scale-[0.99] disabled:opacity-50"
+                class="mt-2 h-10 w-full rounded-xl bg-[#ff545a] px-4.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#e0454b] disabled:opacity-50"
                 tabindex="5"
                 :disabled="processing"
                 data-test="register-user-button"

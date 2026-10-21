@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { ArrowLeft, Sun, Moon, ShieldCheck, Lock } from '@lucide/vue';
+import { ArrowLeft, Sun, Moon, Lock } from '@lucide/vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 import { useLanguage, type TranslationKey } from '@/composables/useLanguage';
@@ -119,12 +119,6 @@ const toggleTheme = () => {
                     >
                         <!-- Card Header -->
                         <div class="mb-6 flex flex-col items-center text-center">
-                            <div
-                                class="mb-3 inline-flex size-12 items-center justify-center rounded-2xl border border-[#ff545a]/25 bg-gradient-to-tr from-[#ff545a]/15 to-amber-500/10 shadow-xs"
-                            >
-                                <ShieldCheck class="size-6 text-[#ff545a]" />
-                            </div>
-
                             <h1
                                 class="font-['Poppins',sans-serif] text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-white"
                             >
@@ -148,12 +142,6 @@ const toggleTheme = () => {
                 <div
                     class="mt-6 flex flex-col items-center gap-1.5 text-center text-xs text-zinc-500 dark:text-zinc-400"
                 >
-                    <div
-                        class="inline-flex items-center gap-1.5 font-medium text-zinc-600 dark:text-zinc-400"
-                    >
-                        <Lock class="size-3 text-emerald-500" />
-                        <span>{{ t('nav.secureAuth') }}</span>
-                    </div>
                     <p class="text-[11px] text-zinc-400 dark:text-zinc-500">
                         © 2026 HEY Events Platform. All rights reserved.
                     </p>
