@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
 import { ArrowLeft, Sun, Moon, Lock } from '@lucide/vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
@@ -10,10 +11,14 @@ import { home } from '@/routes';
 const props = defineProps<{
     title?: TranslationKey;
     description?: TranslationKey;
+    wide?: boolean;
 }>();
 
+const page = usePage();
 const { t } = useLanguage();
 const { resolvedAppearance, updateAppearance } = useAppearance();
+
+const isWide = computed(() => Boolean(props.wide || page.url.startsWith('/register')));
 
 const toggleTheme = () => {
     updateAppearance(resolvedAppearance.value === 'dark' ? 'light' : 'dark');
@@ -104,9 +109,14 @@ const toggleTheme = () => {
 
         <!-- Main Card Section -->
         <main
-            class="relative z-10 flex flex-1 items-center justify-center px-4 py-8 sm:px-6 sm:py-12"
+            class="relative z-10 flex flex-1 items-center justify-center px-4 py-6 sm:px-6 sm:py-8"
         >
-            <div class="w-full max-w-[450px]">
+            <div
+                :class="[
+                    isWide ? 'max-w-2xl' : 'max-w-[450px]',
+                    'w-full transition-all duration-300',
+                ]"
+            >
                 <!-- Ambient Subtle Glow Behind Card -->
                 <div class="relative">
                     <div
@@ -115,10 +125,10 @@ const toggleTheme = () => {
 
                     <!-- Glassmorphic Card Container -->
                     <div
-                        class="relative rounded-2xl border border-white/80 bg-white/90 p-6 sm:p-8 backdrop-blur-xl shadow-2xl shadow-zinc-900/10 dark:border-zinc-800/90 dark:bg-zinc-900/90 dark:shadow-black/50"
+                        class="relative rounded-2xl border border-white/80 bg-white/90 p-5 sm:p-7 backdrop-blur-xl shadow-2xl shadow-zinc-900/10 dark:border-zinc-800/90 dark:bg-zinc-900/90 dark:shadow-black/50"
                     >
                         <!-- Card Header -->
-                        <div class="mb-6 flex flex-col items-center text-center">
+                        <div class="mb-5 flex flex-col items-center text-center">
                             <h1
                                 class="font-['Poppins',sans-serif] text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-white"
                             >
@@ -140,7 +150,7 @@ const toggleTheme = () => {
 
                 <!-- Trust and Security Badges -->
                 <div
-                    class="mt-6 flex flex-col items-center gap-1.5 text-center text-xs text-zinc-500 dark:text-zinc-400"
+                    class="mt-4 flex flex-col items-center gap-1.5 text-center text-xs text-zinc-500 dark:text-zinc-400"
                 >
                     <p class="text-[11px] text-zinc-400 dark:text-zinc-500">
                         © 2026 HEY Events Platform. All rights reserved.

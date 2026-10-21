@@ -7,6 +7,7 @@ import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Spinner } from '@/components/ui/spinner';
 import { login } from '@/routes';
 import { store } from '@/routes/register';
 import { useLanguage } from '@/composables/useLanguage';
@@ -22,6 +23,7 @@ defineOptions({
     layout: {
         title: 'auth.register.title',
         description: 'auth.register.description',
+        wide: true,
     },
 });
 </script>
@@ -33,10 +35,11 @@ defineOptions({
         v-bind="store.form()"
         :reset-on-success="['password', 'password_confirmation']"
         v-slot="{ errors, processing }"
-        class="flex flex-col gap-6"
+        class="flex flex-col gap-4"
     >
-        <div class="grid gap-6">
-            <div class="grid gap-2">
+        <div class="grid gap-x-4 gap-y-3 sm:grid-cols-2">
+            <!-- Row 1: Full Name -->
+            <div class="grid gap-1.5">
                 <Label for="name">{{ t('common.name') }}</Label>
                 <Input
                     id="name"
@@ -51,7 +54,8 @@ defineOptions({
                 <InputError :message="errors.name" />
             </div>
 
-            <div class="grid gap-2">
+            <!-- Row 1: Email -->
+            <div class="grid gap-1.5">
                 <Label for="email">{{ t('common.email') }}</Label>
                 <Input
                     id="email"
@@ -65,7 +69,8 @@ defineOptions({
                 <InputError :message="errors.email" />
             </div>
 
-            <div class="grid gap-2">
+            <!-- Row 2: Password -->
+            <div class="grid gap-1.5">
                 <Label for="password">{{ t('common.password') }}</Label>
                 <PasswordInput
                     id="password"
@@ -79,7 +84,8 @@ defineOptions({
                 <InputError :message="errors.password" />
             </div>
 
-            <div class="grid gap-2">
+            <!-- Row 2: Confirm Password -->
+            <div class="grid gap-1.5">
                 <Label for="password_confirmation">{{
                     t('common.confirmPassword')
                 }}</Label>
@@ -95,20 +101,23 @@ defineOptions({
                 <InputError :message="errors.password_confirmation" />
             </div>
 
-            <Button
-                type="submit"
-                class="mt-2 h-10 w-full rounded-xl bg-[#ff545a] px-4.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#e0454b] disabled:opacity-50"
-                tabindex="5"
-                :disabled="processing"
-                data-test="register-user-button"
-            >
-                <Spinner v-if="processing" />
-                {{ t('common.createAccount') }}
-            </Button>
+            <!-- Create Account Button -->
+            <div class="sm:col-span-2 pt-1">
+                <Button
+                    type="submit"
+                    class="h-10 w-full rounded-xl bg-[#ff545a] px-4.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#e0454b] disabled:opacity-50"
+                    tabindex="5"
+                    :disabled="processing"
+                    data-test="register-user-button"
+                >
+                    <Spinner v-if="processing" />
+                    {{ t('common.createAccount') }}
+                </Button>
+            </div>
         </div>
     </Form>
 
-    <div class="mt-6 space-y-4">
+    <div class="mt-4 space-y-3">
         <div class="text-zinc-400 dark:text-zinc-500 flex items-center gap-3 text-xs">
             <div class="bg-zinc-200 dark:bg-zinc-800 h-px flex-1"></div>
             <span>{{ t('auth.register.orContinueWith') }}</span>
@@ -126,7 +135,7 @@ defineOptions({
         </a>
     </div>
 
-    <div class="text-zinc-500 dark:text-zinc-400 text-center text-sm">
+    <div class="mt-4 text-zinc-500 dark:text-zinc-400 text-center text-sm">
         {{ t('auth.register.alreadyHaveAccount') }}
         <TextLink
             :href="login()"
