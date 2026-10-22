@@ -67,8 +67,12 @@ test('service provider can submit KYC and receive pending status', function () {
         'brand_name' => 'Safari Audio & Visuals',
         'contact_name' => 'Baraka John',
         'nida_number' => '19950101-12345-00001-21',
-        'social_media' => '@safariaudio_tz',
-        'category' => 'Music & DJ',
+        'primary_phone' => '+255 754 111 222',
+        'secondary_phone' => '+255 713 333 444',
+        'categories' => ['Music & DJ', 'Sound & Lighting'],
+        'instagram' => '@safariaudio_tz',
+        'whatsapp' => '+255754111222',
+        'tiktok' => '@safariaudio',
         'description' => 'Professional sound system and event lighting.',
         'business_licence' => $file,
     ]);
@@ -83,7 +87,12 @@ test('service provider can submit KYC and receive pending status', function () {
     expect($profile->brand_name)->toBe('Safari Audio & Visuals');
     expect($profile->contact_name)->toBe('Baraka John');
     expect($profile->nida_number)->toBe('19950101-12345-00001-21');
-    expect($profile->social_media)->toBe('@safariaudio_tz');
+    expect($profile->primary_phone)->toBe('+255 754 111 222');
+    expect($profile->secondary_phone)->toBe('+255 713 333 444');
+    expect($profile->categories)->toEqual(['Music & DJ', 'Sound & Lighting']);
+    expect($profile->instagram)->toBe('@safariaudio_tz');
+    expect($profile->whatsapp)->toBe('+255754111222');
+    expect($profile->tiktok)->toBe('@safariaudio');
     expect($profile->status)->toBe('pending');
     expect($profile->business_licence_path)->not->toBeNull();
 

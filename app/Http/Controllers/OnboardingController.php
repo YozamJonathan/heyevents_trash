@@ -49,19 +49,37 @@ class OnboardingController extends Controller
     public function submitProvider(Request $request): RedirectResponse
     {
         $user = $request->user();
+        $existingProfile = $user->serviceProviderProfile;
+
+        $licenceRule = ($existingProfile && $existingProfile->business_licence_path)
+            ? ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120']
+            : ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'];
 
         $validated = $request->validate([
             'brand_name' => ['required', 'string', 'max:255'],
             'contact_name' => ['required', 'string', 'max:255'],
             'nida_number' => ['required', 'string', 'max:50'],
-            'business_licence' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
-            'social_media' => ['required', 'string', 'max:255'],
-            'category' => ['nullable', 'string', 'max:100'],
+            'primary_phone' => ['required', 'string', 'max:50'],
+            'secondary_phone' => ['nullable', 'string', 'max:50'],
+            'business_licence' => $licenceRule,
+            'categories' => ['required', 'array', 'min:1'],
+            'categories.*' => ['string', 'max:100'],
+            'instagram' => ['nullable', 'string', 'max:255'],
+            'whatsapp' => ['nullable', 'string', 'max:255'],
+            'tiktok' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
         ]);
 
-        // Store business licence file securely
-        $licencePath = $request->file('business_licence')->store('vendor_licences', 'public');
+        // Store business licence file securely if uploaded
+        $licencePath = $request->hasFile('business_licence')
+            ? $request->file('business_licence')->store('vendor_licences', 'public')
+            : ($existingProfile?->business_licence_path ?? '');
+
+        $socialSummary = collect([
+            ! empty($validated['instagram']) ? 'IG: '.$validated['instagram'] : null,
+            ! empty($validated['whatsapp']) ? 'WA: '.$validated['whatsapp'] : null,
+            ! empty($validated['tiktok']) ? 'TT: '.$validated['tiktok'] : null,
+        ])->filter()->implode(' • ');
 
         // Create or update provider profile
         $user->serviceProviderProfile()->updateOrCreate(
@@ -70,9 +88,15 @@ class OnboardingController extends Controller
                 'brand_name' => $validated['brand_name'],
                 'contact_name' => $validated['contact_name'],
                 'nida_number' => $validated['nida_number'],
+                'primary_phone' => $validated['primary_phone'],
+                'secondary_phone' => $validated['secondary_phone'] ?? null,
                 'business_licence_path' => $licencePath,
-                'social_media' => $validated['social_media'],
-                'category' => $validated['category'] ?? null,
+                'categories' => $validated['categories'],
+                'category' => $validated['categories'][0] ?? null,
+                'instagram' => $validated['instagram'] ?? null,
+                'whatsapp' => $validated['whatsapp'] ?? null,
+                'tiktok' => $validated['tiktok'] ?? null,
+                'social_media' => $socialSummary ?: 'Provided in application',
                 'description' => $validated['description'] ?? null,
                 'status' => 'pending',
                 'rejection_reason' => null,

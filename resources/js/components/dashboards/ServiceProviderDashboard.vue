@@ -24,9 +24,15 @@ const props = defineProps<{
         brand_name: string;
         contact_name: string;
         nida_number: string;
+        primary_phone?: string;
+        secondary_phone?: string;
+        categories?: string[];
+        instagram?: string;
+        whatsapp?: string;
+        tiktok?: string;
         business_licence_path?: string;
         business_licence_url?: string;
-        social_media: string;
+        social_media?: string;
         category?: string;
         description?: string;
         status: 'pending' | 'approved' | 'rejected';
@@ -130,23 +136,74 @@ const myServices = computed<
             <!-- KYC Details Summary Grid -->
             <div
                 v-if="providerProfile"
-                class="border-amber-500/20 mt-2 grid gap-2.5 border-t pt-3 sm:grid-cols-2 md:grid-cols-4 text-xs"
+                class="border-amber-500/20 mt-2 space-y-2.5 border-t pt-3 text-xs"
             >
-                <div class="rounded-lg bg-background/60 p-2.5 border border-border/40">
-                    <span class="text-muted-foreground text-[10px] block uppercase font-medium">Brand</span>
-                    <span class="text-foreground font-semibold truncate block">{{ providerProfile.brand_name }}</span>
+                <div class="grid gap-2.5 sm:grid-cols-2 md:grid-cols-4">
+                    <div class="rounded-lg bg-background/60 p-2.5 border border-border/40 min-w-0">
+                        <span class="text-muted-foreground text-[10px] block uppercase font-medium">Brand</span>
+                        <span class="text-foreground font-semibold truncate block">{{ providerProfile.brand_name }}</span>
+                    </div>
+                    <div class="rounded-lg bg-background/60 p-2.5 border border-border/40 min-w-0">
+                        <span class="text-muted-foreground text-[10px] block uppercase font-medium">Contact</span>
+                        <span class="text-foreground font-semibold truncate block">{{ providerProfile.contact_name }}</span>
+                    </div>
+                    <div class="rounded-lg bg-background/60 p-2.5 border border-border/40 min-w-0">
+                        <span class="text-muted-foreground text-[10px] block uppercase font-medium">Phone(s)</span>
+                        <span class="text-foreground font-medium truncate block">
+                            {{ providerProfile.primary_phone || '—' }}
+                            <span v-if="providerProfile.secondary_phone" class="text-muted-foreground text-[11px]"> · {{ providerProfile.secondary_phone }}</span>
+                        </span>
+                    </div>
+                    <div class="rounded-lg bg-background/60 p-2.5 border border-border/40 min-w-0">
+                        <span class="text-muted-foreground text-[10px] block uppercase font-medium">NIDA</span>
+                        <span class="font-mono text-foreground font-medium truncate block">{{ providerProfile.nida_number }}</span>
+                    </div>
                 </div>
-                <div class="rounded-lg bg-background/60 p-2.5 border border-border/40">
-                    <span class="text-muted-foreground text-[10px] block uppercase font-medium">Contact</span>
-                    <span class="text-foreground font-semibold truncate block">{{ providerProfile.contact_name }}</span>
-                </div>
-                <div class="rounded-lg bg-background/60 p-2.5 border border-border/40">
-                    <span class="text-muted-foreground text-[10px] block uppercase font-medium">NIDA</span>
-                    <span class="font-mono text-foreground font-medium truncate block">{{ providerProfile.nida_number }}</span>
-                </div>
-                <div class="rounded-lg bg-background/60 p-2.5 border border-border/40">
-                    <span class="text-muted-foreground text-[10px] block uppercase font-medium">Social / Web</span>
-                    <span class="text-foreground font-medium truncate block">{{ providerProfile.social_media }}</span>
+
+                <!-- Services & Social Media Row -->
+                <div class="grid gap-2.5 sm:grid-cols-2">
+                    <div class="rounded-lg bg-background/60 p-2.5 border border-border/40 min-w-0">
+                        <span class="text-muted-foreground text-[10px] block uppercase font-medium mb-1">Services Provided</span>
+                        <div class="flex flex-wrap gap-1">
+                            <template v-if="providerProfile.categories && providerProfile.categories.length > 0">
+                                <span
+                                    v-for="cat in providerProfile.categories"
+                                    :key="cat"
+                                    class="inline-flex items-center rounded-md bg-[#ff545a]/10 px-2 py-0.5 text-[11px] font-medium text-[#ff545a]"
+                                >
+                                    {{ cat }}
+                                </span>
+                            </template>
+                            <span
+                                v-else-if="providerProfile.category"
+                                class="inline-flex items-center rounded-md bg-[#ff545a]/10 px-2 py-0.5 text-[11px] font-medium text-[#ff545a]"
+                            >
+                                {{ providerProfile.category }}
+                            </span>
+                            <span v-else class="text-muted-foreground text-[11px]">—</span>
+                        </div>
+                    </div>
+
+                    <div class="rounded-lg bg-background/60 p-2.5 border border-border/40 min-w-0">
+                        <span class="text-muted-foreground text-[10px] block uppercase font-medium mb-1">Social Channels</span>
+                        <div class="flex flex-wrap items-center gap-1.5 text-[11px]">
+                            <span v-if="providerProfile.instagram" class="inline-flex items-center gap-1 rounded bg-purple-500/10 px-2 py-0.5 text-purple-700 dark:text-purple-300">
+                                IG: {{ providerProfile.instagram }}
+                            </span>
+                            <span v-if="providerProfile.whatsapp" class="inline-flex items-center gap-1 rounded bg-emerald-500/10 px-2 py-0.5 text-emerald-700 dark:text-emerald-300">
+                                WA: {{ providerProfile.whatsapp }}
+                            </span>
+                            <span v-if="providerProfile.tiktok" class="inline-flex items-center gap-1 rounded bg-cyan-500/10 px-2 py-0.5 text-cyan-700 dark:text-cyan-300">
+                                TT: {{ providerProfile.tiktok }}
+                            </span>
+                            <span v-if="!providerProfile.instagram && !providerProfile.whatsapp && !providerProfile.tiktok && providerProfile.social_media" class="text-foreground truncate">
+                                {{ providerProfile.social_media }}
+                            </span>
+                            <span v-if="!providerProfile.instagram && !providerProfile.whatsapp && !providerProfile.tiktok && !providerProfile.social_media" class="text-muted-foreground">
+                                —
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

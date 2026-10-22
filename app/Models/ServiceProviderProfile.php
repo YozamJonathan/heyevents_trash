@@ -16,9 +16,15 @@ class ServiceProviderProfile extends Model
         'brand_name',
         'contact_name',
         'nida_number',
+        'primary_phone',
+        'secondary_phone',
         'business_licence_path',
         'social_media',
+        'instagram',
+        'whatsapp',
+        'tiktok',
         'category',
+        'categories',
         'description',
         'status',
         'rejection_reason',
@@ -43,6 +49,7 @@ class ServiceProviderProfile extends Model
     {
         return [
             'verified_at' => 'datetime',
+            'categories' => 'array',
         ];
     }
 

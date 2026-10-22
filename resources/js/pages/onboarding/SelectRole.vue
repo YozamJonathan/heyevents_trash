@@ -13,11 +13,17 @@ import {
     Sun,
     Moon,
     LogOut,
-    Sparkles,
     User as UserIcon,
-    Globe,
     Building2,
     Lock,
+    Phone,
+    PhoneCall,
+    Check,
+    X,
+    FileCheck,
+    Camera,
+    MessageCircle,
+    Video,
 } from '@lucide/vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
@@ -42,8 +48,14 @@ const props = defineProps<{
         brand_name?: string;
         contact_name?: string;
         nida_number?: string;
-        social_media?: string;
+        primary_phone?: string;
+        secondary_phone?: string;
+        categories?: string[];
         category?: string;
+        instagram?: string;
+        whatsapp?: string;
+        tiktok?: string;
+        social_media?: string;
         description?: string;
         status?: string;
         rejection_reason?: string;
@@ -68,35 +80,85 @@ const selectClient = () => {
     );
 };
 
+const availableCategories = [
+    { id: 'Music & DJ', label: 'Music & DJ', emoji: '🎵' },
+    { id: 'Master of Ceremony (MC)', label: 'MC / Host', emoji: '🎤' },
+    { id: 'Catering & Cake', label: 'Catering & Cake', emoji: '🎂' },
+    { id: 'Photography & Video', label: 'Photo & Video', emoji: '📸' },
+    { id: 'Decoration & Floral', label: 'Decor & Floral', emoji: '💐' },
+    { id: 'Venue & Hall', label: 'Venue & Hall', emoji: '🏛️' },
+    { id: 'Sound & Lighting', label: 'Sound & Lighting', emoji: '💡' },
+    { id: 'Transportation & Protocol', label: 'VIP Car & Protocol', emoji: '🚗' },
+    { id: 'Security & Protocol', label: 'Event Security', emoji: '🛡️' },
+    { id: 'Makeup & Beauty', label: 'Bridal & Makeup', emoji: '💄' },
+    { id: 'Other Services', label: 'Other Event Services', emoji: '✨' },
+];
+
 const kycForm = useForm<{
     brand_name: string;
     contact_name: string;
     nida_number: string;
+    primary_phone: string;
+    secondary_phone: string;
+    categories: string[];
+    instagram: string;
+    whatsapp: string;
+    tiktok: string;
     business_licence: File | null;
-    social_media: string;
-    category: string;
     description: string;
 }>({
     brand_name: props.existingProfile?.brand_name ?? '',
     contact_name: props.existingProfile?.contact_name ?? '',
     nida_number: props.existingProfile?.nida_number ?? '',
+    primary_phone: (props.existingProfile as any)?.primary_phone ?? '',
+    secondary_phone: (props.existingProfile as any)?.secondary_phone ?? '',
+    categories: (props.existingProfile as any)?.categories ?? ((props.existingProfile as any)?.category ? [(props.existingProfile as any).category] : []),
+    instagram: (props.existingProfile as any)?.instagram ?? '',
+    whatsapp: (props.existingProfile as any)?.whatsapp ?? '',
+    tiktok: (props.existingProfile as any)?.tiktok ?? '',
     business_licence: null,
-    social_media: props.existingProfile?.social_media ?? '',
-    category: props.existingProfile?.category ?? '',
     description: props.existingProfile?.description ?? '',
 });
 
+function toggleCategory(catId: string) {
+    const idx = kycForm.categories.indexOf(catId);
+    if (idx === -1) {
+        kycForm.categories.push(catId);
+    } else {
+        kycForm.categories.splice(idx, 1);
+    }
+}
+
 const licenceFileName = ref<string | null>(null);
+const licenceFileSize = ref<string | null>(null);
+const fileInputRef = ref<HTMLInputElement | null>(null);
 
 const onLicenceSelected = (event: Event) => {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files[0]) {
-        kycForm.business_licence = target.files[0];
-        licenceFileName.value = target.files[0].name;
+        const file = target.files[0];
+        kycForm.business_licence = file;
+        licenceFileName.value = file.name;
+        const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+        licenceFileSize.value = `${sizeMb} MB`;
+    }
+};
+
+const clearLicence = (event?: Event) => {
+    if (event) event.stopPropagation();
+    kycForm.business_licence = null;
+    licenceFileName.value = null;
+    licenceFileSize.value = null;
+    if (fileInputRef.value) {
+        fileInputRef.value.value = '';
     }
 };
 
 const submitProviderKyc = () => {
+    if (kycForm.categories.length === 0) {
+        kycForm.setError('categories' as any, 'Please select at least one service category.');
+        return;
+    }
     kycForm.post('/onboarding/provider', {
         forceFormData: true,
     });
@@ -313,7 +375,7 @@ const submitProviderKyc = () => {
             <!-- Step 2: Service Provider KYC Verification Form -->
             <div
                 v-else
-                class="w-full max-w-2xl space-y-6 animate-in fade-in slide-in-from-bottom-2"
+                class="w-full max-w-3xl space-y-6 animate-in fade-in slide-in-from-bottom-2"
             >
                 <div class="flex items-center justify-between">
                     <button
@@ -345,142 +407,290 @@ const submitProviderKyc = () => {
                         </p>
                     </div>
 
-                    <form @submit.prevent="submitProviderKyc" class="space-y-4">
-                        <div class="grid gap-x-4 gap-y-3.5 sm:grid-cols-2">
-                            <!-- 1. Brand Name -->
-                            <div class="grid gap-1.5">
-                                <Label for="brand_name" class="flex items-center gap-1.5 text-xs font-semibold">
-                                    <Building2 class="size-3.5 text-[#ff545a]" />
-                                    <span>{{ t('onboarding.brandName') }}</span>
-                                </Label>
-                                <Input
-                                    id="brand_name"
-                                    v-model="kycForm.brand_name"
-                                    required
-                                    :placeholder="t('onboarding.brandNamePlaceholder')"
-                                    class="h-9.5 text-xs rounded-xl"
-                                />
-                                <InputError :message="kycForm.errors.brand_name" />
-                            </div>
+                    <form @submit.prevent="submitProviderKyc" class="space-y-6">
+                        <!-- 1. BUSINESS & REPRESENTATIVE IDENTITY -->
+                        <div class="space-y-3">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                1. Business & Contact Information
+                            </h3>
 
-                            <!-- 2. Personal / Representative Name -->
-                            <div class="grid gap-1.5">
-                                <Label for="contact_name" class="flex items-center gap-1.5 text-xs font-semibold">
-                                    <UserIcon class="size-3.5 text-[#ff545a]" />
-                                    <span>{{ t('onboarding.contactName') }}</span>
-                                </Label>
-                                <Input
-                                    id="contact_name"
-                                    v-model="kycForm.contact_name"
-                                    required
-                                    :placeholder="t('onboarding.contactNamePlaceholder')"
-                                    class="h-9.5 text-xs rounded-xl"
-                                />
-                                <InputError :message="kycForm.errors.contact_name" />
-                            </div>
+                            <div class="grid gap-x-4 gap-y-3.5 sm:grid-cols-2">
+                                <!-- Brand Name -->
+                                <div class="grid gap-1.5 min-w-0">
+                                    <Label for="brand_name" class="flex items-center gap-1.5 text-xs font-semibold">
+                                        <Building2 class="size-3.5 text-[#ff545a]" />
+                                        <span>{{ t('onboarding.brandName') }}</span>
+                                    </Label>
+                                    <Input
+                                        id="brand_name"
+                                        v-model="kycForm.brand_name"
+                                        required
+                                        :placeholder="t('onboarding.brandNamePlaceholder')"
+                                        class="h-9.5 text-xs rounded-xl"
+                                    />
+                                    <InputError :message="kycForm.errors.brand_name" />
+                                </div>
 
-                            <!-- 3. NIDA Number -->
-                            <div class="grid gap-1.5">
-                                <Label for="nida_number" class="flex items-center gap-1.5 text-xs font-semibold">
-                                    <ShieldCheck class="size-3.5 text-[#ff545a]" />
-                                    <span>{{ t('onboarding.nida') }}</span>
-                                </Label>
-                                <Input
-                                    id="nida_number"
-                                    v-model="kycForm.nida_number"
-                                    required
-                                    :placeholder="t('onboarding.nidaPlaceholder')"
-                                    class="h-9.5 text-xs rounded-xl font-mono"
-                                />
-                                <InputError :message="kycForm.errors.nida_number" />
-                            </div>
+                                <!-- Contact Name -->
+                                <div class="grid gap-1.5 min-w-0">
+                                    <Label for="contact_name" class="flex items-center gap-1.5 text-xs font-semibold">
+                                        <UserIcon class="size-3.5 text-[#ff545a]" />
+                                        <span>{{ t('onboarding.contactName') }}</span>
+                                    </Label>
+                                    <Input
+                                        id="contact_name"
+                                        v-model="kycForm.contact_name"
+                                        required
+                                        :placeholder="t('onboarding.contactNamePlaceholder')"
+                                        class="h-9.5 text-xs rounded-xl"
+                                    />
+                                    <InputError :message="kycForm.errors.contact_name" />
+                                </div>
 
-                            <!-- 4. Social Media Account -->
-                            <div class="grid gap-1.5">
-                                <Label for="social_media" class="flex items-center gap-1.5 text-xs font-semibold">
-                                    <Globe class="size-3.5 text-[#ff545a]" />
-                                    <span>{{ t('onboarding.socialMedia') }}</span>
-                                </Label>
-                                <Input
-                                    id="social_media"
-                                    v-model="kycForm.social_media"
-                                    required
-                                    :placeholder="t('onboarding.socialMediaPlaceholder')"
-                                    class="h-9.5 text-xs rounded-xl"
-                                />
-                                <InputError :message="kycForm.errors.social_media" />
-                            </div>
+                                <!-- NIDA Number -->
+                                <div class="grid gap-1.5 min-w-0 sm:col-span-2">
+                                    <Label for="nida_number" class="flex items-center gap-1.5 text-xs font-semibold">
+                                        <ShieldCheck class="size-3.5 text-[#ff545a]" />
+                                        <span>{{ t('onboarding.nida') }}</span>
+                                    </Label>
+                                    <Input
+                                        id="nida_number"
+                                        v-model="kycForm.nida_number"
+                                        required
+                                        :placeholder="t('onboarding.nidaPlaceholder')"
+                                        class="h-9.5 text-xs rounded-xl font-mono"
+                                    />
+                                    <InputError :message="kycForm.errors.nida_number" />
+                                </div>
 
-                            <!-- 5. Category Selection -->
-                            <div class="grid gap-1.5">
-                                <Label for="category" class="flex items-center gap-1.5 text-xs font-semibold">
-                                    <Briefcase class="size-3.5 text-[#ff545a]" />
-                                    <span>{{ t('onboarding.category') }}</span>
-                                </Label>
-                                <select
-                                    id="category"
-                                    v-model="kycForm.category"
-                                    class="h-9.5 w-full rounded-xl border border-zinc-200 bg-background px-3 text-xs text-foreground shadow-xs dark:border-zinc-800 focus:outline-none focus:ring-2 focus:ring-[#ff545a]/30"
+                                <!-- Primary Phone Number -->
+                                <div class="grid gap-1.5 min-w-0">
+                                    <Label for="primary_phone" class="flex items-center gap-1.5 text-xs font-semibold">
+                                        <Phone class="size-3.5 text-[#ff545a]" />
+                                        <span>{{ t('onboarding.primaryPhone') }}</span>
+                                    </Label>
+                                    <Input
+                                        id="primary_phone"
+                                        v-model="kycForm.primary_phone"
+                                        required
+                                        :placeholder="t('onboarding.primaryPhonePlaceholder')"
+                                        class="h-9.5 text-xs rounded-xl font-mono"
+                                    />
+                                    <InputError :message="kycForm.errors.primary_phone" />
+                                </div>
+
+                                <!-- Secondary Phone Number (Optional) -->
+                                <div class="grid gap-1.5 min-w-0">
+                                    <Label for="secondary_phone" class="flex items-center gap-1.5 text-xs font-semibold">
+                                        <PhoneCall class="size-3.5 text-zinc-400" />
+                                        <span>{{ t('onboarding.secondaryPhone') }}</span>
+                                    </Label>
+                                    <Input
+                                        id="secondary_phone"
+                                        v-model="kycForm.secondary_phone"
+                                        :placeholder="t('onboarding.secondaryPhonePlaceholder')"
+                                        class="h-9.5 text-xs rounded-xl font-mono"
+                                    />
+                                    <InputError :message="kycForm.errors.secondary_phone" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. SERVICES OFFERED (SELECT MULTIPLE) -->
+                        <div class="space-y-2.5 pt-2 border-t border-zinc-200/60 dark:border-zinc-800/80">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                        2. {{ t('onboarding.services') }}
+                                    </h3>
+                                    <p class="text-[11px] text-zinc-500 dark:text-zinc-400">
+                                        {{ t('onboarding.servicesSubtitle') }}
+                                    </p>
+                                </div>
+                                <span
+                                    v-if="kycForm.categories.length > 0"
+                                    class="rounded-full bg-[#ff545a]/15 px-2.5 py-0.5 text-[11px] font-bold text-[#ff545a]"
                                 >
-                                    <option value="" disabled>Select Primary Category</option>
-                                    <option value="Music & DJ">Music & DJ Sound System</option>
-                                    <option value="Master of Ceremony (MC)">Master of Ceremony (MC)</option>
-                                    <option value="Catering & Cake">Catering & Banquet Cakes</option>
-                                    <option value="Photography & Video">Photography & Cinematography</option>
-                                    <option value="Decoration & Floral">Decoration & Floral Architecture</option>
-                                    <option value="Venue & Hall">Event Venue & Garden</option>
-                                    <option value="Transportation & Protocol">VIP Protocol & Car Hire</option>
-                                    <option value="Other Event Services">Other Event Services</option>
-                                </select>
-                                <InputError :message="kycForm.errors.category" />
+                                    {{ kycForm.categories.length }} selected
+                                </span>
                             </div>
 
-                            <!-- 6. Business Licence Document File Upload -->
-                            <div class="grid gap-1.5">
-                                <Label for="business_licence" class="flex items-center gap-1.5 text-xs font-semibold">
-                                    <FileText class="size-3.5 text-[#ff545a]" />
-                                    <span>{{ t('onboarding.licence') }}</span>
-                                </Label>
+                            <div class="flex flex-wrap gap-2">
+                                <button
+                                    v-for="cat in availableCategories"
+                                    :key="cat.id"
+                                    type="button"
+                                    @click="toggleCategory(cat.id)"
+                                    class="inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs transition duration-200"
+                                    :class="
+                                        kycForm.categories.includes(cat.id)
+                                            ? 'border-[#ff545a] bg-[#ff545a]/10 text-[#ff545a] font-semibold dark:bg-[#ff545a]/20 shadow-xs ring-1 ring-[#ff545a]/30'
+                                            : 'border-zinc-200/80 bg-white/60 text-zinc-700 hover:border-zinc-400 dark:border-zinc-750 dark:bg-zinc-800/60 dark:text-zinc-300 dark:hover:border-zinc-600'
+                                    "
+                                >
+                                    <span>{{ cat.emoji }}</span>
+                                    <span>{{ cat.label }}</span>
+                                    <Check
+                                        v-if="kycForm.categories.includes(cat.id)"
+                                        class="size-3.5 text-[#ff545a] ml-0.5"
+                                    />
+                                </button>
+                            </div>
+                            <InputError :message="kycForm.errors.categories" />
+                        </div>
+
+                        <!-- 3. SOCIAL MEDIA & ONLINE CHANNELS -->
+                        <div class="space-y-3 pt-2 border-t border-zinc-200/60 dark:border-zinc-800/80">
+                            <div>
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                    3. Social Media & Portfolios
+                                </h3>
+                                <p class="text-[11px] text-zinc-500 dark:text-zinc-400">
+                                    Showcase your recent events, videos, and portfolio to speed up verification.
+                                </p>
+                            </div>
+
+                            <div class="grid gap-3 sm:grid-cols-3">
+                                <!-- Instagram -->
+                                <div class="grid gap-1.5 min-w-0">
+                                    <Label for="instagram" class="flex items-center gap-1.5 text-xs font-semibold">
+                                        <Camera class="size-3.5 text-pink-500" />
+                                        <span>{{ t('onboarding.instagram') }}</span>
+                                    </Label>
+                                    <Input
+                                        id="instagram"
+                                        v-model="kycForm.instagram"
+                                        :placeholder="t('onboarding.instagramPlaceholder')"
+                                        class="h-9.5 text-xs rounded-xl"
+                                    />
+                                    <InputError :message="kycForm.errors.instagram" />
+                                </div>
+
+                                <!-- WhatsApp -->
+                                <div class="grid gap-1.5 min-w-0">
+                                    <Label for="whatsapp" class="flex items-center gap-1.5 text-xs font-semibold">
+                                        <MessageCircle class="size-3.5 text-emerald-500" />
+                                        <span>{{ t('onboarding.whatsapp') }}</span>
+                                    </Label>
+                                    <Input
+                                        id="whatsapp"
+                                        v-model="kycForm.whatsapp"
+                                        :placeholder="t('onboarding.whatsappPlaceholder')"
+                                        class="h-9.5 text-xs rounded-xl"
+                                    />
+                                    <InputError :message="kycForm.errors.whatsapp" />
+                                </div>
+
+                                <!-- TikTok -->
+                                <div class="grid gap-1.5 min-w-0">
+                                    <Label for="tiktok" class="flex items-center gap-1.5 text-xs font-semibold">
+                                        <Video class="size-3.5 text-indigo-500" />
+                                        <span>{{ t('onboarding.tiktok') }}</span>
+                                    </Label>
+                                    <Input
+                                        id="tiktok"
+                                        v-model="kycForm.tiktok"
+                                        :placeholder="t('onboarding.tiktokPlaceholder')"
+                                        class="h-9.5 text-xs rounded-xl"
+                                    />
+                                    <InputError :message="kycForm.errors.tiktok" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. BUSINESS LICENCE DOCUMENT (OVERFLOW-PROOF FULL WIDTH DROPZONE) -->
+                        <div class="space-y-3 pt-2 border-t border-zinc-200/60 dark:border-zinc-800/80">
+                            <div>
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                    4. Official Business Licence
+                                </h3>
+                                <p class="text-[11px] text-zinc-500 dark:text-zinc-400">
+                                    Upload official government business registration or tax certificate.
+                                </p>
+                            </div>
+
+                            <div class="w-full min-w-0 overflow-hidden">
                                 <label
-                                    class="flex h-9.5 cursor-pointer items-center justify-between rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-800/50 px-3 text-xs hover:border-[#ff545a] transition"
+                                    for="business_licence"
+                                    class="group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-zinc-300/80 bg-zinc-50/70 p-5 text-center transition hover:border-[#ff545a] hover:bg-zinc-100/50 dark:border-zinc-700/80 dark:bg-zinc-800/40 dark:hover:bg-zinc-800/60 cursor-pointer min-w-0 overflow-hidden"
                                 >
-                                    <span class="truncate text-zinc-600 dark:text-zinc-300">
-                                        {{ licenceFileName || t('onboarding.licenceHelp') }}
-                                    </span>
-                                    <UploadCloud class="size-4 text-[#ff545a] shrink-0 ml-2" />
+                                    <!-- When no file is selected -->
+                                    <div v-if="!licenceFileName" class="flex flex-col items-center gap-2 min-w-0 max-w-full">
+                                        <div
+                                            class="rounded-full bg-[#ff545a]/10 p-3 text-[#ff545a] transition group-hover:scale-105"
+                                        >
+                                            <UploadCloud class="size-6" />
+                                        </div>
+                                        <div class="space-y-0.5 min-w-0 max-w-full">
+                                            <p class="text-xs font-semibold text-zinc-800 dark:text-zinc-200 truncate">
+                                                Click to upload or drag & drop Business Licence
+                                            </p>
+                                            <p class="text-[11px] text-zinc-500 dark:text-zinc-400">
+                                                PDF, PNG, or JPG (maximum 5MB)
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- When file is selected -->
+                                    <div v-else class="flex items-center justify-between w-full min-w-0 gap-3 px-2">
+                                        <div class="flex items-center gap-3 min-w-0 flex-1">
+                                            <div class="rounded-xl bg-emerald-500/10 p-2 text-emerald-600 dark:text-emerald-400 shrink-0">
+                                                <FileCheck class="size-6" />
+                                            </div>
+                                            <div class="min-w-0 flex-1 text-left">
+                                                <p class="text-xs font-semibold text-zinc-800 dark:text-zinc-200 truncate">
+                                                    {{ licenceFileName }}
+                                                </p>
+                                                <p v-if="licenceFileSize" class="text-[10px] text-zinc-500 dark:text-zinc-400">
+                                                    {{ licenceFileSize }} • Ready for verification
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            @click="clearLicence"
+                                            class="inline-flex size-7 items-center justify-center rounded-lg bg-zinc-200/80 text-zinc-600 hover:bg-red-100 hover:text-red-600 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-red-950/40 dark:hover:text-red-400 transition shrink-0"
+                                            title="Remove file"
+                                        >
+                                            <X class="size-4" />
+                                        </button>
+                                    </div>
+
                                     <input
+                                        ref="fileInputRef"
                                         id="business_licence"
                                         type="file"
                                         accept=".pdf,image/png,image/jpeg,image/jpg"
                                         class="hidden"
-                                        required
                                         @change="onLicenceSelected"
                                     />
                                 </label>
                                 <InputError :message="kycForm.errors.business_licence" />
                             </div>
-
-                            <!-- 7. Short Description (Full Width) -->
-                            <div class="sm:col-span-2 grid gap-1.5">
-                                <Label for="description" class="text-xs font-semibold">
-                                    {{ t('onboarding.description') }}
-                                </Label>
-                                <textarea
-                                    id="description"
-                                    v-model="kycForm.description"
-                                    rows="2"
-                                    :placeholder="t('onboarding.descriptionPlaceholder')"
-                                    class="w-full rounded-xl border border-zinc-200 bg-background p-2.5 text-xs text-foreground shadow-xs dark:border-zinc-800 focus:outline-none focus:ring-2 focus:ring-[#ff545a]/30 resize-none"
-                                ></textarea>
-                                <InputError :message="kycForm.errors.description" />
-                            </div>
                         </div>
 
+                        <!-- 5. DESCRIPTION -->
+                        <div class="space-y-1.5 pt-2 border-t border-zinc-200/60 dark:border-zinc-800/80">
+                            <Label for="description" class="text-xs font-semibold">
+                                {{ t('onboarding.description') }}
+                            </Label>
+                            <textarea
+                                id="description"
+                                v-model="kycForm.description"
+                                rows="2"
+                                :placeholder="t('onboarding.descriptionPlaceholder')"
+                                class="w-full rounded-xl border border-zinc-200 bg-background p-2.5 text-xs text-foreground shadow-xs dark:border-zinc-800 focus:outline-none focus:ring-2 focus:ring-[#ff545a]/30 resize-none"
+                            ></textarea>
+                            <InputError :message="kycForm.errors.description" />
+                        </div>
+
+                        <!-- Submit Button -->
                         <div class="pt-2">
                             <Button
                                 type="submit"
                                 :disabled="kycForm.processing"
-                                class="h-10 w-full rounded-xl bg-[#ff545a] px-4.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#e0454b] disabled:opacity-50"
+                                class="h-10.5 w-full rounded-xl bg-[#ff545a] px-4.5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#e0454b] disabled:opacity-50"
                             >
                                 <Spinner v-if="kycForm.processing" />
                                 <span>{{ t('onboarding.submitKyc') }}</span>
@@ -491,7 +701,7 @@ const submitProviderKyc = () => {
                     <!-- Trust Note -->
                     <div class="mt-4 flex items-center justify-center gap-1.5 text-center text-[11px] text-zinc-400 dark:text-zinc-500">
                         <Lock class="size-3 text-emerald-500 shrink-0" />
-                        <span>All NIDA documents are securely encrypted for KYC verification.</span>
+                        <span>All NIDA documents and business licences are securely encrypted for KYC verification.</span>
                     </div>
                 </div>
             </div>

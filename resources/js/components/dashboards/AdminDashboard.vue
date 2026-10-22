@@ -14,6 +14,10 @@ import {
     Check,
     X,
     Loader2,
+    Phone,
+    Camera,
+    MessageCircle,
+    Video,
 } from '@lucide/vue';
 import { router } from '@inertiajs/vue3';
 import { useLanguage } from '@/composables/useLanguage';
@@ -24,10 +28,16 @@ interface PendingVendor {
     brand_name: string;
     contact_name: string;
     nida_number: string;
+    primary_phone?: string;
+    secondary_phone?: string;
     business_licence_path?: string;
     business_licence_url?: string;
-    social_media: string;
+    social_media?: string;
+    instagram?: string;
+    whatsapp?: string;
+    tiktok?: string;
     category?: string;
+    categories?: string[];
     description?: string;
     status: string;
     created_at?: string;
@@ -214,28 +224,46 @@ const flaggedEvents = computed<
                         class="flex flex-col gap-3 py-4 first:pt-2"
                     >
                         <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                            <div>
+                            <div class="space-y-1">
                                 <div class="flex flex-wrap items-center gap-2">
                                     <h3 class="text-foreground text-sm font-semibold">
                                         {{ vendor.brand_name }}
                                     </h3>
-                                    <span
-                                        class="bg-blue-500/10 text-blue-700 dark:text-blue-300 rounded px-2 py-0.5 text-[10px] font-medium"
-                                    >
-                                        {{ vendor.category || 'Service Provider' }}
-                                    </span>
+                                    <!-- Service category tags -->
+                                    <div class="flex flex-wrap items-center gap-1">
+                                        <span
+                                            v-for="cat in (vendor.categories && vendor.categories.length > 0 ? vendor.categories : [vendor.category || 'Service Provider'])"
+                                            :key="cat"
+                                            class="bg-blue-500/10 text-blue-700 dark:text-blue-300 rounded px-2 py-0.5 text-[10px] font-medium"
+                                        >
+                                            {{ cat }}
+                                        </span>
+                                    </div>
                                 </div>
-                                <p class="text-muted-foreground mt-0.5 text-xs">
-                                    {{ t('adminDashboard.owner') }}:
-                                    <span class="text-foreground font-medium">{{ vendor.contact_name }}</span>
-                                    <span v-if="vendor.user?.email" class="text-muted-foreground ml-1.5 font-mono">
+                                <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground text-xs">
+                                    <span>
+                                        {{ t('adminDashboard.owner') }}:
+                                        <strong class="text-foreground">{{ vendor.contact_name }}</strong>
+                                    </span>
+                                    <span v-if="vendor.user?.email" class="font-mono">
                                         ({{ vendor.user.email }})
                                     </span>
-                                </p>
+                                    <a
+                                        v-if="vendor.primary_phone"
+                                        :href="`tel:${vendor.primary_phone}`"
+                                        class="inline-flex items-center gap-1 font-mono text-foreground hover:text-[#ff545a] transition"
+                                    >
+                                        <Phone class="size-3 text-emerald-600 dark:text-emerald-400" />
+                                        <span>{{ vendor.primary_phone }}</span>
+                                    </a>
+                                    <span v-if="vendor.secondary_phone" class="font-mono text-muted-foreground text-[11px]">
+                                        (Alt: {{ vendor.secondary_phone }})
+                                    </span>
+                                </div>
                             </div>
 
                             <!-- Action buttons -->
-                            <div class="flex items-center gap-2 self-start sm:self-auto">
+                            <div class="flex items-center gap-2 self-start sm:self-auto shrink-0">
                                 <button
                                     type="button"
                                     :disabled="processingId === vendor.id"
@@ -259,19 +287,47 @@ const flaggedEvents = computed<
                         </div>
 
                         <!-- Submitted KYC verification attributes -->
-                        <div class="grid gap-2.5 rounded-lg border border-border/50 bg-muted/20 p-3 sm:grid-cols-3 text-xs">
+                        <div class="grid gap-2.5 rounded-lg border border-border/50 bg-muted/20 p-3 sm:grid-cols-4 text-xs">
                             <div>
                                 <span class="text-muted-foreground text-[10px] uppercase font-medium block">
                                     {{ t('adminDashboard.nida') }}
                                 </span>
                                 <span class="font-mono text-foreground font-medium">{{ vendor.nida_number }}</span>
                             </div>
+
                             <div>
                                 <span class="text-muted-foreground text-[10px] uppercase font-medium block">
-                                    {{ t('adminDashboard.social') }}
+                                    Contact Phones
                                 </span>
-                                <span class="text-foreground font-medium truncate block">{{ vendor.social_media }}</span>
+                                <span class="font-mono text-foreground block">{{ vendor.primary_phone || '—' }}</span>
+                                <span v-if="vendor.secondary_phone" class="font-mono text-muted-foreground text-[11px] block">
+                                    Alt: {{ vendor.secondary_phone }}
+                                </span>
                             </div>
+
+                            <div>
+                                <span class="text-muted-foreground text-[10px] uppercase font-medium block">
+                                    Social Channels
+                                </span>
+                                <div class="flex flex-wrap items-center gap-2 mt-0.5">
+                                    <span v-if="vendor.instagram" class="inline-flex items-center gap-1 text-[11px] text-pink-600 dark:text-pink-400">
+                                        <Camera class="size-3" />
+                                        <span>{{ vendor.instagram }}</span>
+                                    </span>
+                                    <span v-if="vendor.whatsapp" class="inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400">
+                                        <MessageCircle class="size-3" />
+                                        <span>{{ vendor.whatsapp }}</span>
+                                    </span>
+                                    <span v-if="vendor.tiktok" class="inline-flex items-center gap-1 text-[11px] text-indigo-600 dark:text-indigo-400">
+                                        <Video class="size-3" />
+                                        <span>{{ vendor.tiktok }}</span>
+                                    </span>
+                                    <span v-if="!vendor.instagram && !vendor.whatsapp && !vendor.tiktok" class="text-muted-foreground text-[11px]">
+                                        {{ vendor.social_media || 'None' }}
+                                    </span>
+                                </div>
+                            </div>
+
                             <div>
                                 <span class="text-muted-foreground text-[10px] uppercase font-medium block">
                                     {{ t('adminDashboard.licenceDoc') }}
