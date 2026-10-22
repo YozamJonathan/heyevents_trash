@@ -47,6 +47,7 @@ class EventBookingController extends Controller
 
         $notificationMessage = 'Thanks! The team will reach you soon.';
 
+        session()->flash('booking_success', $notificationMessage);
         session()->flash('success', $notificationMessage);
         session()->flash('toast', [
             'type' => 'success',

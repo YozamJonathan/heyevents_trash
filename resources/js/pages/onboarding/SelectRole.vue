@@ -189,12 +189,6 @@ const submitProviderKyc = () => {
                 class="w-full max-w-4xl space-y-8"
             >
                 <div class="text-center space-y-2">
-                    <span
-                        class="inline-flex items-center gap-1.5 rounded-full bg-[#ff545a]/10 px-3 py-1 text-xs font-bold text-[#ff545a]"
-                    >
-                        <Sparkles class="size-3.5" />
-                        Account Personalization
-                    </span>
                     <h1
                         class="font-['Poppins',sans-serif] text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white"
                     >

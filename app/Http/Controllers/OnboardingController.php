@@ -40,7 +40,7 @@ class OnboardingController extends Controller
             $user->assignRole('Client');
         }
 
-        return redirect()->route('dashboard')->with('success', __('onboarding.clientActivated') ?? 'Welcome to HEY Events! Your client account is ready.');
+        return redirect()->route('dashboard');
     }
 
     /**

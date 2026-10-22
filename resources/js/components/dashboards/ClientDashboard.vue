@@ -47,7 +47,21 @@ const props = withDefaults(
 );
 
 const page = usePage();
-const flashSuccess = computed(() => (page.props as any).flash?.success || (page.props as any).flash?.toast?.message);
+const flashBooking = computed(() => {
+    const flash = (page.props as any).flash;
+    if (flash?.booking_success) {
+        return flash.booking_success;
+    }
+    if (
+        flash?.success &&
+        typeof flash.success === 'string' &&
+        (flash.success.toLowerCase().includes('reach you') ||
+            flash.success.toLowerCase().includes('booking'))
+    ) {
+        return flash.success;
+    }
+    return null;
+});
 
 const serviceMeta: Record<string, { label: string; icon: any }> = {
     cake: { label: 'Cake', icon: Cake },
@@ -170,13 +184,13 @@ const managedProjects = [
     <div class="space-y-6">
         <!-- Notification Pop Message Banner if newly booked -->
         <div
-            v-if="flashSuccess"
+            v-if="flashBooking"
             class="flex items-start gap-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-4 text-emerald-800 dark:text-emerald-200 shadow-sm animate-in fade-in slide-in-from-top-2"
         >
             <CheckCircle2 class="size-5 shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
             <div class="space-y-1">
                 <h4 class="text-sm font-bold">Booking Request Received</h4>
-                <p class="text-xs leading-relaxed opacity-90">{{ flashSuccess }}</p>
+                <p class="text-xs leading-relaxed opacity-90">{{ flashBooking }}</p>
             </div>
         </div>
 
