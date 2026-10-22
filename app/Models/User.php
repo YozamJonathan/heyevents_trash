@@ -53,4 +53,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(EventBooking::class);
     }
+
+    /**
+     * Get the service provider profile / KYC record for this user.
+     */
+    public function serviceProviderProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ServiceProviderProfile::class);
+    }
 }

@@ -21,13 +21,21 @@ defineOptions({
     },
 });
 
-const { stats, booked_events = [] } = defineProps<{
+const {
+    stats,
+    booked_events = [],
+    pending_vendors = [],
+    provider_profile = null,
+} = defineProps<{
     stats?: {
         users_count: number;
         roles_count: number;
         permissions_count: number;
+        pending_kyc_count?: number;
     };
     booked_events?: any[];
+    pending_vendors?: any[];
+    provider_profile?: any;
 }>();
 
 const { user, roles, permissions, isSuperAdmin, can, canAny } = usePermission();
@@ -183,11 +191,11 @@ const roleBadgeColor = computed(() => {
 
             <!-- 2. Operations & KYC Moderation (Admin Staff) -->
             <section
-                v-if="showModeration"
+                v-if="showModeration || isSuperAdmin"
                 aria-labelledby="section-moderation"
                 class="space-y-4"
             >
-                <AdminDashboard :stats="stats" />
+                <AdminDashboard :stats="stats" :pending-vendors="pending_vendors" />
             </section>
 
             <!-- 3. Provider Workspace (Service Providers / Vendors) -->
@@ -196,7 +204,7 @@ const roleBadgeColor = computed(() => {
                 aria-labelledby="section-provider"
                 class="space-y-4"
             >
-                <ServiceProviderDashboard />
+                <ServiceProviderDashboard :provider-profile="provider_profile" />
             </section>
 
             <!-- 4. Client Planning, Bookings & Portfolio (Clients & Event Organizers) -->

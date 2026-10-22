@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import {
     Users,
     CheckCircle,
@@ -9,26 +9,92 @@ import {
     MessageSquare,
     CheckCircle2,
     Inbox,
+    FileText,
+    ExternalLink,
+    Check,
+    X,
+    Loader2,
 } from '@lucide/vue';
+import { router } from '@inertiajs/vue3';
 import { useLanguage } from '@/composables/useLanguage';
+
+interface PendingVendor {
+    id: number;
+    user_id: number;
+    brand_name: string;
+    contact_name: string;
+    nida_number: string;
+    business_licence_path?: string;
+    business_licence_url?: string;
+    social_media: string;
+    category?: string;
+    description?: string;
+    status: string;
+    created_at?: string;
+    user?: {
+        id: number;
+        name: string;
+        email: string;
+    };
+}
 
 const props = defineProps<{
     stats?: {
         users_count: number;
         roles_count: number;
         permissions_count: number;
+        pending_kyc_count?: number;
     };
+    pendingVendors?: PendingVendor[];
 }>();
 
 const { t } = useLanguage();
 
+const processingId = ref<number | null>(null);
+
+function approveVendor(vendor: PendingVendor) {
+    if (!confirm(t('adminDashboard.confirmApprove'))) return;
+    processingId.value = vendor.id;
+    router.post(
+        `/admin/vendors/${vendor.id}/approve`,
+        {},
+        {
+            preserveScroll: true,
+            onFinish: () => {
+                processingId.value = null;
+            },
+        },
+    );
+}
+
+function rejectVendor(vendor: PendingVendor) {
+    const reason = window.prompt(t('adminDashboard.rejectPrompt'), '');
+    if (reason === null) return;
+    processingId.value = vendor.id;
+    router.post(
+        `/admin/vendors/${vendor.id}/reject`,
+        { reason },
+        {
+            preserveScroll: true,
+            onFinish: () => {
+                processingId.value = null;
+            },
+        },
+    );
+}
+
+const vendorList = computed(() => props.pendingVendors ?? []);
+
 const metrics = computed(() => [
     {
         title: t('adminDashboard.pendingKyc'),
-        value: t('adminDashboard.pending'),
-        change: t('adminDashboard.allClear'),
+        value: `${vendorList.value.length} ${t('adminDashboard.awaitingReview')}`,
+        change:
+            vendorList.value.length > 0
+                ? `${vendorList.value.length} pending`
+                : t('adminDashboard.allClear'),
         icon: ShieldCheck,
-        alert: false,
+        alert: vendorList.value.length > 0,
     },
     {
         title: t('adminDashboard.moderation'),
@@ -53,10 +119,6 @@ const metrics = computed(() => [
     },
 ]);
 
-// Real items (starts empty)
-const pendingVendors = computed<
-    Array<{ name: string; owner: string; category: string; submitted: string }>
->(() => []);
 const flaggedEvents = computed<
     Array<{ title: string; organizer: string; reason: string; date: string }>
 >(() => []);
@@ -88,7 +150,8 @@ const flaggedEvents = computed<
                         >{{ metric.value }}</span
                     >
                     <span
-                        class="inline-flex items-center text-xs font-medium text-emerald-600 dark:text-emerald-400"
+                        class="inline-flex items-center text-xs font-medium"
+                        :class="metric.alert ? 'text-amber-600 dark:text-amber-400 font-semibold' : 'text-emerald-600 dark:text-emerald-400'"
                     >
                         {{ metric.change }}
                     </span>
@@ -114,15 +177,20 @@ const flaggedEvents = computed<
                         </p>
                     </div>
                     <span
-                        class="rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400"
+                        class="rounded-full px-2.5 py-1 text-xs font-semibold"
+                        :class="
+                            vendorList.length > 0
+                                ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300'
+                                : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                        "
                     >
-                        {{ t('adminDashboard.awaitingReview') }}
+                        {{ vendorList.length }} {{ t('adminDashboard.awaitingReview') }}
                     </span>
                 </div>
 
                 <!-- Empty state when no pending KYC -->
                 <div
-                    v-if="pendingVendors.length === 0"
+                    v-if="vendorList.length === 0"
                     class="flex flex-col items-center justify-center py-16 text-center"
                 >
                     <div
@@ -141,30 +209,91 @@ const flaggedEvents = computed<
                 <!-- Populated list if vendors present -->
                 <div v-else class="divide-border/40 mt-4 divide-y">
                     <div
-                        v-for="(vendor, idx) in pendingVendors"
-                        :key="idx"
-                        class="flex flex-col gap-3 py-4 first:pt-2 sm:flex-row sm:items-center sm:justify-between"
+                        v-for="vendor in vendorList"
+                        :key="vendor.id"
+                        class="flex flex-col gap-3 py-4 first:pt-2"
                     >
-                        <div class="space-y-1">
-                            <div class="flex items-center gap-2">
-                                <h3
-                                    class="text-foreground text-sm font-semibold"
-                                >
-                                    {{ vendor.name }}
-                                </h3>
-                                <span
-                                    class="bg-muted text-muted-foreground rounded px-2 py-0.5 text-[10px] font-medium"
-                                    >{{ vendor.category }}</span
-                                >
+                        <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h3 class="text-foreground text-sm font-semibold">
+                                        {{ vendor.brand_name }}
+                                    </h3>
+                                    <span
+                                        class="bg-blue-500/10 text-blue-700 dark:text-blue-300 rounded px-2 py-0.5 text-[10px] font-medium"
+                                    >
+                                        {{ vendor.category || 'Service Provider' }}
+                                    </span>
+                                </div>
+                                <p class="text-muted-foreground mt-0.5 text-xs">
+                                    {{ t('adminDashboard.owner') }}:
+                                    <span class="text-foreground font-medium">{{ vendor.contact_name }}</span>
+                                    <span v-if="vendor.user?.email" class="text-muted-foreground ml-1.5 font-mono">
+                                        ({{ vendor.user.email }})
+                                    </span>
+                                </p>
                             </div>
-                            <p class="text-muted-foreground text-xs">
-                                Owner:
-                                <span class="text-foreground">{{
-                                    vendor.owner
-                                }}</span>
-                                • Applied {{ vendor.submitted }}
-                            </p>
+
+                            <!-- Action buttons -->
+                            <div class="flex items-center gap-2 self-start sm:self-auto">
+                                <button
+                                    type="button"
+                                    :disabled="processingId === vendor.id"
+                                    @click="approveVendor(vendor)"
+                                    class="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:opacity-50"
+                                >
+                                    <Loader2 v-if="processingId === vendor.id" class="size-3.5 animate-spin" />
+                                    <Check v-else class="size-3.5" />
+                                    {{ t('adminDashboard.approve') }}
+                                </button>
+                                <button
+                                    type="button"
+                                    :disabled="processingId === vendor.id"
+                                    @click="rejectVendor(vendor)"
+                                    class="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-rose-500/10 px-3 py-1.5 text-xs font-medium text-rose-700 transition hover:bg-rose-500/20 disabled:opacity-50 dark:text-rose-300"
+                                >
+                                    <X class="size-3.5" />
+                                    {{ t('adminDashboard.reject') }}
+                                </button>
+                            </div>
                         </div>
+
+                        <!-- Submitted KYC verification attributes -->
+                        <div class="grid gap-2.5 rounded-lg border border-border/50 bg-muted/20 p-3 sm:grid-cols-3 text-xs">
+                            <div>
+                                <span class="text-muted-foreground text-[10px] uppercase font-medium block">
+                                    {{ t('adminDashboard.nida') }}
+                                </span>
+                                <span class="font-mono text-foreground font-medium">{{ vendor.nida_number }}</span>
+                            </div>
+                            <div>
+                                <span class="text-muted-foreground text-[10px] uppercase font-medium block">
+                                    {{ t('adminDashboard.social') }}
+                                </span>
+                                <span class="text-foreground font-medium truncate block">{{ vendor.social_media }}</span>
+                            </div>
+                            <div>
+                                <span class="text-muted-foreground text-[10px] uppercase font-medium block">
+                                    {{ t('adminDashboard.licenceDoc') }}
+                                </span>
+                                <a
+                                    v-if="vendor.business_licence_url || vendor.business_licence_path"
+                                    :href="vendor.business_licence_url || `/storage/${vendor.business_licence_path}`"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="inline-flex items-center gap-1 font-medium text-[#ff545a] hover:underline"
+                                >
+                                    <FileText class="size-3.5" />
+                                    <span>{{ t('adminDashboard.viewLicence') }}</span>
+                                    <ExternalLink class="size-3" />
+                                </a>
+                                <span v-else class="text-muted-foreground italic">Not attached</span>
+                            </div>
+                        </div>
+
+                        <p v-if="vendor.description" class="text-muted-foreground text-xs italic">
+                            "{{ vendor.description }}"
+                        </p>
                     </div>
                 </div>
             </div>

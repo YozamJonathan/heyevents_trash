@@ -1,10 +1,15 @@
 <?php
 
 use App\Models\User;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Contracts\Provider;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\User as GoogleUser;
+
+beforeEach(function () {
+    $this->seed(RolesAndPermissionsSeeder::class);
+});
 
 function mockGoogleUser(array $attributes): void
 {
@@ -14,7 +19,7 @@ function mockGoogleUser(array $attributes): void
     Socialite::shouldReceive('driver')->with('google')->andReturn($provider);
 }
 
-test('google sign-up creates a verified account and signs the user in', function () {
+test('google sign-up creates a verified account, signs the user in, and directs to onboarding', function () {
     mockGoogleUser([
         'id' => 'google-user-100',
         'name' => 'Google User',
@@ -24,7 +29,7 @@ test('google sign-up creates a verified account and signs the user in', function
 
     $response = $this->get(route('google.callback'));
 
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect(route('onboarding.index', absolute: false));
     $this->assertAuthenticated();
     $this->assertDatabaseHas('users', [
         'email' => 'google-user@example.com',
@@ -38,6 +43,7 @@ test('google sign-up links a verified existing email without changing its passwo
         'email' => 'existing-user@example.com',
         'password' => 'existing-password',
     ]);
+    $user->assignRole('Client');
     $passwordHash = $user->getRawOriginal('password');
 
     mockGoogleUser([

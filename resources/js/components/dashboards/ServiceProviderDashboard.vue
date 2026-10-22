@@ -10,10 +10,38 @@ import {
     BadgeCheck,
     CalendarCheck2,
     PackagePlus,
+    AlertCircle,
+    FileText,
+    ExternalLink,
+    RefreshCw,
 } from '@lucide/vue';
+import { Link } from '@inertiajs/vue3';
 import { useLanguage } from '@/composables/useLanguage';
 
+const props = defineProps<{
+    providerProfile?: {
+        id: number;
+        brand_name: string;
+        contact_name: string;
+        nida_number: string;
+        business_licence_path?: string;
+        business_licence_url?: string;
+        social_media: string;
+        category?: string;
+        description?: string;
+        status: 'pending' | 'approved' | 'rejected';
+        rejection_reason?: string | null;
+        verified_at?: string | null;
+    } | null;
+}>();
+
 const { t } = useLanguage();
+
+const isPending = computed(() => props.providerProfile?.status === 'pending');
+const isRejected = computed(() => props.providerProfile?.status === 'rejected');
+const isApproved = computed(
+    () => !props.providerProfile || props.providerProfile.status === 'approved',
+);
 
 const metrics = computed(() => [
     {
@@ -61,8 +89,119 @@ const myServices = computed<
 
 <template>
     <div class="space-y-6">
-        <!-- Vendor Profile Status Card -->
+        <!-- 1. PENDING KYC BANNER -->
         <div
+            v-if="isPending"
+            class="flex flex-col gap-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-5 shadow-sm dark:border-amber-500/30 dark:bg-amber-500/5"
+        >
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div class="flex items-start gap-3.5">
+                    <div
+                        class="mt-0.5 rounded-full bg-amber-500/20 p-2.5 text-amber-600 dark:text-amber-400"
+                    >
+                        <Clock class="size-6 animate-pulse" />
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h3 class="text-foreground text-base font-semibold">
+                                {{ t('providerDashboard.kycPendingTitle') }}
+                            </h3>
+                            <span
+                                class="rounded-full bg-amber-500/20 px-2.5 py-0.5 text-[11px] font-bold text-amber-800 uppercase dark:text-amber-300"
+                            >
+                                {{ t('providerDashboard.pendingStatus') }}
+                            </span>
+                        </div>
+                        <p class="text-muted-foreground mt-1 max-w-2xl text-xs leading-relaxed">
+                            {{ t('providerDashboard.kycPendingDesc') }}
+                        </p>
+                    </div>
+                </div>
+
+                <Link
+                    href="/onboarding"
+                    class="inline-flex shrink-0 items-center gap-1.5 self-start rounded-xl border border-amber-500/40 bg-amber-500/10 px-3.5 py-2 text-xs font-medium text-amber-800 transition hover:bg-amber-500/20 dark:text-amber-300"
+                >
+                    <RefreshCw class="size-3.5" />
+                    {{ t('providerDashboard.updateKyc') }}
+                </Link>
+            </div>
+
+            <!-- KYC Details Summary Grid -->
+            <div
+                v-if="providerProfile"
+                class="border-amber-500/20 mt-2 grid gap-2.5 border-t pt-3 sm:grid-cols-2 md:grid-cols-4 text-xs"
+            >
+                <div class="rounded-lg bg-background/60 p-2.5 border border-border/40">
+                    <span class="text-muted-foreground text-[10px] block uppercase font-medium">Brand</span>
+                    <span class="text-foreground font-semibold truncate block">{{ providerProfile.brand_name }}</span>
+                </div>
+                <div class="rounded-lg bg-background/60 p-2.5 border border-border/40">
+                    <span class="text-muted-foreground text-[10px] block uppercase font-medium">Contact</span>
+                    <span class="text-foreground font-semibold truncate block">{{ providerProfile.contact_name }}</span>
+                </div>
+                <div class="rounded-lg bg-background/60 p-2.5 border border-border/40">
+                    <span class="text-muted-foreground text-[10px] block uppercase font-medium">NIDA</span>
+                    <span class="font-mono text-foreground font-medium truncate block">{{ providerProfile.nida_number }}</span>
+                </div>
+                <div class="rounded-lg bg-background/60 p-2.5 border border-border/40">
+                    <span class="text-muted-foreground text-[10px] block uppercase font-medium">Social / Web</span>
+                    <span class="text-foreground font-medium truncate block">{{ providerProfile.social_media }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. REJECTED KYC BANNER -->
+        <div
+            v-else-if="isRejected"
+            class="flex flex-col gap-4 rounded-xl border border-rose-500/40 bg-rose-500/10 p-5 shadow-sm dark:border-rose-500/30 dark:bg-rose-500/5"
+        >
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div class="flex items-start gap-3.5">
+                    <div
+                        class="mt-0.5 rounded-full bg-rose-500/20 p-2.5 text-rose-600 dark:text-rose-400"
+                    >
+                        <AlertCircle class="size-6" />
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h3 class="text-foreground text-base font-semibold">
+                                {{ t('providerDashboard.kycRejectedTitle') }}
+                            </h3>
+                            <span
+                                class="rounded-full bg-rose-500/20 px-2.5 py-0.5 text-[11px] font-bold text-rose-800 uppercase dark:text-rose-300"
+                            >
+                                {{ t('providerDashboard.rejectedStatus') }}
+                            </span>
+                        </div>
+                        <p class="text-muted-foreground mt-1 max-w-2xl text-xs leading-relaxed">
+                            {{ t('providerDashboard.kycRejectedDesc') }}
+                        </p>
+                        <div
+                            v-if="providerProfile?.rejection_reason"
+                            class="mt-2.5 rounded-lg border border-rose-500/30 bg-background/80 p-3 text-xs"
+                        >
+                            <span class="font-semibold text-rose-600 dark:text-rose-400">
+                                {{ t('providerDashboard.rejectionReason') }}:
+                            </span>
+                            <span class="text-foreground ml-1.5">{{ providerProfile.rejection_reason }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <Link
+                    href="/onboarding"
+                    class="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#ff545a] px-4.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#e0454b]"
+                >
+                    <RefreshCw class="size-3.5" />
+                    {{ t('providerDashboard.updateKyc') }}
+                </Link>
+            </div>
+        </div>
+
+        <!-- 3. VERIFIED / APPROVED STATUS CARD -->
+        <div
+            v-else
             class="flex flex-col gap-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-emerald-500/20"
         >
             <div class="flex items-center gap-3">
@@ -89,7 +228,7 @@ const myServices = computed<
 
             <div class="flex items-center gap-2">
                 <button
-                    class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white shadow-sm hover:bg-emerald-700"
+                    class="inline-flex items-center gap-1.5 rounded-xl bg-[#ff545a] px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-[#e0454b]"
                 >
                     <Plus class="size-3.5" />
                     {{ t('providerDashboard.addService') }}

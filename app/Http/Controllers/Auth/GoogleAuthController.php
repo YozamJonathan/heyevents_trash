@@ -78,6 +78,10 @@ class GoogleAuthController
         Auth::login($user, remember: true);
         $request->session()->regenerate();
 
+        if ($user->roles()->count() === 0) {
+            return redirect()->route('onboarding.index');
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 }
