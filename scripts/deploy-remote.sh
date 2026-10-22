@@ -33,6 +33,11 @@ echo "==> Running migrations"
 # schema behind the code (which causes "Unknown column" 500s at runtime).
 php artisan migrate --force --no-interaction
 
+echo "==> Seeding roles and permissions"
+# Idempotent (firstOrCreate/syncPermissions). Demo users are skipped when
+# APP_ENV=production, so this never creates known-credential accounts.
+php artisan db:seed --class=RolesAndPermissionsSeeder --force --no-interaction
+
 echo "==> Building frontend assets"
 # public/build is gitignored, so it is produced here on every deploy.
 npm ci

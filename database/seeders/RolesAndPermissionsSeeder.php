@@ -115,41 +115,45 @@ class RolesAndPermissionsSeeder extends Seeder
             'view client receipts',
         ]);
 
-        // 4. Create default demo users for each role with password: 'password'
-        $users = [
-            [
-                'name' => 'Sarah Connor (Super Admin)',
-                'email' => 'superadmin@heyevents.com',
-                'role' => $superAdminRole,
-            ],
-            [
-                'name' => 'Marcus Vance (Admin)',
-                'email' => 'admin@heyevents.com',
-                'role' => $adminRole,
-            ],
-            [
-                'name' => 'Elena Rostova (Photography & DJ Pro)',
-                'email' => 'provider@heyevents.com',
-                'role' => $providerRole,
-            ],
-            [
-                'name' => 'David Kim (Event Organizer & Client)',
-                'email' => 'client@heyevents.com',
-                'role' => $clientRole,
-            ],
-        ];
-
-        foreach ($users as $userData) {
-            $user = User::updateOrCreate(
-                ['email' => $userData['email']],
+        // 4. Create default demo users for each role with password: 'password'.
+        //    Local/testing only — never seed known-credential accounts into
+        //    production.
+        if (! app()->environment('production')) {
+            $users = [
                 [
-                    'name' => $userData['name'],
-                    'password' => Hash::make('password'),
-                    'email_verified_at' => now(),
-                ]
-            );
+                    'name' => 'Sarah Connor (Super Admin)',
+                    'email' => 'superadmin@heyevents.com',
+                    'role' => $superAdminRole,
+                ],
+                [
+                    'name' => 'Marcus Vance (Admin)',
+                    'email' => 'admin@heyevents.com',
+                    'role' => $adminRole,
+                ],
+                [
+                    'name' => 'Elena Rostova (Photography & DJ Pro)',
+                    'email' => 'provider@heyevents.com',
+                    'role' => $providerRole,
+                ],
+                [
+                    'name' => 'David Kim (Event Organizer & Client)',
+                    'email' => 'client@heyevents.com',
+                    'role' => $clientRole,
+                ],
+            ];
 
-            $user->syncRoles([$userData['role']]);
+            foreach ($users as $userData) {
+                $user = User::updateOrCreate(
+                    ['email' => $userData['email']],
+                    [
+                        'name' => $userData['name'],
+                        'password' => Hash::make('password'),
+                        'email_verified_at' => now(),
+                    ]
+                );
+
+                $user->syncRoles([$userData['role']]);
+            }
         }
     }
 }
