@@ -28,13 +28,15 @@ echo "==> Installing PHP dependencies"
 export COMPOSER_MEMORY_LIMIT=-1
 composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
+echo "==> Running migrations"
+# Migrate before the long asset build so a build/SSH hiccup can never leave the
+# schema behind the code (which causes "Unknown column" 500s at runtime).
+php artisan migrate --force --no-interaction
+
 echo "==> Building frontend assets"
 # public/build is gitignored, so it is produced here on every deploy.
 npm ci
 npm run build
-
-echo "==> Running migrations"
-php artisan migrate --force --no-interaction
 
 echo "==> Linking storage"
 php artisan storage:link --force >/dev/null 2>&1 || true

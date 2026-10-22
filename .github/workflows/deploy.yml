@@ -46,5 +46,8 @@ jobs:
               -o UserKnownHostsFile=~/.ssh/known_hosts \
               -o IdentitiesOnly=yes \
               -o ConnectTimeout=15 \
+              -o ServerAliveInterval=30 \
+              -o ServerAliveCountMax=40 \
+              -o TCPKeepAlive=yes \
               "$EC2_USERNAME@$EC2_HOST" \
               'bash -s' < scripts/deploy-remote.sh
