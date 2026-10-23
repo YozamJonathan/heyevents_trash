@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
-import { computed, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { dashboard } from '@/routes';
 import {
     Users,
     Shield,
     Briefcase,
     Ticket,
-    ShieldAlert,
     Search,
-    UserCheck,
-    Calendar,
-    MoreVertical,
     Trash2,
     Crown,
     Filter,
@@ -19,8 +15,6 @@ import {
     AlertCircle,
     Clock,
     X,
-    ChevronLeft,
-    ChevronRight,
 } from '@lucide/vue';
 import { useLanguage } from '@/composables/useLanguage';
 
@@ -59,10 +53,13 @@ const props = defineProps<{
         data: UserItem[];
         current_page: number;
         last_page: number;
+        per_page?: number;
         total: number;
+        from?: number | null;
+        to?: number | null;
         links: Array<{ url: string | null; label: string; active: boolean }>;
     };
-    stats: {
+    stats?: {
         total: number;
         admins: number;
         providers: number;
@@ -71,6 +68,7 @@ const props = defineProps<{
     filters: {
         search: string;
         role: string;
+        per_page?: number;
     };
     availableRoles: string[];
     canEditUsers: boolean;
@@ -81,6 +79,7 @@ const { t } = useLanguage();
 
 const search = ref(props.filters.search || '');
 const selectedRole = ref(props.filters.role || 'all');
+const perPage = ref<number>(props.filters.per_page || 10);
 
 // Role Change Modal state
 const roleModalOpen = ref(false);
@@ -131,7 +130,7 @@ function deleteUser(user: UserItem) {
     });
 }
 
-// Debounced filter trigger
+// Filter trigger
 let timeout: any = null;
 function applyFilter() {
     clearTimeout(timeout);
@@ -141,6 +140,7 @@ function applyFilter() {
             {
                 search: search.value || undefined,
                 role: selectedRole.value !== 'all' ? selectedRole.value : undefined,
+                per_page: perPage.value,
             },
             {
                 preserveState: true,
@@ -148,6 +148,22 @@ function applyFilter() {
             },
         );
     }, 300);
+}
+
+function onPerPageChange() {
+    router.get(
+        '/admin/users',
+        {
+            search: search.value || undefined,
+            role: selectedRole.value !== 'all' ? selectedRole.value : undefined,
+            per_page: perPage.value,
+            page: 1,
+        },
+        {
+            preserveState: true,
+            replace: true,
+        },
+    );
 }
 
 watch(selectedRole, () => {
@@ -187,7 +203,7 @@ function formatDate(dateStr: string) {
                     User Management
                 </h1>
                 <p class="text-xs sm:text-sm text-muted-foreground mt-1">
-                    Manage all registered accounts, roles, permission tiers, and service provider credentials.
+                    Manage all registered accounts, role tiers, and permissions.
                 </p>
             </div>
             <Link
@@ -198,43 +214,8 @@ function formatDate(dateStr: string) {
             </Link>
         </div>
 
-        <!-- Metrics Row -->
-        <div class="grid gap-3 grid-cols-2 sm:grid-cols-4">
-            <div class="rounded-xl border border-border/70 bg-card p-4 shadow-xs">
-                <span class="text-xs font-medium text-muted-foreground">Total Users</span>
-                <div class="flex items-baseline justify-between mt-1">
-                    <span class="text-2xl font-bold text-foreground">{{ stats.total }}</span>
-                    <Users class="size-4 text-muted-foreground/60" />
-                </div>
-            </div>
-
-            <div class="rounded-xl border border-blue-500/30 bg-blue-500/5 p-4 shadow-xs">
-                <span class="text-xs font-medium text-blue-700 dark:text-blue-300">Administrators</span>
-                <div class="flex items-baseline justify-between mt-1">
-                    <span class="text-2xl font-bold text-blue-900 dark:text-blue-100">{{ stats.admins }}</span>
-                    <Shield class="size-4 text-blue-600 dark:text-blue-400" />
-                </div>
-            </div>
-
-            <div class="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4 shadow-xs">
-                <span class="text-xs font-medium text-amber-700 dark:text-amber-300">Service Providers</span>
-                <div class="flex items-baseline justify-between mt-1">
-                    <span class="text-2xl font-bold text-amber-900 dark:text-amber-100">{{ stats.providers }}</span>
-                    <Briefcase class="size-4 text-amber-600 dark:text-amber-400" />
-                </div>
-            </div>
-
-            <div class="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4 shadow-xs">
-                <span class="text-xs font-medium text-emerald-700 dark:text-emerald-300">Event Clients</span>
-                <div class="flex items-baseline justify-between mt-1">
-                    <span class="text-2xl font-bold text-emerald-900 dark:text-emerald-100">{{ stats.clients }}</span>
-                    <Ticket class="size-4 text-emerald-600 dark:text-emerald-400" />
-                </div>
-            </div>
-        </div>
-
-        <!-- Filters Bar -->
-        <div class="flex flex-col sm:flex-row gap-3">
+        <!-- Filters Bar (Search, Role Filter, Per Page) -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <!-- Search Input -->
             <div class="relative flex-1">
                 <Search class="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
@@ -242,7 +223,7 @@ function formatDate(dateStr: string) {
                     v-model="search"
                     @input="applyFilter"
                     type="text"
-                    placeholder="Search by name or email address..."
+                    placeholder="Search users by name or email address..."
                     class="w-full h-10.5 pl-10 pr-4 rounded-xl border border-border/80 bg-card text-xs text-foreground placeholder:text-muted-foreground focus:border-[#ff545a] focus:ring-1 focus:ring-[#ff545a] outline-none transition"
                 />
             </div>
@@ -258,6 +239,22 @@ function formatDate(dateStr: string) {
                     <option v-for="role in availableRoles" :key="role" :value="role">
                         {{ role }}
                     </option>
+                </select>
+            </div>
+
+            <!-- Per Page Select in Filter Toolbar -->
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-muted-foreground whitespace-nowrap">Per page:</span>
+                <select
+                    v-model="perPage"
+                    @change="onPerPageChange"
+                    class="h-10.5 rounded-xl border border-border/80 bg-card px-3 text-xs font-semibold text-foreground outline-none focus:border-[#ff545a] transition"
+                >
+                    <option :value="5">5</option>
+                    <option :value="10">10</option>
+                    <option :value="25">25</option>
+                    <option :value="50">50</option>
+                    <option :value="100">100</option>
                 </select>
             </div>
         </div>
@@ -413,15 +410,32 @@ function formatDate(dateStr: string) {
                 </table>
             </div>
 
-            <!-- Pagination Bar -->
+            <!-- Bottom Pagination & List per Page Bar -->
             <div
-                v-if="users.last_page > 1"
-                class="flex items-center justify-between border-t border-border/50 px-4 py-3 text-xs"
+                class="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border/50 px-4 py-3 text-xs"
             >
-                <span class="text-muted-foreground">
-                    Showing Page {{ users.current_page }} of {{ users.last_page }} ({{ users.total }} users)
-                </span>
-                <div class="flex items-center gap-1">
+                <div class="flex flex-wrap items-center gap-3 text-muted-foreground">
+                    <span>
+                        Showing {{ users.from ?? 0 }} to {{ users.to ?? 0 }} of {{ users.total }} users
+                    </span>
+                    <span class="text-border">|</span>
+                    <div class="flex items-center gap-1.5">
+                        <span>List per page:</span>
+                        <select
+                            v-model="perPage"
+                            @change="onPerPageChange"
+                            class="rounded-lg border border-border/70 bg-background px-2 py-1 text-xs font-semibold text-foreground outline-none focus:border-[#ff545a]"
+                        >
+                            <option :value="5">5</option>
+                            <option :value="10">10</option>
+                            <option :value="25">25</option>
+                            <option :value="50">50</option>
+                            <option :value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div v-if="users.last_page > 1" class="flex items-center gap-1">
                     <template v-for="(link, i) in users.links" :key="i">
                         <Link
                             v-if="link.url"
@@ -432,6 +446,11 @@ function formatDate(dateStr: string) {
                                     ? 'border-[#ff545a] bg-[#ff545a] text-white'
                                     : 'border-border/60 bg-background text-foreground hover:bg-muted'
                             "
+                            v-html="link.label"
+                        />
+                        <span
+                            v-else
+                            class="px-2.5 py-1 rounded-lg border border-transparent text-[11px] font-medium text-muted-foreground/50 cursor-not-allowed"
                             v-html="link.label"
                         />
                     </template>

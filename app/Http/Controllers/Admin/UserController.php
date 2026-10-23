@@ -25,6 +25,10 @@ class UserController extends Controller
 
         $search = $request->query('search');
         $roleFilter = $request->query('role');
+        $perPage = (int) $request->query('per_page', 10);
+        if (! in_array($perPage, [5, 10, 25, 50, 100], true)) {
+            $perPage = 10;
+        }
 
         $query = User::with(['roles', 'serviceProviderProfile'])->latest();
 
@@ -41,7 +45,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->paginate(20)->withQueryString();
+        $users = $query->paginate($perPage)->withQueryString();
 
         $stats = [
             'total' => User::count(),
@@ -58,6 +62,7 @@ class UserController extends Controller
             'filters' => [
                 'search' => $search ?? '',
                 'role' => $roleFilter ?? 'all',
+                'per_page' => $perPage,
             ],
             'availableRoles' => $availableRoles,
             'canEditUsers' => $currentUser->can('edit users') || $currentUser->hasRole('Super Admin'),
