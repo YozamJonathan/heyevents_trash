@@ -50,7 +50,7 @@ const mainNavItems = computed<NavItem[]>(() => {
     if (can('view users')) {
         items.push({
             title: t('nav.userManagement'),
-            href: '#',
+            href: '/admin/users',
             icon: Users,
         });
     }
@@ -75,7 +75,7 @@ const mainNavItems = computed<NavItem[]>(() => {
     if (can('verify service providers')) {
         items.push({
             title: t('nav.vendorApprovals'),
-            href: '#',
+            href: '/admin/vendor-approvals',
             icon: CheckSquare,
         });
     }

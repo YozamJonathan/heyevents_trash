@@ -19,7 +19,7 @@ import {
     MessageCircle,
     Video,
 } from '@lucide/vue';
-import { router } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import { useLanguage } from '@/composables/useLanguage';
 
 interface PendingVendor {
@@ -186,16 +186,24 @@ const flaggedEvents = computed<
                             {{ t('adminDashboard.verificationDescription') }}
                         </p>
                     </div>
-                    <span
-                        class="rounded-full px-2.5 py-1 text-xs font-semibold"
-                        :class="
-                            vendorList.length > 0
-                                ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300'
-                                : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                        "
-                    >
-                        {{ vendorList.length }} {{ t('adminDashboard.awaitingReview') }}
-                    </span>
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="rounded-full px-2.5 py-1 text-xs font-semibold"
+                            :class="
+                                vendorList.length > 0
+                                    ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300'
+                                    : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                            "
+                        >
+                            {{ vendorList.length }} {{ t('adminDashboard.awaitingReview') }}
+                        </span>
+                        <Link
+                            href="/admin/vendor-approvals"
+                            class="rounded-lg border border-border/70 bg-background/80 px-2.5 py-1 text-xs font-medium text-foreground hover:bg-muted transition"
+                        >
+                            View All & History →
+                        </Link>
+                    </div>
                 </div>
 
                 <!-- Empty state when no pending KYC -->

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VendorVerificationController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\DashboardController;
@@ -24,8 +25,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('onboarding/provider', [OnboardingController::class, 'submitProvider'])->name('onboarding.provider');
 
     // Admin Vendor KYC Verification
+    Route::get('admin/vendor-approvals', [VendorVerificationController::class, 'index'])->name('admin.vendors.index');
     Route::post('admin/vendors/{profile}/approve', [VendorVerificationController::class, 'approve'])->name('admin.vendors.approve');
     Route::post('admin/vendors/{profile}/reject', [VendorVerificationController::class, 'reject'])->name('admin.vendors.reject');
+
+    // Admin User Management
+    Route::get('admin/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::put('admin/users/{user}/role', [UserController::class, 'updateRole'])->name('admin.users.update-role');
+    Route::delete('admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
     // Event Booking Flow
     Route::get('events/book', [EventBookingController::class, 'create'])->name('events.book');

@@ -6,9 +6,44 @@ use App\Http\Controllers\Controller;
 use App\Models\ServiceProviderProfile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class VendorVerificationController extends Controller
 {
+    /**
+     * Display dedicated Vendor KYC Approvals listing.
+     */
+    public function index(Request $request): Response
+    {
+        if (! $request->user()->can('verify service providers') && ! $request->user()->hasRole('Super Admin')) {
+            abort(403);
+        }
+
+        $status = $request->query('status', 'all');
+
+        $query = ServiceProviderProfile::with(['user', 'verifier'])->latest();
+
+        if (in_array($status, ['pending', 'approved', 'rejected'], true)) {
+            $query->where('status', $status);
+        }
+
+        $vendors = $query->get();
+
+        $counts = [
+            'all' => ServiceProviderProfile::count(),
+            'pending' => ServiceProviderProfile::where('status', 'pending')->count(),
+            'approved' => ServiceProviderProfile::where('status', 'approved')->count(),
+            'rejected' => ServiceProviderProfile::where('status', 'rejected')->count(),
+        ];
+
+        return Inertia::render('admin/VendorApprovals', [
+            'vendors' => $vendors,
+            'currentStatus' => $status,
+            'counts' => $counts,
+        ]);
+    }
+
     /**
      * Approve a vendor KYC profile.
      */
