@@ -3,9 +3,13 @@
 use App\Models\ServiceProviderProfile;
 use App\Models\User;
 use Database\Seeders\RolesAndPermissionsSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
+use Tests\TestCase;
+
+uses(TestCase::class, RefreshDatabase::class);
 
 beforeEach(function () {
     $this->seed(RolesAndPermissionsSeeder::class);
@@ -179,4 +183,67 @@ test('rejected vendor can access onboarding screen to re-submit documents', func
         ->has('existingProfile')
         ->where('existingProfile.status', 'rejected')
     );
+});
+
+test('provider KYC submission fails when required fields or categories are missing', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $response = $this->post(route('onboarding.provider'), [
+        'brand_name' => '',
+        'contact_name' => '',
+        'nida_number' => '',
+        'primary_phone' => '',
+        'categories' => [],
+    ]);
+
+    $response->assertSessionHasErrors([
+        'brand_name',
+        'contact_name',
+        'nida_number',
+        'primary_phone',
+        'categories',
+        'business_licence',
+    ]);
+});
+
+test('rejected provider can resubmit KYC with existing licence and updated details', function () {
+    $user = User::factory()->create();
+    $user->assignRole('Service Provider');
+
+    ServiceProviderProfile::create([
+        'user_id' => $user->id,
+        'brand_name' => 'Original Brand',
+        'contact_name' => 'Original Contact',
+        'nida_number' => '19900101-11111-22222-33',
+        'primary_phone' => '+255 711 000 000',
+        'categories' => ['Music & DJ'],
+        'category' => 'Music & DJ',
+        'business_licence_path' => 'vendor_licences/existing.pdf',
+        'status' => 'rejected',
+        'rejection_reason' => 'Please provide more details on services.',
+    ]);
+
+    $this->actingAs($user);
+
+    $response = $this->post(route('onboarding.provider'), [
+        'brand_name' => 'Updated Brand Name',
+        'contact_name' => 'Updated Contact Name',
+        'nida_number' => '19900101-11111-22222-33',
+        'primary_phone' => '+255 711 999 888',
+        'categories' => ['Music & DJ', 'Sound & Lighting'],
+        'instagram' => '@updated_insta',
+        'description' => 'Comprehensive audio and visual equipment provider.',
+    ]);
+
+    $response->assertRedirect(route('dashboard'));
+
+    $profile = $user->fresh()->serviceProviderProfile;
+    expect($profile->brand_name)->toBe('Updated Brand Name');
+    expect($profile->contact_name)->toBe('Updated Contact Name');
+    expect($profile->primary_phone)->toBe('+255 711 999 888');
+    expect($profile->categories)->toEqual(['Music & DJ', 'Sound & Lighting']);
+    expect($profile->business_licence_path)->toBe('vendor_licences/existing.pdf');
+    expect($profile->status)->toBe('pending');
+    expect($profile->rejection_reason)->toBeNull();
 });

@@ -4,7 +4,9 @@ use App\Http\Controllers\Admin\VendorVerificationController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventBookingController;
-use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\Onboarding\ShowOnboardingController;
+use App\Http\Controllers\Onboarding\StoreClientRoleController;
+use App\Http\Controllers\Onboarding\StoreProviderKycController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'Welcome')->name('home');
@@ -19,9 +21,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Onboarding & Role Selection
-    Route::get('onboarding', [OnboardingController::class, 'index'])->name('onboarding.index');
-    Route::post('onboarding/client', [OnboardingController::class, 'selectClient'])->name('onboarding.client');
-    Route::post('onboarding/provider', [OnboardingController::class, 'submitProvider'])->name('onboarding.provider');
+    Route::get('onboarding', ShowOnboardingController::class)->name('onboarding.index');
+    Route::post('onboarding/client', StoreClientRoleController::class)->name('onboarding.client');
+    Route::post('onboarding/provider', StoreProviderKycController::class)->name('onboarding.provider');
 
     // Admin Vendor KYC Verification
     Route::post('admin/vendors/{profile}/approve', [VendorVerificationController::class, 'approve'])->name('admin.vendors.approve');
