@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Onboarding;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Onboarding\StoreProviderKycRequest;
 use Illuminate\Http\RedirectResponse;
+use Spatie\Permission\Models\Role;
 
 class StoreProviderKycController extends Controller
 {
@@ -43,6 +44,8 @@ class StoreProviderKycController extends Controller
                 'rejection_reason' => null,
             ]
         );
+
+        Role::findOrCreate('Service Provider', 'web');
 
         if (! $user->hasRole('Service Provider')) {
             $user->assignRole('Service Provider');
