@@ -1,3 +1,5 @@
+import type { Component } from 'vue';
+
 export interface ExistingProviderProfile {
     brand_name?: string;
     contact_name?: string;
@@ -20,7 +22,8 @@ export interface ServiceCategory {
     id: string;
     label: string;
     swLabel: string;
-    emoji: string;
+    emoji?: string;
+    icon?: Component;
 }
 
 export interface ProviderRegistrationFormData {

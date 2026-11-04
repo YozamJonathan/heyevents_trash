@@ -16,10 +16,14 @@ const emit = defineEmits<{
 
 const { t, currentLanguage } = useLanguage();
 
+const getCategory = (id: string) => {
+    return props.categoriesList.find((c) => c.id === id);
+};
+
 const getCategoryLabel = (id: string) => {
-    const item = props.categoriesList.find((c) => c.id === id);
+    const item = getCategory(id);
     if (!item) return id;
-    return currentLanguage.value === 'sw' ? `${item.emoji} ${item.swLabel}` : `${item.emoji} ${item.label}`;
+    return currentLanguage.value === 'sw' ? item.swLabel : item.label;
 };
 </script>
 
@@ -68,8 +72,17 @@ const getCategoryLabel = (id: string) => {
                     </button>
                 </div>
                 <div class="flex flex-wrap gap-1.5">
-                    <span v-for="cat in form.categories" :key="cat" class="inline-flex items-center rounded-lg bg-zinc-200/80 dark:bg-zinc-800 px-2.5 py-1 text-[11px] font-medium text-zinc-800 dark:text-zinc-200">
-                        {{ getCategoryLabel(cat) }}
+                    <span
+                        v-for="cat in form.categories"
+                        :key="cat"
+                        class="inline-flex items-center gap-1.5 rounded-lg bg-zinc-200/80 dark:bg-zinc-800 px-2.5 py-1 text-[11px] font-medium text-zinc-800 dark:text-zinc-200"
+                    >
+                        <component
+                            :is="getCategory(cat)?.icon"
+                            v-if="getCategory(cat)?.icon"
+                            class="size-3.5 text-[#ff545a] shrink-0"
+                        />
+                        <span>{{ getCategoryLabel(cat) }}</span>
                     </span>
                 </div>
             </div>

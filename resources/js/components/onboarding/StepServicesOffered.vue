@@ -3,7 +3,7 @@ import { Check } from '@lucide/vue';
 import { useLanguage } from '@/composables/useLanguage';
 import type { ServiceCategory } from '@/types/onboarding';
 
-const props = defineProps<{
+defineProps<{
     selectedCategories: string[];
     categoriesList: ServiceCategory[];
     error?: string;
@@ -45,19 +45,28 @@ const getCategoryLabel = (category: ServiceCategory) => {
                 :key="cat.id"
                 type="button"
                 @click="emit('toggle', cat.id)"
-                class="relative flex items-center gap-2.5 rounded-xl border p-3 text-left transition-all duration-200 cursor-pointer"
+                class="group relative flex items-center gap-2.5 rounded-xl border p-2.5 sm:p-3 text-left transition-all duration-200 cursor-pointer"
                 :class="[
                     selectedCategories.includes(cat.id)
                         ? 'border-[#ff545a] bg-[#ff545a]/10 text-zinc-900 dark:text-white ring-2 ring-[#ff545a]/30 shadow-xs'
                         : 'border-zinc-200/80 bg-white/70 text-zinc-700 hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-800/70 dark:text-zinc-300 dark:hover:border-zinc-650',
                 ]"
             >
-                <span class="text-xl shrink-0">{{ cat.emoji }}</span>
+                <div
+                    class="flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors"
+                    :class="[
+                        selectedCategories.includes(cat.id)
+                            ? 'bg-[#ff545a] text-white shadow-xs'
+                            : 'bg-zinc-100 text-zinc-600 group-hover:bg-zinc-200/80 dark:bg-zinc-800 dark:text-zinc-300 dark:group-hover:bg-zinc-750',
+                    ]"
+                >
+                    <component :is="cat.icon" v-if="cat.icon" class="size-4" />
+                </div>
                 <span class="text-xs font-semibold flex-1 truncate">{{ getCategoryLabel(cat) }}</span>
 
                 <div
                     v-if="selectedCategories.includes(cat.id)"
-                    class="flex size-4.5 items-center justify-center rounded-full bg-[#ff545a] text-white shrink-0"
+                    class="flex size-4.5 items-center justify-center rounded-full bg-[#ff545a] text-white shrink-0 shadow-xs"
                 >
                     <Check class="size-3 stroke-[2.5]" />
                 </div>

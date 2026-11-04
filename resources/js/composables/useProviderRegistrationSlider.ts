@@ -1,7 +1,20 @@
 import { ref, computed, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
+import {
+    Headphones,
+    Mic,
+    UtensilsCrossed,
+    Camera,
+    Flower2,
+    Landmark,
+    Volume2,
+    Car,
+    ShieldCheck,
+    Sparkles,
+    Layers,
+} from '@lucide/vue';
 import { useLanguage, type TranslationKey } from '@/composables/useLanguage';
-import type { ExistingProviderProfile, ProviderRegistrationFormData } from '@/types/onboarding';
+import type { ExistingProviderProfile, ProviderRegistrationFormData, ServiceCategory } from '@/types/onboarding';
 import {
     brandNameError,
     contactNameError,
@@ -19,18 +32,18 @@ import {
     type FieldError,
 } from '@/lib/providerRegistrationValidation';
 
-export const AVAILABLE_CATEGORIES = [
-    { id: 'Music & DJ', label: 'Music & DJ', swLabel: 'Muziki & DJ', emoji: '🎵' },
-    { id: 'Master of Ceremony (MC)', label: 'MC / Host', swLabel: 'Mshehereshaji (MC)', emoji: '🎤' },
-    { id: 'Catering & Cake', label: 'Catering & Cake', swLabel: 'Chakula & Keki', emoji: '🎂' },
-    { id: 'Photography & Video', label: 'Photo & Video', swLabel: 'Picha & Video', emoji: '📸' },
-    { id: 'Decoration & Floral', label: 'Decor & Floral', swLabel: 'Mapambo & Maua', emoji: '💐' },
-    { id: 'Venue & Hall', label: 'Venue & Hall', swLabel: 'Ukumbi & Maeneo', emoji: '🏛️' },
-    { id: 'Sound & Lighting', label: 'Sound & Lighting', swLabel: 'Sauti & Taa', emoji: '💡' },
-    { id: 'Transportation & Protocol', label: 'VIP Car & Protocol', swLabel: 'Magari ya Kifahari', emoji: '🚗' },
-    { id: 'Security & Protocol', label: 'Event Security', swLabel: 'Ulinzi wa Matukio', emoji: '🛡️' },
-    { id: 'Makeup & Beauty', label: 'Bridal & Makeup', swLabel: 'Urembo & Makeup', emoji: '💄' },
-    { id: 'Other Services', label: 'Other Event Services', swLabel: 'Huduma Nyinginezo', emoji: '✨' },
+export const AVAILABLE_CATEGORIES: ServiceCategory[] = [
+    { id: 'Music & DJ', label: 'Music & DJ', swLabel: 'Muziki & DJ', icon: Headphones },
+    { id: 'Master of Ceremony (MC)', label: 'MC / Host', swLabel: 'Mshehereshaji (MC)', icon: Mic },
+    { id: 'Catering & Cake', label: 'Catering & Cake', swLabel: 'Chakula & Keki', icon: UtensilsCrossed },
+    { id: 'Photography & Video', label: 'Photo & Video', swLabel: 'Picha & Video', icon: Camera },
+    { id: 'Decoration & Floral', label: 'Decor & Floral', swLabel: 'Mapambo & Maua', icon: Flower2 },
+    { id: 'Venue & Hall', label: 'Venue & Hall', swLabel: 'Ukumbi & Maeneo', icon: Landmark },
+    { id: 'Sound & Lighting', label: 'Sound & Lighting', swLabel: 'Sauti & Taa', icon: Volume2 },
+    { id: 'Transportation & Protocol', label: 'VIP Car & Protocol', swLabel: 'Magari ya Kifahari', icon: Car },
+    { id: 'Security & Protocol', label: 'Event Security', swLabel: 'Ulinzi wa Matukio', icon: ShieldCheck },
+    { id: 'Makeup & Beauty', label: 'Bridal & Makeup', swLabel: 'Urembo & Makeup', icon: Sparkles },
+    { id: 'Other Services', label: 'Other Event Services', swLabel: 'Huduma Nyinginezo', icon: Layers },
 ];
 
 export function useProviderRegistrationSlider(existingProfile?: ExistingProviderProfile | null) {
