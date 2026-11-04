@@ -44,7 +44,7 @@ const selectClient = () => {
 <template>
     <Head :title="t('onboarding.title')" />
 
-    <div class="relative flex min-h-screen flex-col font-['Poppins',sans-serif] text-zinc-900 antialiased selection:bg-[#ff545a] selection:text-white dark:text-zinc-100">
+    <div class="relative flex min-h-screen flex-col font-sans text-zinc-900 antialiased selection:bg-[#ff545a] selection:text-white dark:text-zinc-100">
         <!-- Persistent City Background -->
         <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden">
             <img
@@ -66,7 +66,7 @@ const selectClient = () => {
                 <div class="flex items-center gap-3">
                     <AppLogoIcon class="size-9 drop-shadow-md" />
                     <div class="flex flex-col text-left">
-                        <div class="flex items-center gap-1.5 font-['Poppins',sans-serif] text-base font-extrabold tracking-tight text-zinc-900 dark:text-white">
+                        <div class="flex items-center gap-1.5 font-sans text-base font-extrabold tracking-tight text-zinc-900 dark:text-white">
                             <span>HEY</span>
                             <span class="text-[#ff545a]">EVENTS</span>
                         </div>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Check } from '@lucide/vue';
-import InputError from '@/components/InputError.vue';
 import { useLanguage } from '@/composables/useLanguage';
 import type { ServiceCategory } from '@/types/onboarding';
 
@@ -25,7 +24,7 @@ const getCategoryLabel = (category: ServiceCategory) => {
     <div class="space-y-4">
         <div class="flex items-center justify-between">
             <div>
-                <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                <h3 class="text-sm font-extrabold tracking-tight text-zinc-900 dark:text-white">
                     {{ t('onboarding.selectCategoryPrompt') }}
                 </h3>
                 <p class="text-[11px] text-zinc-500 dark:text-zinc-400">
@@ -54,7 +53,7 @@ const getCategoryLabel = (category: ServiceCategory) => {
                 ]"
             >
                 <span class="text-xl shrink-0">{{ cat.emoji }}</span>
-                <span class="text-xs font-medium flex-1 truncate">{{ getCategoryLabel(cat) }}</span>
+                <span class="text-xs font-semibold flex-1 truncate">{{ getCategoryLabel(cat) }}</span>
 
                 <div
                     v-if="selectedCategories.includes(cat.id)"
@@ -65,6 +64,13 @@ const getCategoryLabel = (category: ServiceCategory) => {
             </button>
         </div>
 
-        <InputError :message="error" />
+        <p
+            v-if="error"
+            class="flex items-start gap-1.5 text-[11px] font-medium text-amber-600 dark:text-amber-400"
+            role="alert"
+            aria-live="polite"
+        >
+            {{ error }}
+        </p>
     </div>
 </template>

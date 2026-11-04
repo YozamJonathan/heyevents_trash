@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { UploadCloud, FileCheck, X } from '@lucide/vue';
-import InputError from '@/components/InputError.vue';
 import { useLanguage } from '@/composables/useLanguage';
 
 defineProps<{
@@ -47,7 +46,7 @@ const removeFile = (e: Event) => {
 <template>
     <div class="space-y-4">
         <div>
-            <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            <h3 class="text-sm font-extrabold tracking-tight text-zinc-900 dark:text-white">
                 {{ t('onboarding.dropzoneTitle') }}
             </h3>
             <p class="text-[11px] text-zinc-500 dark:text-zinc-400">
@@ -120,7 +119,14 @@ const removeFile = (e: Event) => {
                 />
             </label>
 
-            <InputError :message="error || form.errors.business_licence" />
+            <p
+                v-if="error || form.errors.business_licence"
+                class="mt-2 flex items-start gap-1.5 text-[11px] font-medium text-amber-600 dark:text-amber-400"
+                role="alert"
+                aria-live="polite"
+            >
+                {{ error || form.errors.business_licence }}
+            </p>
         </div>
     </div>
 </template>

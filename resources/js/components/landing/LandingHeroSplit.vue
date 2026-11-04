@@ -19,14 +19,14 @@ const page = usePage();
                     <span>Complete Event Infrastructure</span>
                 </div>
 
-                <h1 class="mt-6 text-4xl font-extrabold tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl dark:text-white">
+                <h1 class="mt-6 text-4xl font-black tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl dark:text-white">
                     From Budgeting to Gate Check-In —
                     <span class="block bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
                         Manage Any Event End-To-End.
                     </span>
                 </h1>
 
-                <p class="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg dark:text-zinc-300">
+                <p class="mx-auto mt-5 max-w-2xl text-base font-medium leading-relaxed text-zinc-600 sm:text-lg dark:text-zinc-300">
                     The all-in-one platform for organizers, venues, and teams to
                     <strong class="font-semibold text-zinc-900 dark:text-white">plan, market, execute, and track</strong>
                     events of any scale.

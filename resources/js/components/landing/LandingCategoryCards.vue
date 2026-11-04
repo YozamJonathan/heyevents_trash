@@ -84,7 +84,7 @@ const scrollToExplore = () => {
 
                         <!-- Category Title -->
                         <h3
-                            class="mt-5 font-['Poppins',sans-serif] text-base font-extrabold text-zinc-900 transition group-hover:text-[#ff545a] dark:text-white"
+                            class="mt-5 font-sans text-base font-extrabold text-zinc-900 transition group-hover:text-[#ff545a] dark:text-white"
                         >
                             {{ t(cat.titleKey) }}
                         </h3>

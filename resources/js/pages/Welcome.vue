@@ -14,21 +14,10 @@ const { t } = useLanguage();
 </script>
 
 <template>
-    <Head :title="t('page.title')">
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-            rel="preconnect"
-            href="https://fonts.gstatic.com"
-            crossorigin="anonymous"
-        />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
-            rel="stylesheet"
-        />
-    </Head>
+    <Head :title="t('page.title')" />
 
     <div
-        class="relative min-h-screen bg-slate-100 font-['Poppins',sans-serif] text-zinc-900 antialiased selection:bg-[#ff545a] selection:text-white dark:bg-zinc-950 dark:text-zinc-100"
+        class="relative min-h-screen bg-slate-100 font-sans text-zinc-900 antialiased selection:bg-[#ff545a] selection:text-white dark:bg-zinc-950 dark:text-zinc-100"
     >
         <!-- Persistent Background Layer (City Day for Light Mode, City Night for Dark Mode) -->
         <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden">

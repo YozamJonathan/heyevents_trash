@@ -41,7 +41,7 @@ const { t } = useLanguage();
                     {{ t('steps.eyebrow') }}
                 </span>
                 <h2
-                    class="mt-2 font-['Poppins',sans-serif] text-2xl font-black tracking-wider text-zinc-900 uppercase sm:text-3xl dark:text-white"
+                    class="mt-2 font-sans text-2xl font-black tracking-wider text-zinc-900 uppercase sm:text-3xl dark:text-white"
                 >
                     {{ t('steps.title') }}
                 </h2>
@@ -71,7 +71,7 @@ const { t } = useLanguage();
                     </div>
 
                     <h3
-                        class="font-['Poppins',sans-serif] text-base font-bold text-zinc-900 dark:text-white"
+                        class="font-sans text-base font-bold text-zinc-900 dark:text-white"
                     >
                         {{ t(step.titleKey) }}
                     </h3>

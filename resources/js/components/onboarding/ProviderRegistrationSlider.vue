@@ -37,6 +37,8 @@ const {
     prevStep,
     goToStep,
     submitApplication,
+    markTouched,
+    markLive,
 } = useProviderRegistrationSlider(props.existingProfile);
 
 const onPrevClick = () => {
@@ -80,13 +82,15 @@ const onPrevClick = () => {
                     v-if="activeStep === 1"
                     :form="form"
                     :step-errors="stepErrors"
+                    @field-blur="markTouched"
+                    @field-input="markLive"
                 />
 
                 <StepServicesOffered
                     v-else-if="activeStep === 2"
                     :selected-categories="form.categories"
                     :categories-list="AVAILABLE_CATEGORIES"
-                    :error="stepErrors.categories"
+                    :error="stepErrors.categories || form.errors.categories || form.errors['categories.0']"
                     @toggle="toggleCategory"
                 />
 
@@ -94,6 +98,8 @@ const onPrevClick = () => {
                     v-else-if="activeStep === 3"
                     :form="form"
                     :step-errors="stepErrors"
+                    @field-blur="markTouched"
+                    @field-input="markLive"
                 />
 
                 <StepBusinessLicence

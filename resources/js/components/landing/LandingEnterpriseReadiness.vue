@@ -14,7 +14,7 @@ const { enterpriseFeatures } = useLandingData();
                     <span>Built for Ground Realities</span>
                 </div>
 
-                <h2 class="mt-4 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl dark:text-white">
+                <h2 class="mt-4 text-3xl font-black tracking-tight text-zinc-950 sm:text-4xl dark:text-white">
                     Enterprise & Team Readiness
                 </h2>
 

@@ -1,6 +1,23 @@
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useForm } from '@inertiajs/vue3';
+import { useLanguage, type TranslationKey } from '@/composables/useLanguage';
 import type { ExistingProviderProfile, ProviderRegistrationFormData } from '@/types/onboarding';
+import {
+    brandNameError,
+    contactNameError,
+    descriptionError,
+    instagramError,
+    licenceError,
+    nidaError,
+    normaliseWebsite,
+    phoneError,
+    secondaryPhoneError,
+    stepForField,
+    tiktokError,
+    websiteError,
+    whatsappError,
+    type FieldError,
+} from '@/lib/providerRegistrationValidation';
 
 export const AVAILABLE_CATEGORIES = [
     { id: 'Music & DJ', label: 'Music & DJ', swLabel: 'Muziki & DJ', emoji: '🎵' },
@@ -17,9 +34,11 @@ export const AVAILABLE_CATEGORIES = [
 ];
 
 export function useProviderRegistrationSlider(existingProfile?: ExistingProviderProfile | null) {
+    const { t } = useLanguage();
     const activeStep = ref<number>(1);
     const maxVisitedStep = ref<number>(1);
     const stepErrors = ref<Record<string, string>>({});
+    const touched = ref<Record<string, boolean>>({});
 
     const hasExistingLicence = computed(() => Boolean(existingProfile?.business_licence_path));
     const licenceFileName = ref<string | null>(
@@ -32,9 +51,9 @@ export function useProviderRegistrationSlider(existingProfile?: ExistingProvider
     const form = useForm<ProviderRegistrationFormData>({
         brand_name: existingProfile?.brand_name ?? '',
         contact_name: existingProfile?.contact_name ?? '',
-        nida_number: existingProfile?.nida_number ?? '',
-        primary_phone: existingProfile?.primary_phone ?? '',
-        secondary_phone: existingProfile?.secondary_phone ?? '',
+        nida_number: String(existingProfile?.nida_number ?? ''),
+        primary_phone: String(existingProfile?.primary_phone ?? ''),
+        secondary_phone: String(existingProfile?.secondary_phone ?? ''),
         categories: initialCategories,
         instagram: existingProfile?.instagram ?? '',
         whatsapp: existingProfile?.whatsapp ?? '',
@@ -43,6 +62,132 @@ export function useProviderRegistrationSlider(existingProfile?: ExistingProvider
         business_licence: null,
         description: existingProfile?.description ?? '',
     });
+
+    const messageFor = (error: FieldError | null): string => {
+        if (!error) {
+            return '';
+        }
+
+        const template = t(`onboarding.${error.key}` as TranslationKey);
+
+        return template
+            .replace(':count', String(error.count ?? 0))
+            .replace(':expected', String(error.expected ?? 0));
+    };
+
+    const setError = (field: string, error: FieldError | null) => {
+        const message = messageFor(error);
+
+        if (message) {
+            stepErrors.value[field] = message;
+        } else {
+            delete stepErrors.value[field];
+        }
+    };
+
+    const markTouched = (field: string) => {
+        touched.value[field] = true;
+        if (field === 'social_media' && form.social_media) {
+            form.social_media = normaliseWebsite(form.social_media);
+        }
+        validateActiveStep();
+    };
+
+    const markLive = (field: string) => {
+        if (field === 'nida_number' || field === 'primary_phone' || field === 'secondary_phone') {
+            if (String(form[field] ?? '').length > 0) {
+                touched.value[field] = true;
+            }
+        } else {
+            touched.value[field] = true;
+        }
+
+        validateActiveStep();
+    };
+
+    const validateActiveStep = () => {
+        if (activeStep.value === 1) {
+            validateBusinessInfo(false);
+        } else if (activeStep.value === 3) {
+            validateSocialPortfolio(false);
+        }
+    };
+
+    const validateBusinessInfo = (requireEmpty: boolean): boolean => {
+        const brandTouched = requireEmpty || Boolean(touched.value.brand_name);
+        const contactTouched = requireEmpty || Boolean(touched.value.contact_name);
+        const nidaTouched =
+            requireEmpty || Boolean(touched.value.nida_number) || String(form.nida_number ?? '').length > 0;
+        const primaryTouched =
+            requireEmpty || Boolean(touched.value.primary_phone) || String(form.primary_phone ?? '').length > 0;
+        const secondaryTouched =
+            requireEmpty || Boolean(touched.value.secondary_phone) || String(form.secondary_phone ?? '').length > 0;
+
+        if (brandTouched) {
+            setError('brand_name', brandNameError(form.brand_name, requireEmpty || Boolean(touched.value.brand_name)));
+        }
+
+        if (contactTouched) {
+            setError(
+                'contact_name',
+                contactNameError(form.contact_name, requireEmpty || Boolean(touched.value.contact_name)),
+            );
+        }
+
+        if (nidaTouched) {
+            setError('nida_number', nidaError(form.nida_number, requireEmpty || Boolean(touched.value.nida_number)));
+        }
+
+        if (primaryTouched) {
+            setError(
+                'primary_phone',
+                phoneError(form.primary_phone, requireEmpty || Boolean(touched.value.primary_phone)),
+            );
+        }
+
+        if (secondaryTouched) {
+            setError('secondary_phone', secondaryPhoneError(form.secondary_phone, form.primary_phone));
+        }
+
+        return !['brand_name', 'contact_name', 'nida_number', 'primary_phone', 'secondary_phone'].some(
+            (field) => stepErrors.value[field],
+        );
+    };
+
+    const validateSocialPortfolio = (force: boolean): boolean => {
+        const checks: Array<[string, () => FieldError | null]> = [
+            ['instagram', () => instagramError(form.instagram)],
+            ['whatsapp', () => whatsappError(form.whatsapp)],
+            ['tiktok', () => tiktokError(form.tiktok)],
+            ['social_media', () => websiteError(form.social_media)],
+            ['description', () => descriptionError(form.description)],
+        ];
+
+        for (const [field, check] of checks) {
+            // Show errors once a field was touched, or always when the description overflows.
+            if (force || touched.value[field] || field === 'description') {
+                setError(field, check());
+            }
+        }
+
+        return !checks.some(([field]) => stepErrors.value[field]);
+    };
+
+    watch(
+        () => [
+            form.brand_name,
+            form.contact_name,
+            form.nida_number,
+            form.primary_phone,
+            form.secondary_phone,
+            form.instagram,
+            form.whatsapp,
+            form.tiktok,
+            form.social_media,
+            form.description,
+        ],
+        () => validateActiveStep(),
+    );
 
     const toggleCategory = (catId: string) => {
         delete stepErrors.value.categories;
@@ -55,6 +200,14 @@ export function useProviderRegistrationSlider(existingProfile?: ExistingProvider
     };
 
     const handleFileSelected = (file: File) => {
+        const error = licenceError(file, hasExistingLicence.value);
+
+        if (error && error.key !== 'licenceRequired') {
+            form.business_licence = null;
+            setError('business_licence', error);
+            return;
+        }
+
         delete stepErrors.value.business_licence;
         form.business_licence = file;
         licenceFileName.value = file.name;
@@ -67,49 +220,46 @@ export function useProviderRegistrationSlider(existingProfile?: ExistingProvider
         if (!hasExistingLicence.value) {
             licenceFileName.value = null;
             licenceFileSize.value = null;
+            setError('business_licence', { key: 'licenceRequired' });
+        } else {
+            delete stepErrors.value.business_licence;
         }
     };
 
     const validateStep = (stepNumber: number): boolean => {
-        stepErrors.value = {};
-
         if (stepNumber === 1) {
-            if (!form.brand_name.trim()) {
-                stepErrors.value.brand_name = 'Brand / Business Name is required.';
+            touched.value.brand_name = true;
+            touched.value.contact_name = true;
+            touched.value.nida_number = true;
+            touched.value.primary_phone = true;
+            if (form.secondary_phone) {
+                touched.value.secondary_phone = true;
             }
-            if (!form.contact_name.trim()) {
-                stepErrors.value.contact_name = 'Contact Person Name is required.';
-            }
-            if (!form.nida_number.trim()) {
-                stepErrors.value.nida_number = 'NIDA Number is required.';
-            } else if (form.nida_number.replace(/[^0-9]/g, '').length < 8) {
-                stepErrors.value.nida_number = 'Please enter a valid NIDA identification number.';
-            }
-            if (!form.primary_phone.trim()) {
-                stepErrors.value.primary_phone = 'Primary phone number is required.';
-            }
-            return Object.keys(stepErrors.value).length === 0;
+
+            return validateBusinessInfo(true);
         }
 
         if (stepNumber === 2) {
             if (form.categories.length === 0) {
-                stepErrors.value.categories = 'Please select at least one service category.';
+                setError('categories', { key: 'categoriesRequired' });
                 return false;
             }
+            delete stepErrors.value.categories;
             return true;
         }
 
         if (stepNumber === 3) {
-            // Step 3 optional / format checks
-            return true;
+            if (form.social_media) {
+                form.social_media = normaliseWebsite(form.social_media);
+            }
+
+            return validateSocialPortfolio(true);
         }
 
         if (stepNumber === 4) {
-            if (!form.business_licence && !hasExistingLicence.value) {
-                stepErrors.value.business_licence = 'Please upload a business licence document.';
-                return false;
-            }
-            return true;
+            const error = licenceError(form.business_licence, hasExistingLicence.value);
+            setError('business_licence', error);
+            return !error;
         }
 
         return true;
@@ -139,7 +289,6 @@ export function useProviderRegistrationSlider(existingProfile?: ExistingProvider
             activeStep.value = targetStep;
             return;
         }
-        // Validate each step in between before jumping forward
         for (let s = activeStep.value; s < targetStep; s++) {
             if (!validateStep(s)) {
                 return;
@@ -158,8 +307,17 @@ export function useProviderRegistrationSlider(existingProfile?: ExistingProvider
                 return;
             }
         }
+        form.clearErrors();
         form.post('/onboarding/provider', {
             forceFormData: true,
+            preserveScroll: true,
+            onError: (errors) => {
+                // Jump back to the earliest step that the server rejected.
+                const fields = Object.keys(errors);
+                if (fields.length > 0) {
+                    activeStep.value = Math.min(...fields.map(stepForField));
+                }
+            },
         });
     };
 
@@ -179,5 +337,7 @@ export function useProviderRegistrationSlider(existingProfile?: ExistingProvider
         prevStep,
         goToStep,
         submitApplication,
+        markTouched,
+        markLive,
     };
 }

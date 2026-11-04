@@ -8,8 +8,17 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+    /* Montserrat is the single typeface for the whole app (sans, serif and mono all map to it). */
     --font-sans:
-        Instrument Sans, ui-sans-serif, system-ui, sans-serif,
+        'Montserrat', ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+    --font-serif:
+        'Montserrat', ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+    --font-mono:
+        'Montserrat', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
 
@@ -77,17 +86,6 @@
     ::backdrop,
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
-    }
-}
-
-@layer utilities {
-
-    body,
-    html {
-        --font-sans:
-            'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
-            'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-            'Noto Color Emoji';
     }
 }
 
@@ -169,7 +167,61 @@
         @apply border-border outline-ring/50;
     }
 
+    html,
     body {
-        @apply bg-background text-foreground;
+        @apply bg-background text-foreground font-sans;
+    }
+
+    html,
+    body {
+        font-optical-sizing: auto;
+        text-rendering: optimizeLegibility;
+    }
+
+    /* Form controls don't inherit the font by default. */
+    button,
+    input,
+    select,
+    textarea {
+        font-family: inherit;
+    }
+
+    /*
+      Montserrat weight scale used across the app:
+        900 font-black      -> hero / page display titles
+        800 font-extrabold  -> page & section headings
+        700 font-bold       -> card titles, badges, emphasis
+        600 font-semibold   -> labels, buttons, nav links
+        500 font-medium     -> body copy, inputs, helper text
+      Headings get sensible defaults below; explicit utility classes still win.
+    */
+    h1 {
+        font-weight: 900;
+    }
+
+    h2 {
+        font-weight: 800;
+    }
+
+    h3,
+    h4 {
+        font-weight: 700;
+    }
+
+    h5,
+    h6,
+    label,
+    th {
+        font-weight: 600;
+    }
+
+    strong,
+    b {
+        font-weight: 700;
+    }
+
+    .font-mono {
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.01em;
     }
 }

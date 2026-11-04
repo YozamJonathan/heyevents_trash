@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { Building2, Briefcase, Share2, FileText, ClipboardCheck, Check } from '@lucide/vue';
-import { useLanguage } from '@/composables/useLanguage';
+import { useLanguage, type TranslationKey } from '@/composables/useLanguage';
 
 const props = defineProps<{
     activeStep: number;
@@ -14,7 +14,7 @@ const emit = defineEmits<{
 
 const { t } = useLanguage();
 
-const steps = [
+const steps: Array<{ number: number; titleKey: TranslationKey; icon: typeof Building2 }> = [
     { number: 1, titleKey: 'onboarding.step1Title', icon: Building2 },
     { number: 2, titleKey: 'onboarding.step2Title', icon: Briefcase },
     { number: 3, titleKey: 'onboarding.step3Title', icon: Share2 },

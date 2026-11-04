@@ -59,7 +59,7 @@ onUnmounted(() => {
                 />
                 <div class="flex flex-col">
                     <span
-                        class="font-['Poppins',sans-serif] text-xl font-bold tracking-tight text-zinc-900 transition dark:text-white"
+                        class="font-sans text-xl font-black tracking-tight text-zinc-900 transition dark:text-white"
                     >
                         HEY <span class="text-[#ff545a]">Events</span>
                     </span>

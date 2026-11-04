@@ -11,6 +11,26 @@ class ServiceProviderProfile extends Model
 {
     use HasFactory;
 
+    /**
+     * Service categories a provider may register under.
+     * Keep in sync with AVAILABLE_CATEGORIES in useProviderRegistrationSlider.ts.
+     *
+     * @var list<string>
+     */
+    public const CATEGORIES = [
+        'Music & DJ',
+        'Master of Ceremony (MC)',
+        'Catering & Cake',
+        'Photography & Video',
+        'Decoration & Floral',
+        'Venue & Hall',
+        'Sound & Lighting',
+        'Transportation & Protocol',
+        'Security & Protocol',
+        'Makeup & Beauty',
+        'Other Services',
+    ];
+
     protected $fillable = [
         'user_id',
         'brand_name',

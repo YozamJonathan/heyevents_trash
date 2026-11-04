@@ -19,7 +19,7 @@ const { t } = useLanguage();
 <template>
     <div class="w-full max-w-4xl space-y-8">
         <div class="text-center space-y-2">
-            <h1 class="font-['Poppins',sans-serif] text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
+            <h1 class="font-sans text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 dark:text-white">
                 {{ t('onboarding.title') }}
             </h1>
             <p class="text-sm text-zinc-500 dark:text-zinc-400 max-w-lg mx-auto">
@@ -35,7 +35,7 @@ const { t } = useLanguage();
                         <Ticket class="size-7" />
                     </div>
                     <div class="space-y-1.5">
-                        <h3 class="font-['Poppins',sans-serif] text-lg font-bold text-zinc-900 dark:text-white">
+                        <h3 class="font-sans text-lg font-extrabold text-zinc-900 dark:text-white">
                             {{ t('onboarding.clientTitle') }}
                         </h3>
                         <p class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
@@ -79,7 +79,7 @@ const { t } = useLanguage();
                     </div>
                     <div class="space-y-1.5">
                         <div class="flex items-center gap-2">
-                            <h3 class="font-['Poppins',sans-serif] text-lg font-bold text-zinc-900 dark:text-white">
+                            <h3 class="font-sans text-lg font-extrabold text-zinc-900 dark:text-white">
                                 {{ t('onboarding.providerTitle') }}
                             </h3>
                             <span class="rounded-full bg-purple-500/15 px-2 py-0.5 text-[10px] font-bold text-purple-700 dark:text-purple-300 uppercase">

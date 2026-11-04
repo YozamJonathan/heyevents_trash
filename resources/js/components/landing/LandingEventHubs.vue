@@ -10,7 +10,7 @@ const { activeHubId, eventHubs, currentHub } = useLandingData();
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <div class="mx-auto max-w-3xl text-center">
                 <p class="text-xs font-semibold tracking-widest text-indigo-600 uppercase dark:text-indigo-400">4 Functional Hubs</p>
-                <h2 class="mt-2 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl dark:text-white">
+                <h2 class="mt-2 text-3xl font-black tracking-tight text-zinc-950 sm:text-4xl dark:text-white">
                     Tailored Systems for Every Event Category
                 </h2>
                 <p class="mt-3 text-sm text-zinc-600 sm:text-base dark:text-zinc-400">
@@ -48,7 +48,7 @@ const { activeHubId, eventHubs, currentHub } = useLandingData();
                                 </span>
                             </div>
 
-                            <h3 class="text-2xl font-bold text-zinc-950 dark:text-white">
+                            <h3 class="text-2xl font-extrabold text-zinc-950 dark:text-white">
                                 Built for {{ currentHub.title }}
                             </h3>
 

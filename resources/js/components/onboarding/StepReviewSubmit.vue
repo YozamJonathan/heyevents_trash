@@ -26,7 +26,7 @@ const getCategoryLabel = (id: string) => {
 <template>
     <div class="space-y-4">
         <div>
-            <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            <h3 class="text-sm font-extrabold tracking-tight text-zinc-900 dark:text-white">
                 {{ t('onboarding.summaryTitle') }}
             </h3>
             <p class="text-[11px] text-zinc-500 dark:text-zinc-400">
@@ -50,7 +50,7 @@ const getCategoryLabel = (id: string) => {
                 <div class="grid grid-cols-2 gap-2 text-zinc-600 dark:text-zinc-300">
                     <div><span class="text-zinc-400 block text-[10px] uppercase font-medium">{{ t('onboarding.brandName') }}</span> <span class="font-semibold text-zinc-900 dark:text-white">{{ form.brand_name }}</span></div>
                     <div><span class="text-zinc-400 block text-[10px] uppercase font-medium">{{ t('onboarding.contactName') }}</span> {{ form.contact_name }}</div>
-                    <div><span class="text-zinc-400 block text-[10px] uppercase font-medium">{{ t('onboarding.nida') }}</span> <span class="font-mono text-[11px]">{{ form.nida_number }}</span></div>
+                    <div><span class="text-zinc-400 block text-[10px] uppercase font-medium">{{ t('onboarding.nida') }}</span> <span class="font-sans text-[11px] tracking-wide">{{ form.nida_number }}</span></div>
                     <div><span class="text-zinc-400 block text-[10px] uppercase font-medium">{{ t('onboarding.primaryPhone') }}</span> {{ form.primary_phone }} <span v-if="form.secondary_phone" class="text-zinc-400 text-[10px]">({{ form.secondary_phone }})</span></div>
                 </div>
             </div>

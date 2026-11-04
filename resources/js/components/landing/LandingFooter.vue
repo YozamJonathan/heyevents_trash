@@ -25,7 +25,7 @@ const toggleTheme = () => {
                 <div class="flex items-center gap-3">
                     <AppLogoIcon class="size-8 drop-shadow-sm" />
                     <span
-                        class="font-['Poppins',sans-serif] text-lg font-bold tracking-tight text-zinc-900 dark:text-white"
+                        class="font-sans text-lg font-black tracking-tight text-zinc-900 dark:text-white"
                     >
                         HEY <span class="text-[#ff545a]">Events</span>
                     </span>

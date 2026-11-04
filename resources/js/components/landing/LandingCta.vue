@@ -13,11 +13,11 @@ const page = usePage();
                 <!-- Subtle glow -->
                 <div class="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl" />
 
-                <h2 class="text-3xl font-light tracking-tight sm:text-4xl">
-                    Ready to elevate your <span class="font-serif italic text-zinc-400">next event?</span>
+                <h2 class="text-3xl font-black tracking-tight sm:text-4xl">
+                    Ready to elevate your <span class="font-medium italic text-zinc-400">next event?</span>
                 </h2>
 
-                <p class="mx-auto mt-4 max-w-lg text-sm text-zinc-400">
+                <p class="mx-auto mt-4 max-w-lg text-sm font-medium text-zinc-400">
                     Join thousands of organizers creating seamless, memorable experiences with eSherehe.
                 </p>
 

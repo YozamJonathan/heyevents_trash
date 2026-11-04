@@ -97,7 +97,7 @@ const filteredListings = computed(() => {
                         {{ t('explore.eyebrow') }}
                     </span>
                     <h2
-                        class="mt-1 font-['Poppins',sans-serif] text-3xl font-black tracking-wider text-zinc-950 uppercase drop-shadow-xs sm:text-4xl dark:text-white dark:drop-shadow-md"
+                        class="mt-1 font-sans text-3xl font-black tracking-wider text-zinc-950 uppercase drop-shadow-xs sm:text-4xl dark:text-white dark:drop-shadow-md"
                     >
                         {{ t('explore.title') }}
                     </h2>
@@ -167,7 +167,7 @@ const filteredListings = computed(() => {
                                 {{ t(item.categoryKey) }}
                             </div>
                             <h3
-                                class="mt-1 font-['Poppins',sans-serif] text-base font-bold text-zinc-900 transition-colors group-hover:text-[#ff545a] dark:text-white"
+                                class="mt-1 font-sans text-base font-bold text-zinc-900 transition-colors group-hover:text-[#ff545a] dark:text-white"
                             >
                                 {{ item.title }}
                             </h3>

@@ -25,7 +25,7 @@ const handleSearch = () => {
         >
             <!-- Main Hero Typography -->
             <h1
-                class="font-['Poppins',sans-serif] text-3xl leading-tight font-black tracking-wider text-zinc-950 uppercase drop-shadow-xs sm:text-4xl md:text-5xl lg:text-[46px] dark:text-white dark:drop-shadow-md"
+                class="font-sans text-3xl leading-tight font-black tracking-wider text-zinc-950 uppercase drop-shadow-xs sm:text-4xl md:text-5xl lg:text-[46px] dark:text-white dark:drop-shadow-md"
             >
                 {{ t('hero.title') }}
             </h1>
