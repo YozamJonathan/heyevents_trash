@@ -534,6 +534,7 @@
         "whatsappLinkInvalid": "Viungo vya WhatsApp lazima vianze na https://wa.me/, https://chat.whatsapp.com/ au https://whatsapp.com/channel/.",
         "websiteInvalid": "Weka kiungo sahihi cha tovuti (mfano: https://mybusiness.co.tz).",
         "descriptionTooLong": "Maelezo yasizidi herufi :expected (kwa sasa una :count).",
-        "uploadDrag": "Bofya kupakia au buruta na uachie faili hapa"
+        "uploadDrag": "Bofya kupakia au buruta na uachie faili hapa",
+        "noServicesSelected": "Hakuna huduma zilizochaguliwa."
     }
 }

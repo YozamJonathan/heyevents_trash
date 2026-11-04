@@ -534,6 +534,7 @@
         "whatsappLinkInvalid": "WhatsApp links must start with https://wa.me/, https://chat.whatsapp.com/ or https://whatsapp.com/channel/.",
         "websiteInvalid": "Enter a valid website link (e.g. https://mybusiness.co.tz).",
         "descriptionTooLong": "Description may not exceed :expected characters (you currently have :count).",
-        "uploadDrag": "Click to upload or drag and drop"
+        "uploadDrag": "Click to upload or drag and drop",
+        "noServicesSelected": "No services selected."
     }
 }
