@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Heart, Briefcase, Music2, Users2, ArrowRight } from '@lucide/vue';
+import { Link } from '@inertiajs/vue3';
+import { Armchair, UtensilsCrossed, Music2, Building2, ArrowRight } from '@lucide/vue';
 import { useLanguage, type TranslationKey } from '@/composables/useLanguage';
 
 interface StandardCategory {
@@ -9,60 +10,60 @@ interface StandardCategory {
     listingsKey: TranslationKey;
     subtitleKey: TranslationKey;
     icon: any;
+    exploreUrl: string;
 }
 
 const categories: StandardCategory[] = [
     {
-        id: 'social',
+        id: 'rentals',
         titleKey: 'category.social.title',
         badgeKey: 'category.social.badge',
         listingsKey: 'category.social.listings',
         subtitleKey: 'category.social.subtitle',
-        icon: Heart,
+        icon: Armchair,
+        exploreUrl: '/explore?category=rentals',
     },
     {
-        id: 'corporate',
+        id: 'catering',
         titleKey: 'category.corporate.title',
         badgeKey: 'category.corporate.badge',
         listingsKey: 'category.corporate.listings',
         subtitleKey: 'category.corporate.subtitle',
-        icon: Briefcase,
+        icon: UtensilsCrossed,
+        exploreUrl: '/explore?category=catering',
     },
     {
-        id: 'entertainment',
+        id: 'sound',
         titleKey: 'category.entertainment.title',
         badgeKey: 'category.entertainment.badge',
         listingsKey: 'category.entertainment.listings',
         subtitleKey: 'category.entertainment.subtitle',
         icon: Music2,
+        exploreUrl: '/explore?category=sound-media',
     },
     {
-        id: 'community',
+        id: 'venues',
         titleKey: 'category.community.title',
         badgeKey: 'category.community.badge',
         listingsKey: 'category.community.listings',
         subtitleKey: 'category.community.subtitle',
-        icon: Users2,
+        icon: Building2,
+        exploreUrl: '/explore?category=venues',
     },
 ];
 
 const { t } = useLanguage();
-
-const scrollToExplore = () => {
-    const el = document.getElementById('explore');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-};
 </script>
 
 <template>
-    <section id="standards" class="relative z-20 -mt-14 mb-16 sm:-mt-20">
+    <section id="standards" class="relative z-20 -mt-10 mb-16 sm:-mt-16">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                <div
+                <Link
                     v-for="cat in categories"
                     :key="cat.id"
-                    @click="scrollToExplore"
-                    class="group relative flex cursor-pointer flex-col justify-between rounded-2xl border border-zinc-200/90 bg-white/95 p-6 shadow-xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-[#ff545a] hover:shadow-2xl dark:border-zinc-700/80 dark:bg-zinc-900/95 dark:hover:border-[#ff545a] dark:hover:bg-zinc-900 dark:hover:shadow-[0_0_30px_rgba(255,84,90,0.18)]"
+                    :href="cat.exploreUrl"
+                    class="group relative flex flex-col justify-between rounded-3xl border border-zinc-200/90 bg-white/95 p-6 shadow-xl backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-[#ff545a] hover:shadow-2xl dark:border-zinc-700/80 dark:bg-zinc-900/95 dark:hover:border-[#ff545a] dark:hover:bg-zinc-900 dark:hover:shadow-[0_0_30px_rgba(255,84,90,0.18)]"
                 >
                     <div>
                         <!-- Top Icon & Badge with High Contrast -->
@@ -84,7 +85,7 @@ const scrollToExplore = () => {
 
                         <!-- Category Title -->
                         <h3
-                            class="mt-5 font-sans text-base font-extrabold text-zinc-900 transition group-hover:text-[#ff545a] dark:text-white"
+                            class="mt-5 font-display text-base sm:text-lg font-extrabold tracking-tight text-zinc-900 transition group-hover:text-[#ff545a] dark:text-white"
                         >
                             {{ t(cat.titleKey) }}
                         </h3>
@@ -110,10 +111,10 @@ const scrollToExplore = () => {
                     >
                         <span>{{ t('category.explore') }}</span>
                         <ArrowRight
-                            class="size-4 transition group-hover:translate-x-1"
+                            class="size-4 transition-transform duration-300 group-hover:translate-x-1"
                         />
                     </div>
-                </div>
+                </Link>
             </div>
         </div>
     </section>

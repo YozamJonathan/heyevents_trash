@@ -18,8 +18,10 @@ class ShowOnboardingController extends Controller
         $user = $request->user();
         $profile = $user ? $user->serviceProviderProfile : null;
 
-        // If user already has a role and isn't a rejected vendor seeking to re-submit, redirect to dashboard
-        if ($user && $user->roles()->count() > 0 && (! $profile || $profile->status !== 'rejected')) {
+        // If user already has a role and has NO provider profile and didn't ask to create one,
+        // pure clients can go to dashboard. But if user has an existing provider profile
+        // or has Service Provider role, ALWAYS let them access onboarding to edit/rectify KYC details.
+        if ($user && $user->roles()->count() > 0 && ! $profile && ! $user->hasRole('Service Provider') && ! $request->has('role')) {
             return redirect()->route('dashboard');
         }
 

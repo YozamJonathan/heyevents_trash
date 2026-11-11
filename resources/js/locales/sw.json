@@ -5,11 +5,17 @@
         "swahili": "Kiswahili"
     },
     "nav": {
-        "standards": "Aina za Matukio",
+        "home": "Mwanzo",
+        "servicesAndRentals": "Huduma & Vifaa",
+        "venues": "Kumbi",
         "howItWorks": "Jinsi Inavyofanya Kazi",
+        "aboutUs": "Kuhusu Sisi",
+        "contact": "Wasiliana Nasi",
+        "listService": "Weka Vifaa & Huduma Zako",
+        "viewAllCategories": "Angalia Makundi Yote 12",
+        "standards": "Aina za Matukio",
         "exploreEvents": "Gundua Matukio",
         "reviews": "Maoni",
-        "contact": "Wasiliana Nasi",
         "toggleTheme": "Badili mandhari",
         "dark": "Giza",
         "light": "Mwanga",
@@ -40,62 +46,81 @@
         "platformHelp": "Msaada wa Mfumo",
         "platform": "Mfumo"
     },
+    "about": {
+        "badge": "Kuhusu HEY Events",
+        "title": "Soko la Kisasa la Vifaa & Huduma za Matukio",
+        "description": "Kuunganisha waandaaji wa sherehe moja kwa moja na ukodishaji wa vifaa, upishi, muziki, na kumbi zilizohakikiwa kote Tanzania—bila madalali wala gharama zilizofichwa.",
+        "card1Title": "Vifaa & Watoa Huduma Waliohakikiwa",
+        "card1Desc": "Mahema, viti, muziki na wataalamu walioidhinishwa kwa ubora na picha halisi.",
+        "card2Title": "Bei za Wazi Bila Madalali",
+        "card2Desc": "Bei halisi moja kwa moja kutoka kwa wamiliki wa vifaa bila gharama zilizofichwa.",
+        "card3Title": "Uwasilishaji kwa Wakati",
+        "card3Desc": "Uhakika wa vifaa kufika na kufungwa mapema kabla wageni hawajawasili, pamoja na msaada masaa 24/7.",
+        "ctaTitle": "Uko tayari kufanikisha sherehe yako?",
+        "ctaDesc": "Pata vifaa vya kisasa, chagua watoa huduma bora, au weka vifaa vyako mtandaoni leo.",
+        "joinVendor": "Weka Vifaa & Jiunge",
+        "exploreServices": "Tazama Vifaa & Huduma"
+    },
     "page": {
         "title": "HEY Events — Usimamizi wa Matukio na Tiketi",
-        "cityAlt": "Mandhari ya jiji kando ya maji"
+        "cityAlt": "Mandhari ya majengo na jiji la Dar es Salaam"
     },
     "hero": {
-        "title": "Mahali bora pa kupata na kugundua kila unachohitaji",
-        "description": "Kuanzia harusi muhimu na mikutano ya kampuni hadi tamasha za viwanjani na hafla za kuchangisha fedha, tafuta, weka nafasi na simamia kila kitu kwa kubofya mara moja.",
-        "eventLabel": "Tukio au aina",
-        "eventPlaceholder": "Gala, mkutano, tamasha, uchangishaji...",
+        "title": "Kila bidhaa, huduma na kifaa kwa ajili ya tukio lako",
+        "description": "Ukodishaji wa mahema, viti, mziki na mapambo, upishi, wapiga picha, usafiri na kumbi—pata, kodi na ajiri vyote sehemu moja.",
+        "eventLabel": "Bidhaa, huduma au ukodishaji",
+        "eventPlaceholder": "Viti, mahema, sound system, upishi, MC...",
         "locationLabel": "Mahali au ukumbi",
-        "locationPlaceholder": "Ukumbi wa sherehe, uwanja, kituo cha mikutano...",
+        "locationPlaceholder": "Dar es Salaam, Serena, JNICC, Masaki...",
         "search": "Tafuta"
     },
     "category": {
         "social": {
-            "title": "Sherehe na Hafla za Kijamii",
-            "badge": "Harusi na Gala",
-            "listings": "Harusi, siku za kuzaliwa na gala",
-            "subtitle": "Mipango ya viti, mahitaji ya chakula na michango kwa njia ya kidijitali."
+            "title": "Vifaa na Ukodishaji",
+            "badge": "Viti na Mahema",
+            "listings": "Viti, mahema na jenereta",
+            "subtitle": "Viti vya Chiavari, meza za karamu, mahema imara, majukwaa na jenereta za uhakika."
         },
         "corporate": {
-            "title": "Kampuni na Biashara",
-            "badge": "Mikutano na Kongamano",
-            "listings": "Mikutano na makongamano",
-            "subtitle": "Ratiba za vipindi, orodha za wazungumzaji na beji za QR za kiotomatiki."
+            "title": "Upishi, Keki na Vinywaji",
+            "badge": "Chakula na Vinywaji",
+            "listings": "Keki, buffet na wahudumu",
+            "subtitle": "Keki za kisasa za harusi na sherehe, buffet catering, vinywaji na wahudumu waliofunzwa."
         },
         "entertainment": {
-            "title": "Burudani na Tamasha",
-            "badge": "Tamasha na Viwanja",
-            "listings": "Matamasha na viwanja",
-            "subtitle": "Tiketi nyingi, ufuatiliaji wa viingilio na malipo bila fedha taslimu."
+            "title": "Muziki, Taa na Picha",
+            "badge": "Sauti na Picha",
+            "listings": "Sound, ma-DJ na video",
+            "subtitle": "Mifumo ya kisasa ya Sound (PA), ma-DJ mahiri, taa za jukwaa, skrini za LED na picha za drone."
         },
         "community": {
-            "title": "Jamii na Mashirika Yasiyo ya Faida",
-            "badge": "Gala na Huduma za Dini",
-            "listings": "Uchangishaji na gala",
-            "subtitle": "Ufuatiliaji wa wafadhili, ripoti za ahadi na uratibu wa wajitoleaji."
+            "title": "Kumbi, Mapambo na Magari",
+            "badge": "Kumbi na Usafiri",
+            "listings": "Kumbi, maua na magari",
+            "subtitle": "Kumbi za kisasa za harusi, bustani za sherehe, mapambo ya maua na magari ya kifahari ya mahrusi."
         },
-        "explore": "Gundua aina hii"
+        "explore": "Gundua huduma hizi"
     },
     "steps": {
-        "eyebrow": "Mchakato rahisi",
-        "title": "Jinsi inavyofanya kazi",
-        "description": "Hatua rahisi kutoka kuunda tukio hadi kuwakaribisha wageni.",
+        "eyebrow": "Mchakato rahisi wa hatua 4",
+        "title": "Jinsi HEY EVENTS Inavyofanya Kazi",
+        "description": "Njia rahisi kuanzia kupata mahitaji yote ya sherehe yako hadi kufanikisha tukio bila stress.",
         "label": "Hatua",
-        "select": {
-            "title": "Chagua aina ya tukio",
-            "description": "Chagua mpangilio wa sherehe, kampuni, burudani au shughuli za jamii."
+        "step1": {
+            "title": "Fungua Akaunti",
+            "description": "Jisajili na uchague aina ya akaunti yako: Mteja (Client) au Mtoa Huduma (Service Provider)."
         },
-        "plan": {
-            "title": "Panga na alika",
-            "description": "Panga viti, ratiba, aina za tiketi na mialiko ya wageni."
+        "step2": {
+            "title": "Gundua Huduma & Vifaa",
+            "description": "Gundua kumbi za sherehe, vifaa vya kukodi, mapambo na watoa huduma wa kitaalamu."
         },
-        "execute": {
-            "title": "Karibisha wageni",
-            "description": "Changanua tiketi bila intaneti na fuatilia wageni wanapowasili."
+        "step3": {
+            "title": "Chagua & Weka Oda",
+            "description": "Linganisha watoa huduma, angalia upatikanaji wa vifaa na tuma maombi yako ya kuweka oda."
+        },
+        "step4": {
+            "title": "Simamia & Furahia Sherehe",
+            "description": "Fuatilia maagizo yako, wasiliana na watoa huduma na ufurahie tukio lako bila usumbufu wowote."
         }
     },
     "explore": {
@@ -240,7 +265,15 @@
         "permissionSession": "Eneo linalodhibitiwa kwa ruhusa • Kipindi kinatumika",
         "hideClientView": "Ficha Mwonekano wa Mteja",
         "previewClientView": "Onyesha Mwonekano wa Mteja",
-        "previewBanner": "Unaangalia mwonekano wa mteja na mwandaaji kama Msimamizi Mkuu"
+        "previewBanner": "Unaangalia mwonekano wa mteja na mwandaaji kama Msimamizi Mkuu",
+        "vendorWorkspace": "Eneo la Mtoa Huduma",
+        "browseAsClient": "Tumia kama Mteja",
+        "clientModeTitle": "Unatumia kama Mteja na Mratibu wa Matukio",
+        "clientModeDesc": "Unaweza kugundua matukio, kuajiri watoa huduma wengine walioidhinishwa, na kusimamia nafasi zako bila kufungua akaunti nyingine.",
+        "backToVendor": "Rudi Eneo la Mtoa Huduma",
+        "hirePartnersTitle": "Unahitaji Watoa Huduma Washirika au Unaandaa Tukio?",
+        "hirePartnersDesc": "Unaweza kuajiri watoa huduma wengine (mapambo, muziki, chakula, MC) na kuweka nafasi moja kwa moja kupitia akaunti yako.",
+        "crossServiceBadge": "Huduma ya Majukumu Mawili"
     },
     "roles": {
         "superAdmin": "Msimamizi Mkuu",
@@ -315,11 +348,21 @@
         "social": "Mitandao ya Kijamii",
         "licenceDoc": "Leseni ya Biashara",
         "viewLicence": "Tazama Nyaraka",
-        "approve": "Idhinisha Mtoa Huduma",
+        "approve": "Hakiki & Idhinisha",
         "reject": "Kataa",
         "rejectPrompt": "Sababu ya kukataa (hiari):",
         "confirmApprove": "Je, una uhakika unataka kumuidhinisha mtoa huduma huyu?",
         "confirmReject": "Je, una uhakika unataka kukataa maombi haya ya mtoa huduma?",
+        "confirmRevoke": "Je, una uhakika unataka kufuta uthibitisho wa mtoa huduma huyu na kumrudisha kwenye ukaguzi?",
+        "tabPending": "Inasubiri Ukaguzi",
+        "tabVerified": "Waliothibitishwa",
+        "tabRejected": "Waliokataliwa",
+        "revoke": "Futa Uthibitisho",
+        "reverify": "Hakiki Tena",
+        "noVerified": "Bado hakuna watoa huduma waliothibitishwa. Walioidhinishwa wataonekana hapa.",
+        "noRejected": "Hakuna maombi yaliyokataliwa.",
+        "verifiedOn": "Alithibitishwa mnamo",
+        "verifiedBy": "Alithibitishwa na",
         "moderationQueue": "Foleni ya Ukaguzi wa Matukio",
         "reviewListings": "Kagua matangazo yaliyoripotiwa",
         "moderationClear": "Foleni ya Ukaguzi Iko Sawa",
@@ -340,18 +383,36 @@
         "rating": "Tathmini ya Mteja",
         "newProvider": "Mtoa Huduma Mpya",
         "awaitReviews": "Inasubiri Tathmini",
-        "verified": "Mtoa Huduma Aliyethibitishwa",
-        "active": "Inatumika",
-        "ready": "Akaunti yako iko tayari. Orodhesha huduma na vifurushi vyako ili kupokea nafasi na maombi ya wateja.",
-        "kycPendingTitle": "Uhakiki wa KYC Unakaguliwa",
-        "kycPendingDesc": "Nambari yako ya NIDA na Leseni ya Biashara zinakaguliwa na timu yetu ya usimamizi. Utaarifiwa mara tu hali yako ya mtoa huduma itakapoidhinishwa.",
+        "verified": "Mshirika Rasmi Aliyethibitishwa",
+        "active": "Imethibitishwa & Inatumika",
+        "ready": "Nyaraka za biashara yako zimethibitishwa na Uongozi wa HEY Events. Vifaa na vifurushi vyako viko hewani kwenye soko la Explore.",
+        "kycPendingTitle": "Akaunti Inasubiri Uhakiki wa Admin",
+        "kycPendingDesc": "Wasifu wako wa biashara na nyaraka zimewasilishwa na zinakaguliwa na uongozi wa HEY Events. Ufikiaji kamili wa kuorodhesha vifaa na kupokea oda utafunguliwa mara baada ya kuidhinishwa.",
         "kycRejectedTitle": "Uhakiki wa KYC Unahitaji Marekebisho",
         "kycRejectedDesc": "Uhakiki wako haukuidhinishwa.",
         "rejectionReason": "Sababu",
         "updateKyc": "Sasisha Taarifa za Uhakiki",
-        "pendingStatus": "Inakaguliwa",
+        "pendingStatus": "Inasubiri Uhakiki",
         "rejectedStatus": "Uhakiki Umekataliwa",
-        "addService": "Ongeza Huduma",
+        "accessPrivileges": "Mamlaka ya Ufikiaji wa Mtoa Huduma",
+        "catalogLocked": "Uorodheshaji wa Vifaa: Umefungwa",
+        "catalogLockedDesc": "Inahitaji idhini ya admin kabla ya kutangaza vifaa au bei.",
+        "catalogUnlocked": "Uorodheshaji wa Vifaa: Umefunguliwa",
+        "catalogUnlockedDesc": "Umeidhinishwa kuorodhesha mahema, viti, sound, na vifurushi.",
+        "bookingsLocked": "Kuonekana Sokoni: Hakijaanza",
+        "bookingsLockedDesc": "Duka lako litaonekana kwenye Explore mara tu utakapothibitishwa.",
+        "bookingsUnlocked": "Kuonekana Sokoni: Kinafanya Kazi",
+        "bookingsUnlockedDesc": "Duka lako lipo hewani na kupokea maombi ya wateja.",
+        "payoutsLocked": "Mapato & Malipo: Yamefungwa",
+        "payoutsLockedDesc": "Utoaji wa fedha kupitia benki/simu utafunguliwa baada ya ukaguzi.",
+        "payoutsUnlocked": "Mapato & Malipo: Yanafanya Kazi",
+        "payoutsUnlockedDesc": "Huduma kamili ya kutoa fedha inafanya kazi.",
+        "verifiedOn": "Alithibitishwa mnamo",
+        "verifiedBy": "Alithibitishwa na",
+        "completeKycTitle": "Kamilisha Usajili wa Mtoa Huduma",
+        "completeKycDesc": "Wasilisha nyaraka za biashara, NIDA na makundi unayotoa huduma ili uthibitishwe na admin.",
+        "completeKycAction": "Wasilisha Taarifa za Uhakiki",
+        "addService": "Ongeza Kifaa / Kifurushi",
         "schedule": "Ratiba ya Matukio Yajayo",
         "scheduleDescription": "Nafasi za moja kwa moja za wateja kwenye ratiba yako.",
         "noBookings": "Bado Hakuna Nafasi Zilizopangwa",
@@ -417,6 +478,7 @@
     "onboarding": {
         "title": "Karibu HEY Events",
         "subtitle": "Chagua jinsi ungependa kutumia mfumo ili kubinafsisha eneo lako la kazi.",
+        "chooseRoleTitle": "Chagua Aina ya Akaunti",
         "clientTitle": "Mteja / Mratibu wa Matukio",
         "clientSubtitle": "Ninataka kugundua matukio, kuajiri watoa huduma walioidhinishwa, na kuweka nafasi.",
         "clientBtn": "Endelea kama Mteja",

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ArrowLeft, ArrowRight, CheckCircle2 } from '@lucide/vue';
+import { ArrowLeft, ArrowRight, CheckCircle2, MessageSquare } from '@lucide/vue';
+import { router } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { useLanguage } from '@/composables/useLanguage';
@@ -43,7 +44,11 @@ const {
 
 const onPrevClick = () => {
     if (activeStep.value === 1) {
-        emit('back-to-roles');
+        if (props.existingProfile) {
+            router.visit('/dashboard');
+        } else {
+            emit('back-to-roles');
+        }
     } else {
         prevStep();
     }
@@ -60,11 +65,27 @@ const onPrevClick = () => {
                 class="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition"
             >
                 <ArrowLeft class="size-3.5 text-[#ff545a]" />
-                <span>{{ activeStep === 1 ? t('onboarding.backToRoles') : t('onboarding.prevStep') }}</span>
+                <span>{{ activeStep === 1 ? (existingProfile ? 'Back to Dashboard' : t('onboarding.backToRoles')) : t('onboarding.prevStep') }}</span>
             </button>
             <span class="rounded-full bg-[#ff545a]/10 px-2.5 py-1 text-[11px] font-bold text-[#ff545a]">
                 {{ t('onboarding.step') }} {{ activeStep }} {{ t('onboarding.of') }} 5
             </span>
+        </div>
+
+        <!-- Admin Feedback Notice during Rectification -->
+        <div
+            v-if="existingProfile?.admin_feedback"
+            class="flex items-start gap-2.5 rounded-xl border border-blue-500/30 bg-blue-50/80 p-3 text-xs dark:bg-blue-950/30"
+        >
+            <div class="rounded-lg bg-blue-500/15 p-1.5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5">
+                <MessageSquare class="size-3.5" />
+            </div>
+            <div>
+                <span class="font-bold text-foreground">Admin Feedback to Rectify:</span>
+                <p class="text-zinc-700 dark:text-zinc-300 italic mt-0.5">
+                    "{{ existingProfile.admin_feedback }}"
+                </p>
+            </div>
         </div>
 
         <!-- Main Card Form Container -->

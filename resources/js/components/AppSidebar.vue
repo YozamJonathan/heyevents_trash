@@ -14,6 +14,7 @@ import {
     BookOpen,
     TrendingUp,
     CalendarPlus,
+    PartyPopper,
 } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
@@ -31,11 +32,13 @@ import {
 } from '@/components/ui/sidebar';
 import { usePermission } from '@/composables/usePermission';
 import { useLanguage } from '@/composables/useLanguage';
+import { useWorkspaceMode } from '@/composables/useWorkspaceMode';
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
-const { can, canAny } = usePermission();
+const { can, canAny, isSuperAdmin } = usePermission();
 const { t } = useLanguage();
+const { isServiceProvider, isClientMode } = useWorkspaceMode();
 
 const mainNavItems = computed<NavItem[]>(() => {
     const items: NavItem[] = [
@@ -46,8 +49,8 @@ const mainNavItems = computed<NavItem[]>(() => {
         },
     ];
 
-    // System Administration Permissions
-    if (can('view users')) {
+    // System Administration Permissions (Only shown if user has admin permissions)
+    if (can('view users') || isSuperAdmin.value) {
         items.push({
             title: t('nav.userManagement'),
             href: '#',
@@ -55,7 +58,7 @@ const mainNavItems = computed<NavItem[]>(() => {
         });
     }
 
-    if (can('manage roles and permissions')) {
+    if (can('manage roles and permissions') || isSuperAdmin.value) {
         items.push({
             title: t('nav.rolesPermissions'),
             href: '#',
@@ -63,7 +66,7 @@ const mainNavItems = computed<NavItem[]>(() => {
         });
     }
 
-    if (can('manage platform settings')) {
+    if (can('manage platform settings') || isSuperAdmin.value) {
         items.push({
             title: t('nav.platformConfig'),
             href: '#',
@@ -72,15 +75,15 @@ const mainNavItems = computed<NavItem[]>(() => {
     }
 
     // Operational & Moderation Permissions
-    if (can('verify service providers')) {
+    if (can('verify service providers') || isSuperAdmin.value) {
         items.push({
             title: t('nav.vendorApprovals'),
-            href: '#',
+            href: '/admin/vendor-approvals',
             icon: CheckSquare,
         });
     }
 
-    if (can('moderate events')) {
+    if (can('moderate events') || isSuperAdmin.value) {
         items.push({
             title: t('nav.eventModeration'),
             href: '#',
@@ -88,7 +91,7 @@ const mainNavItems = computed<NavItem[]>(() => {
         });
     }
 
-    if (can('resolve disputes')) {
+    if (can('resolve disputes') || isSuperAdmin.value) {
         items.push({
             title: t('nav.disputeDesk'),
             href: '#',
@@ -96,7 +99,7 @@ const mainNavItems = computed<NavItem[]>(() => {
         });
     }
 
-    if (can('view platform analytics')) {
+    if (can('view platform analytics') || isSuperAdmin.value) {
         items.push({
             title: t('nav.businessAnalytics'),
             href: '#',
@@ -104,26 +107,20 @@ const mainNavItems = computed<NavItem[]>(() => {
         });
     }
 
-    // Service Provider Permissions
-    if (
-        canAny(['create services', 'edit services', 'manage service packages'])
-    ) {
+    // Service Provider Navigation: Shown for all Service Providers (vendors)
+    if (isServiceProvider.value || canAny(['create services', 'edit services', 'manage service packages'])) {
         items.push({
             title: t('nav.myServices'),
             href: '#',
             icon: Briefcase,
         });
-    }
 
-    if (can('view provider bookings')) {
         items.push({
             title: t('nav.providerSchedule'),
             href: '#',
             icon: Calendar,
         });
-    }
 
-    if (can('view provider earnings')) {
         items.push({
             title: t('nav.earningsPayouts'),
             href: '#',
@@ -131,24 +128,23 @@ const mainNavItems = computed<NavItem[]>(() => {
         });
     }
 
-    // Client / Discovery Permissions
-    if (can('create bookings')) {
+    // Client / Discovery Navigation:
+    // Shown for normal Clients OR Service Providers browsing in 'Client Mode'
+    const showClientNav = !isServiceProvider.value || isClientMode.value;
+
+    if (showClientNav) {
+        items.push({
+            title: t('nav.findServices'),
+            href: '/explore',
+            icon: Search,
+        });
+
         items.push({
             title: t('nav.bookEvent'),
             href: '/events/book',
             icon: CalendarPlus,
         });
-    }
 
-    if (can('browse services')) {
-        items.push({
-            title: t('nav.findServices'),
-            href: '#',
-            icon: Search,
-        });
-    }
-
-    if (can('view my bookings')) {
         items.push({
             title: t('nav.myBookedEvents'),
             href: '/events/my-bookings',
@@ -183,6 +179,40 @@ const footerNavItems = computed<NavItem[]>(() => [
         </SidebarHeader>
 
         <SidebarContent>
+            <!-- Provider Mode Switcher in Sidebar (Visible only to Service Providers) -->
+            <div v-if="isServiceProvider" class="px-3 pt-2 pb-1">
+                <div
+                    class="flex items-center rounded-lg border border-sidebar-border bg-sidebar-accent/40 p-0.5 text-xs shadow-2xs"
+                >
+                    <button
+                        type="button"
+                        @click="useWorkspaceMode().setMode('provider')"
+                        :class="[
+                            'flex-1 flex items-center justify-center gap-1.5 rounded-md py-1.5 font-semibold transition-all text-xs',
+                            !isClientMode
+                                ? 'bg-background text-foreground shadow-xs'
+                                : 'text-muted-foreground hover:text-foreground',
+                        ]"
+                    >
+                        <Briefcase class="size-3.5" />
+                        <span>{{ t('app.vendorWorkspace') }}</span>
+                    </button>
+                    <button
+                        type="button"
+                        @click="useWorkspaceMode().setMode('client')"
+                        :class="[
+                            'flex-1 flex items-center justify-center gap-1.5 rounded-md py-1.5 font-semibold transition-all text-xs',
+                            isClientMode
+                                ? 'bg-[#ff545a] text-white shadow-xs'
+                                : 'text-muted-foreground hover:text-foreground',
+                        ]"
+                    >
+                        <PartyPopper class="size-3.5" />
+                        <span>{{ t('app.browseAsClient') }}</span>
+                    </button>
+                </div>
+            </div>
+
             <NavMain :items="mainNavItems" />
         </SidebarContent>
 

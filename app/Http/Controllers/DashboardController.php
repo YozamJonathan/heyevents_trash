@@ -21,18 +21,32 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        // If user has no roles yet, redirect them to select their role and complete onboarding
+        // If user has no roles yet, ensure they are given default Client role so they never get stuck
         if ($user && $user->roles()->count() === 0) {
-            return redirect()->route('onboarding.index');
+            Role::findOrCreate('Client', 'web');
+            $user->assignRole('Client');
         }
 
         $bookedEvents = $user ? $user->eventBookings()->latest()->get() : [];
 
-        $pendingVendors = ($user && ($user->can('verify service providers') || $user->hasRole('Super Admin')))
-            ? ServiceProviderProfile::with('user')->where('status', 'pending')->latest()->get()
+        $canVerify = $user && ($user->can('verify service providers') || $user->hasRole('Super Admin'));
+
+        $pendingVendors = $canVerify
+            ? ServiceProviderProfile::with(['user', 'feedbackSender'])->where('status', 'pending')->latest()->get()
+            : [];
+
+        $verifiedVendors = $canVerify
+            ? ServiceProviderProfile::with(['user', 'verifier', 'feedbackSender'])->where('status', 'approved')->latest()->get()
+            : [];
+
+        $rejectedVendors = $canVerify
+            ? ServiceProviderProfile::with(['user', 'verifier', 'feedbackSender'])->where('status', 'rejected')->latest()->get()
             : [];
 
         $providerProfile = $user ? $user->serviceProviderProfile : null;
+        if ($providerProfile) {
+            $providerProfile->load(['verifier', 'feedbackSender']);
+        }
 
         return Inertia::render('Dashboard', [
             'stats' => [
@@ -40,9 +54,12 @@ class DashboardController extends Controller
                 'roles_count' => Role::count(),
                 'permissions_count' => Permission::count(),
                 'pending_kyc_count' => ServiceProviderProfile::where('status', 'pending')->count(),
+                'verified_vendors_count' => ServiceProviderProfile::where('status', 'approved')->count(),
             ],
             'booked_events' => $bookedEvents,
             'pending_vendors' => $pendingVendors,
+            'verified_vendors' => $verifiedVendors,
+            'rejected_vendors' => $rejectedVendors,
             'provider_profile' => $providerProfile,
         ]);
     }

@@ -21,6 +21,10 @@ class StoreClientRoleController extends Controller
             $user->assignRole('Client');
         }
 
+        if ($request->hasSession()) {
+            $request->session()->forget('url.intended');
+        }
+
         return redirect()->route('dashboard');
     }
 }

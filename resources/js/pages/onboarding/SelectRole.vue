@@ -23,7 +23,7 @@ const toggleTheme = () => {
 };
 
 const currentView = ref<'select' | 'provider'>(
-    props.existingProfile?.status === 'rejected' ? 'provider' : 'select',
+    props.existingProfile ? 'provider' : 'select',
 );
 const clientSubmitting = ref(false);
 
@@ -45,19 +45,19 @@ const selectClient = () => {
     <Head :title="t('onboarding.title')" />
 
     <div class="relative flex min-h-screen flex-col font-sans text-zinc-900 antialiased selection:bg-[#ff545a] selection:text-white dark:text-zinc-100">
-        <!-- Persistent City Background -->
+        <!-- Persistent Dar es Salaam City Background -->
         <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden">
             <img
-                src="/images/hero-city-day.jpg"
+                src="/images/hero-dar-day.jpg?v=2"
                 :alt="t('page.cityAlt')"
-                class="h-full w-full object-cover object-center dark:hidden"
+                class="h-full w-full object-cover object-[center_25%] brightness-100 contrast-[1.05] dark:hidden"
             />
             <img
-                src="/images/hero-city-night.jpg"
+                src="/images/hero-dar-night.jpg?v=2"
                 :alt="t('page.cityAlt')"
-                class="hidden h-full w-full object-cover object-center dark:block"
+                class="hidden h-full w-full object-cover object-[center_25%] brightness-100 contrast-[1.05] dark:block"
             />
-            <div class="absolute inset-0 bg-slate-100/75 backdrop-blur-[2px] dark:bg-zinc-950/80"></div>
+            <div class="absolute inset-0 bg-slate-100/75 backdrop-blur-[1px] dark:bg-zinc-950/80"></div>
         </div>
 
         <!-- Navigation Header -->

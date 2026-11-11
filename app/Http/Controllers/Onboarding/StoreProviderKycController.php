@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Onboarding;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Onboarding\StoreProviderKycRequest;
+use App\Models\User;
+use App\Notifications\VendorKycNotification;
 use Illuminate\Http\RedirectResponse;
 use Spatie\Permission\Models\Role;
 
@@ -49,6 +51,22 @@ class StoreProviderKycController extends Controller
 
         if (! $user->hasRole('Service Provider')) {
             $user->assignRole('Service Provider');
+        }
+
+        // Notify platform administrators about new vendor KYC submission
+        $admins = User::role(['Admin', 'Super Admin'])->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new VendorKycNotification(
+                title: 'New Vendor KYC Application',
+                message: "New provider \"{$validated['brand_name']}\" ({$user->name}) submitted onboarding documents awaiting your verification.",
+                type: 'pending',
+                actionUrl: '/admin/vendor-approvals',
+                senderName: $user->name
+            ));
+        }
+
+        if ($request->hasSession()) {
+            $request->session()->forget('url.intended');
         }
 
         return redirect()->route('dashboard')->with(

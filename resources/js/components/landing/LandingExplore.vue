@@ -43,9 +43,9 @@ const listings = ref<ListingItem[]>([
         title: 'East Africa Tech Summit 2026',
         categoryKey: 'listing.2.category',
         standard: 'corporate',
-        image: '/images/hero-city-night.jpg',
+        image: '/images/hero-dar-night.jpg',
         statusKey: 'listing.2.status',
-        location: 'Convention Center',
+        location: 'JNICC • Dar es Salaam',
         capacityKey: 'listing.2.capacity',
         descriptionKey: 'listing.2.description',
     },
@@ -97,7 +97,7 @@ const filteredListings = computed(() => {
                         {{ t('explore.eyebrow') }}
                     </span>
                     <h2
-                        class="mt-1 font-sans text-3xl font-black tracking-wider text-zinc-950 uppercase drop-shadow-xs sm:text-4xl dark:text-white dark:drop-shadow-md"
+                        class="mt-1 font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950 dark:text-white"
                     >
                         {{ t('explore.title') }}
                     </h2>
@@ -167,7 +167,7 @@ const filteredListings = computed(() => {
                                 {{ t(item.categoryKey) }}
                             </div>
                             <h3
-                                class="mt-1 font-sans text-base font-bold text-zinc-900 transition-colors group-hover:text-[#ff545a] dark:text-white"
+                                class="mt-1 font-display text-base font-bold text-zinc-900 transition-colors group-hover:text-[#ff545a] dark:text-white"
                             >
                                 {{ item.title }}
                             </h3>

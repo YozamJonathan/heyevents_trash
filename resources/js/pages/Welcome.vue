@@ -4,10 +4,11 @@ import LandingNavbar from '@/components/landing/LandingNavbar.vue';
 import LandingHero from '@/components/landing/LandingHero.vue';
 import LandingCategoryCards from '@/components/landing/LandingCategoryCards.vue';
 import LandingHowItWorks from '@/components/landing/LandingHowItWorks.vue';
-import LandingExplore from '@/components/landing/LandingExplore.vue';
+import LandingAbout from '@/components/landing/LandingAbout.vue';
 import LandingReviews from '@/components/landing/LandingReviews.vue';
 import LandingFooter from '@/components/landing/LandingFooter.vue';
 import PwaBanner from '@/components/pwa/PwaBanner.vue';
+import WhatsAppCornerButton from '@/components/WhatsAppCornerButton.vue';
 import { useLanguage } from '@/composables/useLanguage';
 
 const { t } = useLanguage();
@@ -19,21 +20,21 @@ const { t } = useLanguage();
     <div
         class="relative min-h-screen bg-slate-100 font-sans text-zinc-900 antialiased selection:bg-[#ff545a] selection:text-white dark:bg-zinc-950 dark:text-zinc-100"
     >
-        <!-- Persistent Background Layer (City Day for Light Mode, City Night for Dark Mode) -->
+        <!-- Persistent Background Layer (Dar es Salaam Day for Light Mode, Dar es Salaam Night for Dark Mode) -->
         <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden">
             <img
-                src="/images/hero-city-day.jpg"
+                src="/images/hero-dar-day.jpg?v=2"
                 :alt="t('page.cityAlt')"
-                class="h-full w-full object-cover object-center dark:hidden"
+                class="h-full w-full object-cover object-[center_25%] brightness-100 contrast-[1.05] dark:hidden"
             />
             <img
-                src="/images/hero-city-night.jpg"
+                src="/images/hero-dar-night.jpg?v=2"
                 :alt="t('page.cityAlt')"
-                class="hidden h-full w-full object-cover object-center dark:block"
+                class="hidden h-full w-full object-cover object-[center_25%] brightness-100 contrast-[1.05] dark:block"
             />
-            <!-- Atmospheric Contrast Layer: balanced so skyline & lights are clearly visible while text has high readability -->
+            <!-- Atmospheric Contrast Layer: minimal top vignette so the day image remains 100% crystal clear and crisp -->
             <div
-                class="absolute inset-0 bg-white/45 backdrop-blur-[0.5px] dark:bg-black/55"
+                class="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-slate-100/90 dark:from-zinc-950/60 dark:via-zinc-950/30 dark:to-zinc-950/90"
             ></div>
         </div>
 
@@ -51,8 +52,8 @@ const { t } = useLanguage();
                 <!-- Streamlined How It Works -->
                 <LandingHowItWorks />
 
-                <!-- Clean Explore Section -->
-                <LandingExplore />
+                <!-- About Us Section: What is Hey Events and the Ecosystem -->
+                <LandingAbout />
 
                 <!-- Organizer Reviews -->
                 <LandingReviews />
@@ -61,6 +62,9 @@ const { t } = useLanguage();
             <!-- Minimalist Clean Footer -->
             <LandingFooter />
         </div>
+
+        <!-- Floating Corner WhatsApp Support -->
+        <WhatsAppCornerButton />
 
         <!-- PWA Status and Install Notification -->
         <PwaBanner />

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Building2, User, ShieldCheck, Phone, PhoneCall, Info, TriangleAlert } from '@lucide/vue';
+import { Building2, User, ShieldCheck, Phone, PhoneCall, TriangleAlert } from '@lucide/vue';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useLanguage } from '@/composables/useLanguage';
@@ -126,10 +126,7 @@ const secondaryProgress = computed(() => phoneDigitProgress(props.form.secondary
                     {{ t('onboarding.nidaHint') }}
                 </p>
 
-                <div class="flex items-start gap-1.5 rounded-lg bg-zinc-100/80 p-2 dark:bg-zinc-800/60 text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">
-                    <Info class="size-3.5 text-amber-500 shrink-0 mt-0.5" />
-                    <span>{{ t('onboarding.nidaNotice') }}</span>
-                </div>
+                <!-- Format validation only. Format check does not confirm identity against official government records. -->
             </div>
 
             <!-- Primary Phone -->

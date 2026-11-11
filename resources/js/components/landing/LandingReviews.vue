@@ -43,7 +43,7 @@ const { t } = useLanguage();
                     {{ t('reviews.eyebrow') }}
                 </span>
                 <h2
-                    class="mt-2 text-2xl font-black tracking-tight text-zinc-900 sm:text-3xl dark:text-white"
+                    class="mt-2 font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white"
                 >
                     {{ t('reviews.title') }}
                 </h2>

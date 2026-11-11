@@ -48,6 +48,9 @@ class ServiceProviderProfile extends Model
         'description',
         'status',
         'rejection_reason',
+        'admin_feedback',
+        'feedback_sent_at',
+        'feedback_sent_by',
         'verified_at',
         'verified_by',
     ];
@@ -69,6 +72,7 @@ class ServiceProviderProfile extends Model
     {
         return [
             'verified_at' => 'datetime',
+            'feedback_sent_at' => 'datetime',
             'categories' => 'array',
         ];
     }
@@ -81,6 +85,11 @@ class ServiceProviderProfile extends Model
     public function verifier(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    public function feedbackSender(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'feedback_sent_by');
     }
 
     public function isPending(): bool

@@ -44,6 +44,8 @@ class HandleInertiaRequests extends Middleware
                     'permissions' => $request->user()->getAllPermissions()->pluck('name')->toArray(),
                     'provider_profile' => $request->user()->serviceProviderProfile?->toArray(),
                 ]) : null,
+                'notifications' => $request->user() ? $request->user()->notifications()->latest()->take(15)->get() : [],
+                'unread_notifications_count' => $request->user() ? $request->user()->unreadNotifications()->count() : 0,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [
