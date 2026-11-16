@@ -80,10 +80,9 @@ class GoogleAuthController
         $request->session()->forget('url.intended');
 
         if ($user->roles()->count() === 0) {
-            \Spatie\Permission\Models\Role::findOrCreate('Client', 'web');
-            $user->assignRole('Client');
+            return redirect()->route('onboarding.index');
         }
 
-        return redirect()->route('dashboard');
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 }

@@ -21,10 +21,9 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        // If user has no roles yet, ensure they are given default Client role so they never get stuck
+        // If user has no roles yet, redirect them to select their role and complete onboarding
         if ($user && $user->roles()->count() === 0) {
-            Role::findOrCreate('Client', 'web');
-            $user->assignRole('Client');
+            return redirect()->route('onboarding.index');
         }
 
         $bookedEvents = $user ? $user->eventBookings()->latest()->get() : [];

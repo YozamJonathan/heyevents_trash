@@ -45,6 +45,13 @@ class VendorVerificationController extends Controller
                 'verified_count' => $verifiedVendors->count(),
                 'rejected_count' => $rejectedVendors->count(),
             ],
+            'vendors' => ServiceProviderProfile::with(['user', 'verifier'])->latest()->get(),
+            'counts' => [
+                'all' => ServiceProviderProfile::count(),
+                'pending' => $pendingVendors->count(),
+                'approved' => $verifiedVendors->count(),
+                'rejected' => $rejectedVendors->count(),
+            ],
         ]);
     }
     /**

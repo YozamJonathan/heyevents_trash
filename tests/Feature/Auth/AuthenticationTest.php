@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Fortify\Features;
 
@@ -11,7 +12,9 @@ test('login screen can be rendered', function () {
 });
 
 test('users can authenticate using the login screen', function () {
+    $this->seed(RolesAndPermissionsSeeder::class);
     $user = User::factory()->create();
+    $user->assignRole('Client');
 
     $response = $this->post(route('login.store'), [
         'email' => $user->email,
@@ -20,6 +23,18 @@ test('users can authenticate using the login screen', function () {
 
     $this->assertAuthenticated();
     $response->assertRedirect(route('dashboard', absolute: false));
+});
+
+test('users without a role logging in are redirected to onboarding', function () {
+    $user = User::factory()->create();
+
+    $response = $this->post(route('login.store'), [
+        'email' => $user->email,
+        'password' => 'password',
+    ]);
+
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('onboarding.index', absolute: false));
 });
 
 test('users with two factor enabled are redirected to two factor challenge', function () {

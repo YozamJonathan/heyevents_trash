@@ -21,7 +21,7 @@ test('new users can register', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect(route('onboarding.index', absolute: false));
 });
 
 test('short passwords use the selected Swahili locale', function () {
