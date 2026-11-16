@@ -6,8 +6,9 @@ import ClientDashboard from '@/components/dashboards/ClientDashboard.vue';
 import ServiceProviderDashboard from '@/components/dashboards/ServiceProviderDashboard.vue';
 import SuperAdminDashboard from '@/components/dashboards/SuperAdminDashboard.vue';
 import { usePermission } from '@/composables/usePermission';
+import { useWorkspaceMode } from '@/composables/useWorkspaceMode';
 import { dashboard } from '@/routes';
-import { ShieldCheck, Eye, EyeOff } from '@lucide/vue';
+import { ShieldCheck, Eye, EyeOff, Briefcase, PartyPopper } from '@lucide/vue';
 import { useLanguage } from '@/composables/useLanguage';
 
 defineOptions({
@@ -25,6 +26,8 @@ const {
     stats,
     booked_events = [],
     pending_vendors = [],
+    verified_vendors = [],
+    rejected_vendors = [],
     provider_profile = null,
 } = defineProps<{
     stats?: {
@@ -32,14 +35,18 @@ const {
         roles_count: number;
         permissions_count: number;
         pending_kyc_count?: number;
+        verified_vendors_count?: number;
     };
     booked_events?: any[];
     pending_vendors?: any[];
+    verified_vendors?: any[];
+    rejected_vendors?: any[];
     provider_profile?: any;
 }>();
 
 const { user, roles, permissions, isSuperAdmin, can, canAny } = usePermission();
 const { t } = useLanguage();
+const { isServiceProvider, effectiveMode, setMode, isClientMode } = useWorkspaceMode();
 
 // 1. Permission Gates for each dashboard section
 const showGovernance = computed(
@@ -61,28 +68,28 @@ const showModeration = computed(
         ]) && !isSuperAdmin.value,
 );
 
-const showProviderWorkspace = computed(
-    () =>
-        canAny([
-            'create services',
-            'edit services',
-            'view provider earnings',
-            'manage service packages',
-        ]) && !isSuperAdmin.value,
-);
+const showProviderWorkspace = computed(() => {
+    if (isSuperAdmin.value) return false;
+    if (isServiceProvider.value) {
+        return effectiveMode.value === 'provider';
+    }
+    return canAny([
+        'create services',
+        'edit services',
+        'view provider earnings',
+        'manage service packages',
+    ]);
+});
 
 const showClientExperience = computed(() => {
-    // Show client tools if user has client booking permissions
-    if (canAny(['browse services', 'create bookings', 'view my bookings'])) {
-        // If not super admin or if specifically a client/organizer
-        return !isSuperAdmin.value && !showModeration.value;
+    if (isSuperAdmin.value) return false;
+    if (showModeration.value) return false;
+
+    if (isServiceProvider.value) {
+        return effectiveMode.value === 'client';
     }
-    // Default fallback if no admin or provider rights
-    return (
-        !showGovernance.value &&
-        !showModeration.value &&
-        !showProviderWorkspace.value
-    );
+
+    return true;
 });
 
 // Optional toggle for Super Admin to preview client tools on demand
@@ -195,7 +202,12 @@ const roleBadgeColor = computed(() => {
                 aria-labelledby="section-moderation"
                 class="space-y-4"
             >
-                <AdminDashboard :stats="stats" :pending-vendors="pending_vendors" />
+                <AdminDashboard
+                    :stats="stats"
+                    :pending-vendors="pending_vendors"
+                    :verified-vendors="verified_vendors"
+                    :rejected-vendors="rejected_vendors"
+                />
             </section>
 
             <!-- 3. Provider Workspace (Service Providers / Vendors) -->
@@ -204,7 +216,9 @@ const roleBadgeColor = computed(() => {
                 aria-labelledby="section-provider"
                 class="space-y-4"
             >
-                <ServiceProviderDashboard :provider-profile="provider_profile" />
+                <ServiceProviderDashboard
+                    :provider-profile="provider_profile"
+                />
             </section>
 
             <!-- 4. Client Planning, Bookings & Portfolio (Clients & Event Organizers) -->
@@ -222,6 +236,37 @@ const roleBadgeColor = computed(() => {
                 >
                     {{ t('app.previewBanner') }}
                 </div>
+
+                <!-- Banner when Service Provider is in Client Mode -->
+                <div
+                    v-if="isServiceProvider && isClientMode"
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-red-200/80 bg-red-50/70 p-4 text-xs dark:border-red-900/60 dark:bg-red-950/30"
+                >
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-red-100 text-[#ff545a] dark:bg-red-900/50 dark:text-red-300"
+                        >
+                            <PartyPopper class="size-5" />
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-zinc-900 dark:text-white">
+                                {{ t('app.clientModeTitle') }}
+                            </h4>
+                            <p class="text-zinc-600 dark:text-zinc-400 mt-0.5">
+                                {{ t('app.clientModeDesc') }}
+                            </p>
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        @click="setMode('provider')"
+                        class="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-zinc-200/80 bg-white px-3 py-1.5 font-semibold text-zinc-800 shadow-2xs hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800 transition-colors"
+                    >
+                        <Briefcase class="size-3.5" />
+                        <span>{{ t('app.backToVendor') }}</span>
+                    </button>
+                </div>
+
                 <ClientDashboard :booked-events="booked_events" />
             </section>
         </div>

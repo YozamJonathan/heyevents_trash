@@ -77,11 +77,13 @@ class GoogleAuthController
 
         Auth::login($user, remember: true);
         $request->session()->regenerate();
+        $request->session()->forget('url.intended');
 
         if ($user->roles()->count() === 0) {
-            return redirect()->route('onboarding.index');
+            \Spatie\Permission\Models\Role::findOrCreate('Client', 'web');
+            $user->assignRole('Client');
         }
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->route('dashboard');
     }
 }

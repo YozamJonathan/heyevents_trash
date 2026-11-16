@@ -90,7 +90,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'export reports',
         ]);
 
-        // Service Provider gets vendor & listing management permissions
+        // Service Provider gets vendor & listing management permissions, plus client discovery & booking permissions
         $providerRole->syncPermissions([
             'create services',
             'edit services',
@@ -102,6 +102,13 @@ class RolesAndPermissionsSeeder extends Seeder
             'view provider earnings',
             'request payout',
             'manage provider profile',
+            'browse services',
+            'create bookings',
+            'view my bookings',
+            'cancel my bookings',
+            'submit reviews',
+            'make payments',
+            'view client receipts',
         ]);
 
         // Client gets discovery, booking & payment permissions

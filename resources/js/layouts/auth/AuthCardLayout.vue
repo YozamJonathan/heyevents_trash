@@ -27,7 +27,7 @@ const toggleTheme = () => {
 
 <template>
     <div
-        class="relative flex min-h-screen flex-col font-['Poppins',sans-serif] text-zinc-900 antialiased selection:bg-[#ff545a] selection:text-white dark:text-zinc-100"
+        class="relative flex min-h-screen flex-col font-sans text-zinc-900 antialiased selection:bg-[#ff545a] selection:text-white dark:text-zinc-100"
     >
         <!-- Persistent Background Layer (City Day for Light Mode, City Night for Dark Mode) -->
         <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden">
@@ -64,7 +64,7 @@ const toggleTheme = () => {
                     />
                     <div class="flex flex-col text-left">
                         <div
-                            class="flex items-center gap-1.5 font-['Poppins',sans-serif] text-base font-extrabold tracking-tight text-zinc-900 dark:text-white"
+                            class="flex items-center gap-1.5 font-sans text-base font-extrabold tracking-tight text-zinc-900 dark:text-white"
                         >
                             <span>HEY</span>
                             <span class="text-[#ff545a]">EVENTS</span>
@@ -130,7 +130,7 @@ const toggleTheme = () => {
                         <!-- Card Header -->
                         <div class="mb-5 flex flex-col items-center text-center">
                             <h1
-                                class="font-['Poppins',sans-serif] text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-white"
+                                class="font-sans text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-white"
                             >
                                 {{ props.title ? t(props.title) : '' }}
                             </h1>

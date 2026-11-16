@@ -10,7 +10,7 @@ const { activePipelinePhase, pipelinePhases, currentPipeline } = useLandingData(
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <div class="mx-auto max-w-3xl text-center">
                 <p class="text-xs font-semibold tracking-widest text-indigo-600 uppercase dark:text-indigo-400">Actionable Modules</p>
-                <h2 class="mt-2 text-3xl font-bold tracking-tight text-zinc-950 sm:text-4xl dark:text-white">
+                <h2 class="mt-2 text-3xl font-black tracking-tight text-zinc-950 sm:text-4xl dark:text-white">
                     An Integrated End-to-End Pipeline
                 </h2>
                 <p class="mt-3 text-sm text-zinc-600 sm:text-base dark:text-zinc-400">
@@ -45,7 +45,7 @@ const { activePipelinePhase, pipelinePhases, currentPipeline } = useLandingData(
                             <span class="rounded-md bg-indigo-50 px-2.5 py-1 text-xs font-bold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
                                 {{ currentPipeline.step }} Module
                             </span>
-                            <h3 class="text-2xl font-bold text-zinc-950 dark:text-white">{{ currentPipeline.title }}</h3>
+                            <h3 class="text-2xl font-extrabold text-zinc-950 dark:text-white">{{ currentPipeline.title }}</h3>
                             <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">{{ currentPipeline.subtitle }}</p>
 
                             <div class="space-y-2 pt-2">

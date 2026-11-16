@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hey-events-cache-v1';
+const CACHE_NAME = 'hey-events-cache-v2';
 const OFFLINE_FALLBACK_URL = '/offline.html';
 
 const PRECACHE_ASSETS = [

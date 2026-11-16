@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from '@lucide/vue';
+import { BookOpen, Folder, LayoutGrid, Menu, Search, Moon, Sun } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
+import NotificationBell from '@/components/NotificationBell.vue';
+import { useAppearance } from '@/composables/useAppearance';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -49,6 +52,11 @@ const props = withDefaults(defineProps<Props>(), {
 
 const page = usePage();
 const { t } = useLanguage();
+const { updateAppearance, resolvedAppearance } = useAppearance();
+
+const toggleTheme = () => {
+    updateAppearance(resolvedAppearance.value === 'dark' ? 'light' : 'dark');
+};
 const auth = computed(() => page.props.auth);
 const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl();
 const breadcrumbKeys: Record<string, TranslationKey> = {
@@ -253,6 +261,28 @@ const rightNavItems = computed<NavItem[]>(() => [
                                 </TooltipProvider>
                             </template>
                         </div>
+                    </div>
+
+                    <!-- Language Switcher, Theme Toggle & Notification Bell -->
+                    <div class="hidden sm:flex items-center gap-2 mr-1">
+                        <LanguageSwitcher compact />
+                        <button
+                            type="button"
+                            @click="toggleTheme"
+                            class="inline-flex size-8 shrink-0 items-center justify-center rounded-lg border border-sidebar-border bg-sidebar-accent/40 text-foreground shadow-2xs transition-colors hover:border-[#ff545a]/50 hover:bg-sidebar-accent hover:text-[#ff545a] focus:outline-hidden"
+                            :title="t('nav.toggleTheme')"
+                            :aria-label="t('nav.toggleTheme')"
+                        >
+                            <Moon
+                                v-if="resolvedAppearance === 'dark'"
+                                class="size-4 text-indigo-400"
+                            />
+                            <Sun
+                                v-else
+                                class="size-4 text-amber-500"
+                            />
+                        </button>
+                        <NotificationBell />
                     </div>
 
                     <DropdownMenu>

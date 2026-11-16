@@ -84,6 +84,7 @@ export function setLanguage(nextLanguage: Language): void {
 export function useLanguage() {
     return {
         language,
+        currentLanguage: language,
         setLanguage,
         t: (key: TranslationKey) =>
             getValue(translations[language.value], key) ??
