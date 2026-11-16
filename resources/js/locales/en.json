@@ -44,7 +44,8 @@
         "backToHome": "Back to Home",
         "themeToggle": "Toggle theme",
         "platformHelp": "Platform Help",
-        "platform": "Platform"
+        "platform": "Platform",
+        "notifications": "Notifications"
     },
     "about": {
         "badge": "About HEY Events",

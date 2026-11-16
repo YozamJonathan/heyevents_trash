@@ -22,7 +22,7 @@ import { useLanguage } from '@/composables/useLanguage';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 
 const page = usePage();
-const user = page.props.auth?.user;
+const user = computed(() => page.props.auth?.user);
 const { resolvedAppearance, updateAppearance } = useAppearance();
 const { t } = useLanguage();
 

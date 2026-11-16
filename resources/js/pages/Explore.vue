@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Head, Link, usePage, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
-
-defineOptions({
-    layout: null,
-});
+import AppLayout from '@/layouts/AppLayout.vue';
+import LandingNavbar from '@/components/landing/LandingNavbar.vue';
+import LandingFooter from '@/components/landing/LandingFooter.vue';
+import WhatsAppCornerButton from '@/components/WhatsAppCornerButton.vue';
+import { useLanguage } from '@/composables/useLanguage';
+import type { BreadcrumbItem } from '@/types';
 import {
     Search,
     MapPin,
@@ -20,22 +22,32 @@ import {
     Lock,
     X,
     ArrowRight,
-    UserCheck,
 } from '@lucide/vue';
-import LandingNavbar from '@/components/landing/LandingNavbar.vue';
-import LandingFooter from '@/components/landing/LandingFooter.vue';
-import WhatsAppCornerButton from '@/components/WhatsAppCornerButton.vue';
-import { useLanguage } from '@/composables/useLanguage';
+
+defineOptions({
+    layout: null,
+});
 
 const { t } = useLanguage();
 const page = usePage();
 const user = computed(() => page.props.auth?.user);
 
+const breadcrumbs = computed<BreadcrumbItem[]>(() => [
+    {
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+    {
+        title: 'Find Services & Rentals',
+        href: '/explore',
+    },
+]);
+
 // Query states
 const searchQuery = ref('');
 const selectedCategory = ref('all');
 
-// Auth Gate Modal state
+// Auth Gate Modal state (for guests)
 const isAuthModalOpen = ref(false);
 const pendingBookItem = ref<any>(null);
 
@@ -167,12 +179,12 @@ if (typeof window !== 'undefined') {
 // Action triggered on clicking "Book Now" / "Rent Now"
 const handleBookClick = (item: any) => {
     if (!user.value) {
-        // Guest user: open clean register/login modal gate
+        // Guest user: open register/login modal gate
         pendingBookItem.value = item;
         isAuthModalOpen.value = true;
     } else {
-        // Logged-in user: proceed to booking flow
-        window.location.href = `/events/book?item=${item.id}`;
+        // Logged-in user: seamlessly proceed to booking flow
+        router.visit(`/events/book?item=${item.id}`);
     }
 };
 </script>
@@ -180,8 +192,152 @@ const handleBookClick = (item: any) => {
 <template>
     <Head title="Explore Event Equipment, Services & Venues — HEY Events" />
 
-    <div class="min-h-screen bg-slate-50 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
-        <!-- Clean Public Website Header (No Dashboard Sidebar) -->
+    <!-- 1. Authenticated User View (Inside AppLayout with full Sidebar & Header) -->
+    <AppLayout v-if="user" :breadcrumbs="breadcrumbs">
+        <div class="space-y-6">
+            <!-- Header Banner Card inside App -->
+            <div class="rounded-3xl border border-border/70 bg-card p-6 md:p-8 shadow-xs">
+                <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                    <div>
+                        <div class="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-3 py-1 text-xs font-bold text-[#ff545a]">
+                            <Sparkles class="size-3.5" />
+                            <span>Catalog & Marketplace</span>
+                        </div>
+                        <h1 class="mt-3 text-2xl font-black tracking-tight text-foreground sm:text-3xl">
+                            Find Equipment, Services & Venues
+                        </h1>
+                        <p class="mt-1 text-xs text-muted-foreground">
+                            Rent chairs, tents, sound, decor, or book verified caterers and event halls across Tanzania.
+                        </p>
+                    </div>
+
+                    <!-- Search Input Bar -->
+                    <div class="w-full max-w-md">
+                        <div class="relative">
+                            <Search class="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                            <input
+                                v-model="searchQuery"
+                                type="text"
+                                placeholder="Search chairs, tents, Serena, cakes, sound..."
+                                class="w-full rounded-2xl border border-border bg-background py-2.5 pl-10 pr-4 text-xs font-medium shadow-xs focus:border-[#ff545a] focus:ring-1 focus:ring-[#ff545a] text-foreground"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Chips Horizontal Slider -->
+                <div class="mt-6 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                    <button
+                        v-for="cat in categories"
+                        :key="cat.id"
+                        @click="selectedCategory = cat.id"
+                        type="button"
+                        :class="[
+                            'inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all shadow-2xs',
+                            selectedCategory === cat.id
+                                ? 'bg-[#ff545a] text-white shadow-sm'
+                                : 'border border-border/80 bg-background text-muted-foreground hover:text-foreground hover:border-[#ff545a]',
+                        ]"
+                    >
+                        <component :is="cat.icon" class="size-3.5" />
+                        <span>{{ cat.name }}</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Directory Grid Content -->
+            <div>
+                <div class="flex items-center justify-between pb-4">
+                    <span class="text-xs font-semibold text-muted-foreground">
+                        Showing <strong class="text-foreground">{{ filteredItems.length }}</strong> verified items & services
+                    </span>
+                    <span class="text-xs text-muted-foreground">
+                        Tanzania • Real-time Availability
+                    </span>
+                </div>
+
+                <!-- Items Cards Grid -->
+                <div v-if="filteredItems.length > 0" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    <div
+                        v-for="item in filteredItems"
+                        :key="item.id"
+                        class="group flex flex-col overflow-hidden rounded-3xl border border-border/70 bg-card shadow-xs transition-all hover:-translate-y-1 hover:border-[#ff545a]/60 hover:shadow-lg"
+                    >
+                        <!-- Image with Badge -->
+                        <div class="relative h-48 w-full overflow-hidden bg-muted">
+                            <img
+                                :src="item.image"
+                                :alt="item.title"
+                                class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                            />
+                            <div class="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-bold text-white backdrop-blur-md">
+                                <span>{{ item.badge }}</span>
+                            </div>
+                            <div class="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2 py-0.5 text-xs font-bold text-foreground shadow-xs backdrop-blur-md">
+                                <Star class="size-3 text-amber-500 fill-amber-500" />
+                                <span>{{ item.rating }}</span>
+                                <span class="text-[10px] text-muted-foreground">({{ item.reviewsCount }})</span>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="flex flex-1 flex-col p-5">
+                            <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                <MapPin class="size-3 text-[#ff545a]" />
+                                <span class="truncate">{{ item.location }}</span>
+                            </div>
+
+                            <h3 class="mt-2 text-sm font-bold leading-snug text-foreground transition group-hover:text-[#ff545a]">
+                                {{ item.title }}
+                            </h3>
+
+                            <p class="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                                {{ item.details }}
+                            </p>
+
+                            <div class="mt-3 flex items-center gap-1 text-[11px] text-muted-foreground">
+                                <span>By {{ item.providerName }}</span>
+                                <CheckCircle2 v-if="item.verified" class="size-3 text-emerald-500" />
+                            </div>
+
+                            <!-- Price & Action -->
+                            <div class="mt-auto flex items-center justify-between border-t border-border/60 pt-4">
+                                <div>
+                                    <span class="block text-[10px] uppercase font-bold text-muted-foreground">Rate / Price</span>
+                                    <span class="text-xs font-extrabold text-[#ff545a]">{{ item.price }}</span>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    @click="handleBookClick(item)"
+                                    class="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3.5 py-1.5 text-xs font-bold text-primary-foreground shadow-xs transition hover:bg-[#ff545a] hover:text-white"
+                                >
+                                    <span>Book Now</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty Search State -->
+                <div v-else class="flex flex-col items-center justify-center rounded-3xl border border-dashed border-border py-16 text-center">
+                    <Search class="size-8 text-muted-foreground" />
+                    <h4 class="mt-3 text-sm font-bold text-foreground">No items found matching your filter</h4>
+                    <p class="mt-1 text-xs text-muted-foreground">Try searching with a different term or select "All Categories".</p>
+                    <button
+                        @click="searchQuery = ''; selectedCategory = 'all'"
+                        class="mt-4 rounded-xl bg-[#ff545a] px-4 py-2 text-xs font-bold text-white shadow-xs"
+                    >
+                        Reset Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+    </AppLayout>
+
+    <!-- 2. Guest View (Public Website Header & Footer) -->
+    <div v-else class="min-h-screen bg-slate-50 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
+        <!-- Clean Public Website Header -->
         <LandingNavbar />
 
         <!-- Header / Banner Section -->
@@ -331,54 +487,54 @@ const handleBookClick = (item: any) => {
 
         <!-- Floating Corner WhatsApp Support -->
         <WhatsAppCornerButton />
+    </div>
 
-        <!-- Guest Registration Gate Modal -->
+    <!-- Guest Registration Gate Modal (only for unauthenticated visitors) -->
+    <div
+        v-if="isAuthModalOpen && !user"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+    >
         <div
-            v-if="isAuthModalOpen"
-            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            class="relative w-full max-w-md overflow-hidden rounded-3xl border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900"
         >
-            <div
-                class="relative w-full max-w-md overflow-hidden rounded-3xl border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900"
+            <button
+                @click="isAuthModalOpen = false"
+                class="absolute right-4 top-4 rounded-full p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-white"
             >
-                <button
-                    @click="isAuthModalOpen = false"
-                    class="absolute right-4 top-4 rounded-full p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-white"
-                >
-                    <X class="size-4.5" />
-                </button>
+                <X class="size-4.5" />
+            </button>
 
-                <div class="flex flex-col items-center text-center">
-                    <div class="flex size-14 items-center justify-center rounded-2xl bg-red-500/10 text-[#ff545a]">
-                        <Lock class="size-7" />
-                    </div>
-
-                    <h3 class="mt-4 font-display text-xl font-extrabold text-zinc-950 dark:text-white">
-                        Create an Account to Book
-                    </h3>
-                    <p class="mt-2 text-xs text-zinc-600 dark:text-zinc-300">
-                        To request <strong class="text-zinc-900 dark:text-white">"{{ pendingBookItem?.title }}"</strong>, compare rental quotes, or contact verified providers, please register or sign in to your HEY Events account.
-                    </p>
-
-                    <div class="mt-6 flex w-full flex-col gap-2.5">
-                        <Link
-                            href="/register"
-                            class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#ff545a] py-3 text-xs font-bold text-white shadow-md transition hover:bg-[#e0454b]"
-                        >
-                            <span>Create Free Account (Sign Up)</span>
-                            <ArrowRight class="size-3.5" />
-                        </Link>
-                        <Link
-                            href="/login"
-                            class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white py-2.5 text-xs font-bold text-zinc-800 transition hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
-                        >
-                            <span>Already have an account? Sign In</span>
-                        </Link>
-                    </div>
-
-                    <p class="mt-4 text-[11px] text-zinc-400">
-                        Free for event clients • No hidden fees • Verified vendors
-                    </p>
+            <div class="flex flex-col items-center text-center">
+                <div class="flex size-14 items-center justify-center rounded-2xl bg-red-500/10 text-[#ff545a]">
+                    <Lock class="size-7" />
                 </div>
+
+                <h3 class="mt-4 font-display text-xl font-extrabold text-zinc-950 dark:text-white">
+                    Create an Account to Book
+                </h3>
+                <p class="mt-2 text-xs text-zinc-600 dark:text-zinc-300">
+                    To request <strong class="text-zinc-900 dark:text-white">"{{ pendingBookItem?.title }}"</strong>, compare rental quotes, or contact verified providers, please register or sign in to your HEY Events account.
+                </p>
+
+                <div class="mt-6 flex w-full flex-col gap-2.5">
+                    <Link
+                        href="/register"
+                        class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#ff545a] py-3 text-xs font-bold text-white shadow-md transition hover:bg-[#e0454b]"
+                    >
+                        <span>Create Free Account (Sign Up)</span>
+                        <ArrowRight class="size-3.5" />
+                    </Link>
+                    <Link
+                        href="/login"
+                        class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white py-2.5 text-xs font-bold text-zinc-800 transition hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
+                    >
+                        <span>Already have an account? Sign In</span>
+                    </Link>
+                </div>
+
+                <p class="mt-4 text-[11px] text-zinc-400">
+                    Free for event clients • No hidden fees • Verified vendors
+                </p>
             </div>
         </div>
     </div>

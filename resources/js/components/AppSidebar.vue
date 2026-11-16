@@ -14,7 +14,6 @@ import {
     BookOpen,
     TrendingUp,
     CalendarPlus,
-    PartyPopper,
 } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
@@ -107,8 +106,10 @@ const mainNavItems = computed<NavItem[]>(() => {
         });
     }
 
-    // Service Provider Navigation: Shown for all Service Providers (vendors)
-    if (isServiceProvider.value || canAny(['create services', 'edit services', 'manage service packages'])) {
+    // Navigation based on active workspace mode:
+    // When in Vendor Workspace: show Provider operational links (Services, Schedule, Earnings)
+    // When in Client Mode (or normal client): show Client exploration links (Find Services, Book Event, My Bookings)
+    if (isServiceProvider.value && !isClientMode.value) {
         items.push({
             title: t('nav.myServices'),
             href: '#',
@@ -126,13 +127,7 @@ const mainNavItems = computed<NavItem[]>(() => {
             href: '#',
             icon: DollarSign,
         });
-    }
-
-    // Client / Discovery Navigation:
-    // Shown for normal Clients OR Service Providers browsing in 'Client Mode'
-    const showClientNav = !isServiceProvider.value || isClientMode.value;
-
-    if (showClientNav) {
+    } else {
         items.push({
             title: t('nav.findServices'),
             href: '/explore',
@@ -179,40 +174,6 @@ const footerNavItems = computed<NavItem[]>(() => [
         </SidebarHeader>
 
         <SidebarContent>
-            <!-- Provider Mode Switcher in Sidebar (Visible only to Service Providers) -->
-            <div v-if="isServiceProvider" class="px-3 pt-2 pb-1">
-                <div
-                    class="flex items-center rounded-lg border border-sidebar-border bg-sidebar-accent/40 p-0.5 text-xs shadow-2xs"
-                >
-                    <button
-                        type="button"
-                        @click="useWorkspaceMode().setMode('provider')"
-                        :class="[
-                            'flex-1 flex items-center justify-center gap-1.5 rounded-md py-1.5 font-semibold transition-all text-xs',
-                            !isClientMode
-                                ? 'bg-background text-foreground shadow-xs'
-                                : 'text-muted-foreground hover:text-foreground',
-                        ]"
-                    >
-                        <Briefcase class="size-3.5" />
-                        <span>{{ t('app.vendorWorkspace') }}</span>
-                    </button>
-                    <button
-                        type="button"
-                        @click="useWorkspaceMode().setMode('client')"
-                        :class="[
-                            'flex-1 flex items-center justify-center gap-1.5 rounded-md py-1.5 font-semibold transition-all text-xs',
-                            isClientMode
-                                ? 'bg-[#ff545a] text-white shadow-xs'
-                                : 'text-muted-foreground hover:text-foreground',
-                        ]"
-                    >
-                        <PartyPopper class="size-3.5" />
-                        <span>{{ t('app.browseAsClient') }}</span>
-                    </button>
-                </div>
-            </div>
-
             <NavMain :items="mainNavItems" />
         </SidebarContent>
 

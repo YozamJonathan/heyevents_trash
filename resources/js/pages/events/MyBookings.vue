@@ -92,7 +92,7 @@ const formatDate = (dateStr?: string | null) => {
 <template>
     <Head title="My Booked Events" />
 
-    <div class="max-w-6xl mx-auto space-y-8 p-4 md:p-6">
+    <div class="w-full space-y-6">
         <!-- Header -->
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-border/60 pb-6">
             <div>

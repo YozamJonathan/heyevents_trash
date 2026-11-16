@@ -144,7 +144,7 @@ const submit = () => {
 <template>
     <Head title="Book an Event" />
 
-    <div class="max-w-4xl mx-auto space-y-8 p-4 md:p-6">
+    <div class="w-full space-y-6">
         <!-- Header Banner -->
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-border/60 pb-6">
             <div>
@@ -170,17 +170,17 @@ const submit = () => {
         </div>
 
         <!-- Booking Form -->
-        <form @submit.prevent="submit" class="space-y-8">
+        <form @submit.prevent="submit" class="space-y-6">
             <!-- 1. Event Information -->
-            <div class="rounded-xl border border-border/70 bg-card p-6 shadow-sm space-y-6">
+            <div class="rounded-2xl border border-border/70 bg-card p-6 shadow-xs space-y-5">
                 <div>
                     <h2 class="text-base font-semibold text-foreground">1. Event Overview</h2>
                     <p class="text-xs text-muted-foreground mt-0.5">Provide basic information about your upcoming occasion.</p>
                 </div>
 
-                <div class="grid gap-6 sm:grid-cols-2">
+                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-12">
                     <!-- Event Name -->
-                    <div class="space-y-2 sm:col-span-2">
+                    <div class="space-y-1.5 sm:col-span-2 lg:col-span-4">
                         <label for="event-name" class="text-xs font-semibold uppercase tracking-wider text-foreground">
                             Event Name <span class="text-red-500">*</span>
                         </label>
@@ -189,15 +189,15 @@ const submit = () => {
                             v-model="form.name"
                             type="text"
                             required
-                            placeholder="e.g. John & Sarah's Wedding Reception, Tech Innovators Summit 2026"
-                            class="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                            placeholder="e.g. John & Sarah's Wedding Reception"
+                            class="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                             :class="{ 'border-red-500': form.errors.name }"
                         />
                         <InputError :message="form.errors.name" />
                     </div>
 
                     <!-- Kind of Event -->
-                    <div class="space-y-2 sm:col-span-2">
+                    <div class="space-y-1.5 sm:col-span-2 lg:col-span-4">
                         <label for="event-type" class="text-xs font-semibold uppercase tracking-wider text-foreground">
                             Kind of Event <span class="text-red-500">*</span>
                         </label>
@@ -205,7 +205,7 @@ const submit = () => {
                             id="event-type"
                             v-model="form.event_type"
                             required
-                            class="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                            class="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                             :class="{ 'border-red-500': form.errors.event_type }"
                         >
                             <option value="" disabled selected>Select the kind of event...</option>
@@ -217,40 +217,40 @@ const submit = () => {
                     </div>
 
                     <!-- Tentative Date (Optional) -->
-                    <div class="space-y-2">
+                    <div class="space-y-1.5 sm:col-span-1 lg:col-span-2">
                         <label for="event-date" class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-foreground">
                             <Calendar class="size-3.5 text-muted-foreground" />
-                            <span>Tentative Date</span>
+                            <span>Date</span>
                             <span class="text-[10px] font-normal lowercase text-muted-foreground">(optional)</span>
                         </label>
                         <input
                             id="event-date"
                             v-model="form.event_date"
                             type="date"
-                            class="w-full rounded-lg border border-border bg-background px-3.5 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                            class="w-full rounded-xl border border-border bg-background px-3.5 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                         />
                     </div>
 
                     <!-- Tentative Venue / Location (Optional) -->
-                    <div class="space-y-2">
+                    <div class="space-y-1.5 sm:col-span-1 lg:col-span-2">
                         <label for="event-location" class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-foreground">
                             <MapPin class="size-3.5 text-muted-foreground" />
-                            <span>Location / City</span>
+                            <span>Location</span>
                             <span class="text-[10px] font-normal lowercase text-muted-foreground">(optional)</span>
                         </label>
                         <input
                             id="event-location"
                             v-model="form.location"
                             type="text"
-                            placeholder="e.g. Dar es Salaam, Arusha, Zanzibar"
-                            class="w-full rounded-lg border border-border bg-background px-3.5 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                            placeholder="e.g. Dar es Salaam, Arusha"
+                            class="w-full rounded-xl border border-border bg-background px-3.5 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                         />
                     </div>
                 </div>
             </div>
 
             <!-- 2. Services Needed -->
-            <div class="rounded-xl border border-border/70 bg-card p-6 shadow-sm space-y-4">
+            <div class="rounded-2xl border border-border/70 bg-card p-6 shadow-xs space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 border-b border-border/50 pb-4">
                     <div>
                         <h2 class="text-base font-semibold text-foreground">
@@ -261,141 +261,163 @@ const submit = () => {
                         </p>
                     </div>
 
-                    <span class="self-start rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
+                    <span class="self-start rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
                         {{ form.services.length }} Selected
                     </span>
                 </div>
 
                 <InputError :message="form.errors.services" />
 
-                <!-- Services Grid -->
-                <div class="grid gap-3 sm:grid-cols-2">
+                <!-- Services Grid: extra columns horizontally (up to 4 columns on large screens) -->
+                <div class="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     <div
                         v-for="service in serviceOptions"
                         :key="service.id"
                         @click="toggleService(service.id)"
-                        class="cursor-pointer rounded-xl border p-4 transition-all relative select-none"
+                        class="cursor-pointer rounded-2xl border p-4 transition-all relative select-none flex flex-col justify-between"
                         :class="
                             form.services.includes(service.id)
-                                ? 'border-primary bg-primary/5 ring-1 ring-primary shadow-sm'
-                                : 'border-border/70 bg-card hover:border-border hover:bg-muted/30'
+                                ? 'border-primary bg-primary/5 ring-1 ring-primary shadow-xs'
+                                : 'border-border/70 bg-background hover:border-border hover:bg-muted/30'
                         "
                     >
-                        <div class="flex items-start justify-between gap-3">
-                            <div class="flex items-start gap-3">
+                        <div>
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="rounded-xl p-2.5 shrink-0 transition-colors"
+                                        :class="
+                                            form.services.includes(service.id)
+                                                ? 'bg-primary text-primary-foreground'
+                                                : 'bg-muted text-foreground'
+                                        "
+                                    >
+                                        <component :is="service.icon" class="size-4" />
+                                    </div>
+                                    <div class="space-y-0.5 min-w-0">
+                                        <h3 class="text-sm font-semibold text-foreground leading-tight truncate">{{ service.name }}</h3>
+                                        <span class="inline-block rounded bg-muted/60 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                                            {{ service.category }}
+                                        </span>
+                                    </div>
+                                </div>
+
                                 <div
-                                    class="rounded-lg p-2.5 shrink-0 transition-colors"
+                                    class="flex size-5 shrink-0 items-center justify-center rounded-md border transition-colors mt-0.5"
                                     :class="
                                         form.services.includes(service.id)
-                                            ? 'bg-primary text-primary-foreground'
-                                            : 'bg-muted text-foreground'
+                                            ? 'bg-primary border-primary text-primary-foreground'
+                                            : 'border-border bg-background'
                                     "
                                 >
-                                    <component :is="service.icon" class="size-4" />
-                                </div>
-                                <div class="space-y-1">
-                                    <h3 class="text-sm font-semibold text-foreground leading-tight">{{ service.name }}</h3>
-                                    <span class="inline-block rounded bg-muted/60 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-                                        {{ service.category }}
-                                    </span>
+                                    <Check v-if="form.services.includes(service.id)" class="size-3 stroke-[3]" />
                                 </div>
                             </div>
 
-                            <div
-                                class="flex size-5 shrink-0 items-center justify-center rounded-md border transition-colors mt-0.5"
-                                :class="
-                                    form.services.includes(service.id)
-                                        ? 'bg-primary border-primary text-primary-foreground'
-                                        : 'border-border bg-background'
-                                "
-                            >
-                                <Check v-if="form.services.includes(service.id)" class="size-3 stroke-[3]" />
-                            </div>
+                            <p class="mt-2.5 text-xs text-muted-foreground line-clamp-2">
+                                {{ service.description }}
+                            </p>
                         </div>
-
-                        <p class="mt-2.5 text-xs text-muted-foreground line-clamp-2">
-                            {{ service.description }}
-                        </p>
                     </div>
                 </div>
             </div>
 
-            <!-- 3. Target Budget (Optional) -->
-            <div class="rounded-xl border border-border/70 bg-card p-6 shadow-sm space-y-4">
-                <div class="flex items-start justify-between">
+            <!-- 3 & 4. Budget & Notes Side-by-Side Horizontal Columns -->
+            <div class="grid gap-6 lg:grid-cols-2">
+                <!-- 3. Target Budget (Optional) -->
+                <div class="rounded-2xl border border-border/70 bg-card p-6 shadow-xs space-y-4 flex flex-col justify-between">
                     <div>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center justify-between">
                             <h2 class="text-base font-semibold text-foreground">3. Estimated Budget</h2>
                             <span class="rounded bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                                 Optional
                             </span>
                         </div>
                         <p class="text-xs text-muted-foreground mt-0.5">
-                            If you have an allocated budget, specify it in <strong>TZS (Tanzanian Shillings)</strong>. If left blank, our team will calculate and propose standard packages.
+                            Specify in <strong>TZS (Tanzanian Shillings)</strong> or leave blank for a proposed standard package.
+                        </p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="event-budget" class="text-xs font-semibold uppercase tracking-wider text-foreground">
+                            Your Proposed Budget (TZS)
+                        </label>
+                        <div class="relative">
+                            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">
+                                TZS
+                            </span>
+                            <input
+                                id="event-budget"
+                                v-model="form.budget"
+                                type="number"
+                                min="0"
+                                step="50000"
+                                placeholder="e.g. 2,500,000"
+                                class="w-full rounded-xl border border-border bg-background py-2.5 pl-14 pr-4 text-sm font-semibold text-foreground placeholder:font-normal placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                                :class="{ 'border-red-500': form.errors.budget }"
+                            />
+                        </div>
+                        <InputError :message="form.errors.budget" />
+                        <p class="text-[11px] text-muted-foreground flex items-center gap-1">
+                            <HelpCircle class="size-3 text-muted-foreground shrink-0" />
+                            <span>You can adjust or discuss pricing during consultation.</span>
                         </p>
                     </div>
                 </div>
 
-                <div class="max-w-md space-y-2 pt-1">
-                    <label for="event-budget" class="text-xs font-semibold uppercase tracking-wider text-foreground">
-                        Your Proposed Budget (TZS)
-                    </label>
-                    <div class="relative">
-                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-muted-foreground">
-                            TZS
-                        </span>
-                        <input
-                            id="event-budget"
-                            v-model="form.budget"
-                            type="number"
-                            min="0"
-                            step="50000"
-                            placeholder="e.g. 2,500,000"
-                            class="w-full rounded-lg border border-border bg-background py-2.5 pl-14 pr-4 text-sm font-semibold text-foreground placeholder:font-normal placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                            :class="{ 'border-red-500': form.errors.budget }"
-                        />
+                <!-- 4. Additional Notes / Special Requests (Optional) -->
+                <div class="rounded-2xl border border-border/70 bg-card p-6 shadow-xs space-y-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-base font-semibold text-foreground">4. Additional Notes or Requests</h2>
+                            <span class="rounded bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                                Optional
+                            </span>
+                        </div>
+                        <p class="text-xs text-muted-foreground mt-0.5">
+                            Any specific preferences, estimated guest count, theme, or special instructions.
+                        </p>
                     </div>
-                    <InputError :message="form.errors.budget" />
-                    <p class="text-[11px] text-muted-foreground flex items-center gap-1">
-                        <HelpCircle class="size-3 text-muted-foreground" />
-                        <span>Optional — You can discuss or adjust your budget during consultation.</span>
-                    </p>
+
+                    <div class="space-y-1">
+                        <textarea
+                            v-model="form.notes"
+                            rows="3"
+                            placeholder="Provide any specific preferences, estimated guest count, theme, or questions..."
+                            class="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                        ></textarea>
+                    </div>
                 </div>
             </div>
 
-            <!-- 4. Additional Notes / Special Requests (Optional) -->
-            <div class="rounded-xl border border-border/70 bg-card p-6 shadow-sm space-y-3">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-base font-semibold text-foreground">4. Additional Notes or Requests</h2>
-                    <span class="rounded bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                        Optional
+            <!-- Submission Action Bar -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-border/70 bg-card p-4 shadow-xs">
+                <div class="text-xs text-muted-foreground">
+                    <span v-if="form.services.length === 0" class="text-amber-600 dark:text-amber-400 font-medium">
+                        Please select at least 1 service above to proceed.
+                    </span>
+                    <span v-else class="text-foreground">
+                        Ready to submit: <strong>{{ form.services.length }} services</strong> selected for <strong>{{ form.name || 'your event' }}</strong>.
                     </span>
                 </div>
-                <textarea
-                    v-model="form.notes"
-                    rows="3"
-                    placeholder="Provide any specific preferences, estimated guest count, theme, or questions..."
-                    class="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                ></textarea>
-            </div>
 
-            <!-- Submission Action -->
-            <div class="flex flex-col sm:flex-row items-center justify-end gap-3 pt-2 pb-6">
-                <Link
-                    href="/dashboard"
-                    class="w-full sm:w-auto text-center rounded-lg border border-border bg-background px-4 py-2.5 text-xs font-semibold text-foreground hover:bg-muted transition-colors"
-                >
-                    Cancel
-                </Link>
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <Link
+                        href="/dashboard"
+                        class="w-full sm:w-auto text-center rounded-xl border border-border bg-background px-4 py-2 text-xs font-semibold text-foreground hover:bg-muted transition-colors"
+                    >
+                        Cancel
+                    </Link>
 
-                <button
-                    type="submit"
-                    :disabled="form.processing || form.services.length === 0"
-                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-xs font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    <Send class="size-3.5" v-if="!form.processing" />
-                    <span>{{ form.processing ? 'Submitting Request...' : 'Submit Event Booking Request' }}</span>
-                </button>
+                    <button
+                        type="submit"
+                        :disabled="form.processing || form.services.length === 0"
+                        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-2 text-xs font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <Send class="size-3.5" v-if="!form.processing" />
+                        <span>{{ form.processing ? 'Submitting Request...' : 'Submit Event Booking Request' }}</span>
+                    </button>
+                </div>
             </div>
         </form>
 
