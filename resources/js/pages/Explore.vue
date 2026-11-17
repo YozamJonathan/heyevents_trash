@@ -22,6 +22,13 @@ import {
     Lock,
     X,
     ArrowRight,
+    ShoppingBag,
+    Plus,
+    Minus,
+    Trash2,
+    ChevronUp,
+    ChevronDown,
+    Check,
 } from '@lucide/vue';
 
 defineOptions({
@@ -31,6 +38,10 @@ defineOptions({
 const { t } = useLanguage();
 const page = usePage();
 const user = computed(() => page.props.auth?.user);
+
+const props = defineProps<{
+    catalogItems?: any[];
+}>();
 
 const breadcrumbs = computed<BreadcrumbItem[]>(() => [
     {
@@ -154,15 +165,28 @@ const mockItems = ref([
     },
 ]);
 
+const activeCatalog = computed(() => {
+    if (props.catalogItems && props.catalogItems.length > 0) {
+        return props.catalogItems;
+    }
+    return mockItems.value;
+});
+
 const filteredItems = computed(() => {
-    return mockItems.value.filter((item) => {
+    return activeCatalog.value.filter((item) => {
         const matchesCategory =
-            selectedCategory.value === 'all' || item.category === selectedCategory.value;
+            selectedCategory.value === 'all' ||
+            item.category === selectedCategory.value ||
+            (selectedCategory.value === 'sound-media' && (item.category === 'sound' || item.category === 'photography' || item.category === 'sound-media')) ||
+            (selectedCategory.value === 'transport' && (item.category === 'protocol' || item.category === 'transport'));
+
         const matchesSearch =
             searchQuery.value === '' ||
             item.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
             item.location.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-            item.providerName.toLowerCase().includes(searchQuery.value.toLowerCase());
+            (item.providerName && item.providerName.toLowerCase().includes(searchQuery.value.toLowerCase())) ||
+            (item.description && item.description.toLowerCase().includes(searchQuery.value.toLowerCase()));
+
         return matchesCategory && matchesSearch;
     });
 });
@@ -186,6 +210,83 @@ const handleBookClick = (item: any) => {
         // Logged-in user: seamlessly proceed to booking flow
         router.visit(`/events/book?item=${item.id}`);
     }
+};
+
+// MULTI-ITEM EVENT PACKAGE BASKET STATE
+interface BasketEntry {
+    id: number;
+    title: string;
+    category: string;
+    client_price: number;
+    pricing_unit: string;
+    quantity: number;
+    image?: string;
+    location?: string;
+}
+
+const basket = ref<BasketEntry[]>([]);
+const isBasketDrawerOpen = ref(false);
+
+const basketCount = computed(() => {
+    return basket.value.reduce((sum, item) => sum + item.quantity, 0);
+});
+
+const basketTotal = computed(() => {
+    return basket.value.reduce((sum, item) => sum + (item.client_price * item.quantity), 0);
+});
+
+const isItemInBasket = (itemId: number) => {
+    return basket.value.some((b) => b.id === itemId);
+};
+
+const getItemBasketQuantity = (itemId: number) => {
+    const found = basket.value.find((b) => b.id === itemId);
+    return found ? found.quantity : 0;
+};
+
+const toggleBasketItem = (item: any) => {
+    const existingIndex = basket.value.findIndex((b) => b.id === item.id);
+    if (existingIndex > -1) {
+        basket.value.splice(existingIndex, 1);
+    } else {
+        const rawPrice = Number(item.client_price || 0) || (parseInt((item.price || '').replace(/[^0-9]/g, '')) || 0);
+        basket.value.push({
+            id: item.id,
+            title: item.title,
+            category: item.category,
+            client_price: rawPrice,
+            pricing_unit: item.pricing_unit || 'unit',
+            quantity: 1,
+            image: item.image,
+            location: item.location,
+        });
+    }
+};
+
+const updateBasketQuantity = (itemId: number, delta: number) => {
+    const found = basket.value.find((b) => b.id === itemId);
+    if (!found) return;
+    found.quantity += delta;
+    if (found.quantity <= 0) {
+        basket.value = basket.value.filter((b) => b.id !== itemId);
+    }
+};
+
+const clearBasket = () => {
+    basket.value = [];
+    isBasketDrawerOpen.value = false;
+};
+
+const proceedToCheckout = () => {
+    if (basket.value.length === 0) return;
+    const ids = basket.value.map((b) => b.id).join(',');
+    if (!user.value) {
+        isAuthModalOpen.value = true;
+        return;
+    }
+    // Store selected items payload in sessionStorage for Book.vue to hydrate quantities
+    sessionStorage.setItem('heyevent_basket', JSON.stringify(basket.value));
+    router.visit(`/events/book?items=${ids}`);
 };
 </script>
 
@@ -301,19 +402,41 @@ const handleBookClick = (item: any) => {
                             </div>
 
                             <!-- Price & Action -->
-                            <div class="mt-auto flex items-center justify-between border-t border-border/60 pt-4">
-                                <div>
-                                    <span class="block text-[10px] uppercase font-bold text-muted-foreground">Rate / Price</span>
-                                    <span class="text-xs font-extrabold text-[#ff545a]">{{ item.price }}</span>
+                            <div class="mt-auto flex flex-col gap-2.5 border-t border-border/60 pt-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <span class="block text-[10px] uppercase font-bold text-muted-foreground">Rate / Price</span>
+                                        <span class="text-xs font-extrabold text-[#ff545a]">{{ item.price }}</span>
+                                    </div>
+                                    <span v-if="item.stock_quantity" class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                                        {{ item.stock_quantity }} {{ t('explore.unitsAvailable') }}
+                                    </span>
                                 </div>
 
-                                <button
-                                    type="button"
-                                    @click="handleBookClick(item)"
-                                    class="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3.5 py-1.5 text-xs font-bold text-primary-foreground shadow-xs transition hover:bg-[#ff545a] hover:text-white"
-                                >
-                                    <span>Book Now</span>
-                                </button>
+                                <div class="flex items-center gap-2">
+                                    <button
+                                        type="button"
+                                        @click="toggleBasketItem(item)"
+                                        :class="[
+                                            'flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl py-2 px-3 text-xs font-bold transition shadow-2xs',
+                                            isItemInBasket(item.id)
+                                                ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                                                : 'border border-border bg-background hover:bg-muted text-foreground',
+                                        ]"
+                                    >
+                                        <Check v-if="isItemInBasket(item.id)" class="size-3.5" />
+                                        <Plus v-else class="size-3.5 text-[#ff545a]" />
+                                        <span>{{ isItemInBasket(item.id) ? t('explore.inPackage') : t('explore.addToPackage') }}</span>
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        @click="handleBookClick(item)"
+                                        class="inline-flex items-center justify-center rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground shadow-2xs hover:bg-[#ff545a] hover:text-white transition"
+                                    >
+                                        {{ t('explore.bookNow') }}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -450,19 +573,41 @@ const handleBookClick = (item: any) => {
                         </div>
 
                         <!-- Price & Action -->
-                        <div class="mt-auto flex items-center justify-between border-t border-zinc-100 pt-4 dark:border-zinc-800">
-                            <div>
-                                <span class="block text-[10px] uppercase font-bold text-zinc-400">Rate / Price</span>
-                                <span class="text-xs font-extrabold text-[#ff545a]">{{ item.price }}</span>
+                        <div class="mt-auto flex flex-col gap-2.5 border-t border-zinc-100 pt-4 dark:border-zinc-800">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="block text-[10px] uppercase font-bold text-zinc-400">Rate / Price</span>
+                                    <span class="text-xs font-extrabold text-[#ff545a]">{{ item.price }}</span>
+                                </div>
+                                <span v-if="item.stock_quantity" class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                                    {{ item.stock_quantity }} {{ t('explore.unitsAvailable') }}
+                                </span>
                             </div>
 
-                            <button
-                                type="button"
-                                @click="handleBookClick(item)"
-                                class="inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#ff545a] dark:bg-white dark:text-zinc-900 dark:hover:bg-[#ff545a] dark:hover:text-white"
-                            >
-                                <span>Book Now</span>
-                            </button>
+                            <div class="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    @click="toggleBasketItem(item)"
+                                    :class="[
+                                        'flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl py-2 px-3 text-xs font-bold transition shadow-2xs',
+                                        isItemInBasket(item.id)
+                                            ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                                            : 'border border-zinc-200 bg-white hover:bg-zinc-100 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700',
+                                    ]"
+                                >
+                                    <Check v-if="isItemInBasket(item.id)" class="size-3.5" />
+                                    <Plus v-else class="size-3.5 text-[#ff545a]" />
+                                    <span>{{ isItemInBasket(item.id) ? t('explore.inPackage') : t('explore.addToPackage') }}</span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    @click="handleBookClick(item)"
+                                    class="inline-flex items-center justify-center rounded-xl bg-zinc-900 px-3 py-2 text-xs font-bold text-white shadow-2xs hover:bg-[#ff545a] transition dark:bg-white dark:text-zinc-900 dark:hover:bg-[#ff545a] dark:hover:text-white"
+                                >
+                                    {{ t('explore.bookNow') }}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -487,6 +632,105 @@ const handleBookClick = (item: any) => {
 
         <!-- Floating Corner WhatsApp Support -->
         <WhatsAppCornerButton />
+    </div>
+
+    <!-- Floating Event Package Basket Bar (Fixed at bottom) -->
+    <div
+        v-if="basket.length > 0"
+        class="fixed inset-x-0 bottom-4 z-40 mx-auto max-w-3xl px-4 animate-in slide-in-from-bottom-6 duration-200"
+    >
+        <!-- Drawer popup if expanded -->
+        <div
+            v-if="isBasketDrawerOpen"
+            class="mb-3 max-h-80 overflow-y-auto rounded-3xl border border-border/80 bg-card/95 p-5 shadow-2xl backdrop-blur-xl space-y-3"
+        >
+            <div class="flex items-center justify-between border-b border-border/50 pb-3">
+                <div class="flex items-center gap-2">
+                    <ShoppingBag class="size-4 text-[#ff545a]" />
+                    <h4 class="text-sm font-bold text-foreground">{{ t('explore.basket.title') }}</h4>
+                </div>
+                <button
+                    type="button"
+                    @click="clearBasket"
+                    class="text-xs text-muted-foreground hover:text-red-500 font-semibold transition"
+                >
+                    {{ t('explore.basket.clear') }}
+                </button>
+            </div>
+
+            <div class="divide-y divide-border/40">
+                <div
+                    v-for="bItem in basket"
+                    :key="bItem.id"
+                    class="flex items-center justify-between py-2.5 text-xs gap-3"
+                >
+                    <div class="flex items-center gap-3 min-w-0">
+                        <img :src="bItem.image || '/images/card-resort.jpg'" class="size-10 rounded-lg object-cover shrink-0" />
+                        <div class="min-w-0">
+                            <div class="font-bold text-foreground truncate">{{ bItem.title }}</div>
+                            <div class="text-[11px] text-muted-foreground">
+                                TZS {{ Number(bItem.client_price).toLocaleString() }} / {{ bItem.pricing_unit }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 shrink-0">
+                        <div class="flex items-center rounded-xl border border-border bg-background p-0.5">
+                            <button
+                                type="button"
+                                @click="updateBasketQuantity(bItem.id, -1)"
+                                class="p-1 text-muted-foreground hover:text-foreground"
+                            >
+                                <Minus class="size-3" />
+                            </button>
+                            <span class="px-2 font-bold text-foreground text-xs">{{ bItem.quantity }}</span>
+                            <button
+                                type="button"
+                                @click="updateBasketQuantity(bItem.id, 1)"
+                                class="p-1 text-muted-foreground hover:text-foreground"
+                            >
+                                <Plus class="size-3" />
+                            </button>
+                        </div>
+                        <span class="w-24 text-right font-extrabold text-[#ff545a]">
+                            TZS {{ (bItem.client_price * bItem.quantity).toLocaleString() }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsed Main Bar -->
+        <div class="flex items-center justify-between rounded-2xl border border-zinc-900/10 bg-zinc-950/90 p-3.5 text-white shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/95 sm:px-6">
+            <div class="flex items-center gap-3 cursor-pointer select-none" @click="isBasketDrawerOpen = !isBasketDrawerOpen">
+                <div class="relative rounded-xl bg-[#ff545a] p-2 text-white shadow-xs">
+                    <ShoppingBag class="size-5" />
+                    <span class="absolute -top-1.5 -right-1.5 flex size-4 items-center justify-center rounded-full bg-white text-[10px] font-black text-[#ff545a] shadow-xs">
+                        {{ basket.length }}
+                    </span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5 text-xs font-bold">
+                        <span>{{ basketCount }} {{ t('explore.basket.selected') }}</span>
+                        <component :is="isBasketDrawerOpen ? ChevronDown : ChevronUp" class="size-3.5 opacity-70" />
+                    </div>
+                    <div class="text-[11px] text-zinc-400">
+                        {{ t('explore.basket.estimate') }}: <strong class="text-white">TZS {{ basketTotal.toLocaleString() }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button
+                    type="button"
+                    @click="proceedToCheckout"
+                    class="inline-flex items-center gap-1.5 rounded-xl bg-[#ff545a] px-4 sm:px-5 py-2.5 text-xs font-extrabold text-white shadow-md hover:bg-[#ff4047] transition hover:shadow-lg"
+                >
+                    <span>{{ t('explore.basket.proceed') }}</span>
+                    <ArrowRight class="size-3.5" />
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Guest Registration Gate Modal (only for unauthenticated visitors) -->

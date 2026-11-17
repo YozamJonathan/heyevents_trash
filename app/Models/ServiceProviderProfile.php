@@ -92,6 +92,16 @@ class ServiceProviderProfile extends Model
         return $this->belongsTo(User::class, 'feedback_sent_by');
     }
 
+    public function catalogItems(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(CatalogItem::class, 'service_provider_profile_id');
+    }
+
+    public function assignedBookings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(EventBooking::class, 'assigned_provider_id');
+    }
+
     public function isPending(): bool
     {
         return $this->status === 'pending';

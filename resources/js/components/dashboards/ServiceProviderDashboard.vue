@@ -21,8 +21,12 @@ import {
     MessageSquare,
     ArrowRight,
     X,
+    Truck,
+    Phone,
+    MapPin,
 } from '@lucide/vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
+import { toast } from 'vue-sonner';
 import { useLanguage } from '@/composables/useLanguage';
 
 const props = defineProps<{
@@ -81,22 +85,66 @@ const formatDate = (dateString?: string | null) => {
     }
 };
 
+const upcomingBookings = computed(() => {
+    if (!props.providerProfile?.assigned_bookings) return [];
+    return props.providerProfile.assigned_bookings.map((b: any) => ({
+        id: b.id,
+        client: b.user?.name || b.name || 'Client',
+        phone: b.client_phone || 'N/A',
+        event: b.catalog_item?.title || b.event_type || 'Event Service',
+        date: b.event_date ? new Date(b.event_date).toLocaleDateString() : 'Date TBD',
+        location: b.venue_name ? `${b.venue_name}, ${b.location || ''}` : (b.location || 'Location TBD'),
+        amount: b.provider_payout_amount ? `TZS ${Number(b.provider_payout_amount).toLocaleString()}` : (b.budget ? `Budget: TZS ${Number(b.budget).toLocaleString()}` : 'Agreed Rate'),
+        status: b.dispatch_status === 'pending_dispatch' ? 'Pending Dispatch' : (b.dispatch_status || b.status),
+    }));
+});
+
+const myServices = computed(() => {
+    if (!props.providerProfile?.catalog_items) return [];
+    return props.providerProfile.catalog_items.map((item: any) => ({
+        id: item.id,
+        title: item.title,
+        price: `TZS ${Number(item.client_price).toLocaleString()} / ${item.pricing_unit}`,
+        bookings: `${item.stock_quantity || 1} available`,
+        status: item.is_available ? 'Active in Catalog' : 'Paused',
+    }));
+});
+
+const payoutBalance = computed(() => {
+    if (!props.providerProfile?.assigned_bookings) return 'TZS 0';
+    const total = props.providerProfile.assigned_bookings
+        .filter((b: any) => b.dispatch_status === 'completed' || b.payout_status === 'pending_payout' || b.payout_status === 'paid')
+        .reduce((sum: number, b: any) => sum + Number(b.provider_payout_amount || 0), 0);
+    return `TZS ${total.toLocaleString()}`;
+});
+
+const updateGigProgress = (bookingId: number, dispatchStatus: string) => {
+    router.post(`/provider/bookings/${bookingId}/progress`, {
+        dispatch_status: dispatchStatus,
+    }, {
+        preserveScroll: true,
+        onSuccess: () => {
+            toast.success('Gig status updated. HEY Events coordination desk notified.');
+        },
+    });
+};
+
 const metrics = computed(() => [
     {
         title: t('providerDashboard.earnings'),
-        value: 'TZS 0',
-        change: isApproved.value ? 'Active account' : 'Locked until verified',
+        value: payoutBalance.value,
+        change: isApproved.value ? 'Managed HEY Escrow' : 'Locked until verified',
         icon: Banknote,
     },
     {
         title: t('providerDashboard.upcomingBookings'),
-        value: t('providerDashboard.events'),
+        value: `${upcomingBookings.value.length} Gigs`,
         change: isApproved.value ? t('providerDashboard.scheduleClear') : 'Pending verification',
         icon: Calendar,
     },
     {
         title: t('providerDashboard.packages'),
-        value: t('providerDashboard.listed'),
+        value: `${myServices.value.length} Listed`,
         change: isApproved.value ? t('providerDashboard.addPackage') : 'Catalog locked',
         icon: Briefcase,
     },
@@ -107,22 +155,6 @@ const metrics = computed(() => [
         icon: Star,
     },
 ]);
-
-// Real items (starts empty)
-const upcomingBookings = computed<
-    Array<{
-        client: string;
-        event: string;
-        date: string;
-        time: string;
-        location: string;
-        amount: string;
-        status: string;
-    }>
->(() => []);
-const myServices = computed<
-    Array<{ title: string; price: string; bookings: string; status: string }>
->(() => []);
 </script>
 
 <template>
@@ -527,27 +559,90 @@ const myServices = computed<
                     <div
                         v-for="(booking, idx) in upcomingBookings"
                         :key="idx"
-                        class="border-border/60 bg-muted/20 rounded-lg border p-4"
+                        class="rounded-xl border border-border/60 bg-muted/20 p-4 space-y-3 transition hover:border-border/90"
                     >
-                        <div
-                            class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
-                        >
+                        <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                             <div>
-                                <h4
-                                    class="text-foreground text-sm font-semibold"
-                                >
-                                    {{ booking.event }}
-                                </h4>
-                                <p class="text-muted-foreground text-xs">
-                                    {{ t('providerDashboard.client') }}:
-                                    <span class="text-foreground font-medium">{{
-                                        booking.client
-                                    }}</span>
-                                </p>
+                                <div class="flex items-center gap-2">
+                                    <span class="rounded bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary uppercase">
+                                        Assigned Gig
+                                    </span>
+                                    <h4 class="text-foreground text-sm font-bold">
+                                        {{ booking.event }}
+                                    </h4>
+                                </div>
+                                <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                                    <span>Client: <strong class="text-foreground">{{ booking.client }}</strong></span>
+                                    <span>•</span>
+                                    <span v-if="booking.phone && booking.phone !== 'N/A'" class="inline-flex items-center gap-0.5 font-semibold text-[#ff545a]">
+                                        <Phone class="size-3" /> {{ booking.phone }}
+                                    </span>
+                                    <span>•</span>
+                                    <span class="inline-flex items-center gap-0.5">
+                                        <Calendar class="size-3 text-primary" /> {{ booking.date }}
+                                    </span>
+                                    <span>•</span>
+                                    <span class="inline-flex items-center gap-0.5">
+                                        <MapPin class="size-3 text-primary" /> {{ booking.location }}
+                                    </span>
+                                </div>
                             </div>
-                            <span class="text-foreground text-sm font-bold">{{
-                                booking.amount
-                            }}</span>
+
+                            <div class="text-right sm:self-start">
+                                <span class="text-[10px] font-bold text-muted-foreground uppercase block">Your Payout</span>
+                                <span class="text-foreground text-sm font-extrabold text-emerald-600 dark:text-emerald-400">
+                                    {{ booking.amount }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Status & Provider Actions Bar -->
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-t border-border/40 pt-2.5">
+                            <span
+                                class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold"
+                                :class="{
+                                    'bg-blue-500/15 text-blue-700 dark:text-blue-300': booking.status === 'assigned',
+                                    'bg-purple-500/15 text-purple-700 dark:text-purple-300': booking.status === 'in_transit',
+                                    'bg-teal-500/15 text-teal-700 dark:text-teal-300': booking.status === 'delivered_and_setup',
+                                    'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300': booking.status === 'completed',
+                                }"
+                            >
+                                <Truck class="size-3" v-if="booking.status === 'assigned' || booking.status === 'in_transit'" />
+                                <CheckCircle2 class="size-3" v-else />
+                                <span>
+                                    {{
+                                        booking.status === 'assigned'
+                                            ? 'Assigned · Ready for Dispatch'
+                                            : booking.status === 'in_transit'
+                                            ? 'En Route / In Transit'
+                                            : booking.status === 'delivered_and_setup'
+                                            ? 'Delivered & Set Up'
+                                            : 'Completed & Earned'
+                                    }}
+                                </span>
+                            </span>
+
+                            <div class="flex items-center gap-2">
+                                <button
+                                    v-if="booking.status === 'assigned'"
+                                    type="button"
+                                    @click="updateGigProgress(booking.id, 'in_transit')"
+                                    class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground shadow-xs hover:bg-primary/90 transition"
+                                >
+                                    <Truck class="size-3.5" />
+                                    <span>Confirm & Start Delivery</span>
+                                </button>
+
+                                <button
+                                    v-if="booking.status === 'in_transit'"
+                                    type="button"
+                                    @click="updateGigProgress(booking.id, 'delivered_and_setup')"
+                                    class="inline-flex items-center gap-1.5 rounded-lg bg-teal-600 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-teal-700 transition"
+                                >
+                                    <CheckCircle2 class="size-3.5" />
+                                    <span>Mark Delivered & Set Up at Venue</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -640,7 +735,7 @@ const myServices = computed<
                                 t('providerDashboard.payoutBalance')
                             }}</span>
                             <p class="text-foreground text-2xl font-bold">
-                                TZS 0
+                                {{ payoutBalance }}
                             </p>
                         </div>
                         <button

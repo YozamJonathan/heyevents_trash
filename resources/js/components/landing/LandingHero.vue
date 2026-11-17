@@ -26,9 +26,9 @@ const { t } = useLanguage();
                 <span>Tanzania's Event Marketplace</span>
             </div>
 
-            <!-- Main Hero Typography in Rounded Smooth Bold Display Font -->
+            <!-- Main Hero Typography in Bold Display Font -->
             <h1
-                class="mt-6 font-display text-3xl leading-[1.14] font-black tracking-tight text-[#ff545a] sm:text-4xl md:text-5xl lg:text-6xl dark:text-white drop-shadow-sm"
+                class="mt-6 font-display text-3xl leading-[1.14] font-black tracking-tight text-[#ff545a] transition-colors duration-300 hover:text-zinc-950 sm:text-4xl md:text-5xl lg:text-6xl dark:text-white dark:hover:text-[#ff545a] drop-shadow-sm hover:drop-shadow-md cursor-default select-none"
             >
                 {{ t('hero.title') }}
             </h1>

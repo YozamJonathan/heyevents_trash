@@ -31,7 +31,9 @@
         "userManagement": "Usimamizi wa Watumiaji",
         "rolesPermissions": "Majukumu na Ruhusa",
         "platformConfig": "Mipangilio ya Mfumo",
-        "vendorApprovals": "Uidhinishaji wa Watoa Huduma (KYC)",
+        "vendorApprovals": "Uhakiki wa KYC ya Watoa Huduma",
+        "itemApprovals": "Uhakiki wa Vifaa na Huduma",
+        "clientBookings": "Oda na Nafasi za Wateja",
         "eventModeration": "Ukaguzi wa Matukio",
         "disputeDesk": "Dawati la Migogoro",
         "businessAnalytics": "Takwimu za Biashara",
@@ -125,13 +127,61 @@
         }
     },
     "explore": {
-        "eyebrow": "Orodha ya matukio",
-        "title": "Matukio maalum",
-        "all": "Aina zote",
-        "social": "Kijamii",
-        "corporate": "Kampuni",
-        "entertainment": "Burudani",
-        "community": "Jamii"
+        "eyebrow": "Vifaa na Huduma za Matukio Zilizothibitishwa",
+        "title": "Kila Chombo, Kifaa & Huduma kwa Tukio Lako",
+        "subtitle": "Mahema bora, mifumo ya muziki na DJ, viti vya kisasa, mapambo na vyakula vilivyokaguliwa na kudhaminiwa na HEY Events.",
+        "all": "Vifaa & Huduma Zote",
+        "rentals": "Mahema & Viti",
+        "sound": "Muziki & Sauti",
+        "venues": "Kumbi & Viwanja",
+        "catering": "Upishi & Chakula",
+        "decor": "Mapambo & Maua",
+        "transport": "Magari ya Kifahari",
+        "bookNow": "Weka Oda Sasa",
+        "addToPackage": "+ Weka Kwenye Orodha",
+        "inPackage": "Ipo Kwenye Orodha",
+        "viewAll": "Tazama Soko Zima la Vifaa",
+        "guarantee": "Dhamana ya Ubora na Ufikishwaji ya HEY Events",
+        "unitsAvailable": "vifaa vipo tayari",
+        "basket": {
+            "title": "Orodha ya Vifurushi Vyako",
+            "selected": "kifaa/vifaa vipo kwenye orodha",
+            "estimate": "Jumla ya Gharama ya Tukio",
+            "proceed": "Kamilisha Oda ya Vifaa",
+            "clear": "Futa Zote"
+        }
+    },
+    "bookingForm": {
+        "title": "Weka Oda ya Tukio & Vifaa",
+        "subtitle": "Tuambie kuhusu tukio lako na uchague huduma au vifaa unavyohitaji. HEY Events inakuhakikishia usafirishaji, ukaguzi wa kina wa vifaa, na usimikaji kwa wakati.",
+        "backToDashboard": "Rudi Dashibodi",
+        "directCatalogBooking": "Oda ya Moja kwa Moja kutoka Sokoni",
+        "packageSummaryTitle": "Mchanganuo wa Vifaa & Kifurushi cha Tukio",
+        "guaranteedFulfillment": "Ufikishwaji na usimikaji unadhaminiwa na HEY Events",
+        "quantity": "Idadi:",
+        "totalEstimate": "Jumla ya Gharama ya Tukio",
+        "eventOverview": "1. Maelezo ya Tukio & Sehemu ya Kufikisha Vifaa",
+        "eventOverviewDesc": "Vifaa vifike na kusimikwa lini na wapi?",
+        "eventName": "Jina la Tukio",
+        "eventNamePlaceholder": "mfano: Harusi ya Juma & Neema",
+        "clientPhone": "Namba ya Simu / WhatsApp",
+        "eventType": "Aina ya Tukio",
+        "selectEventType": "Chagua aina ya tukio...",
+        "eventDate": "Tarehe ya Tukio",
+        "eventCity": "Mkoa / Jiji",
+        "venueName": "Jina la Ukumbi / Anuani Kamili",
+        "venuePlaceholder": "mfano: Serena Ballroom, Mbezi Beach, Nyumbani",
+        "budget": "Makadirio ya Bajeti (TZS)",
+        "servicesSection": "2. Huduma za Ziada & Vifurushi",
+        "servicesSectionDesc": "Chagua huduma zozote za ziada unazohitaji kwa tukio lako.",
+        "notesSection": "3. Maelekezo Maalum & Maombi",
+        "notesSectionDesc": "Upatikanaji wa umeme, muda wa kushusha vifaa, maelekezo ya ukumbi n.k.",
+        "notesPlaceholder": "Tuambie kuhusu muda wa kuleta vifaa, mifumo ya umeme au mahitaji maalum...",
+        "submitButton": "Tuma Oda kwa HEY Events",
+        "submitting": "Inatuma Oda...",
+        "successTitle": "Ombi la Oda Limepokelewa!",
+        "successMessage": "Asante sana! Uongozi wa HEY Events umepokea ombi lako. Tutathibitisha upatikanaji wa vifaa, kupanga watoa huduma waliothibitishwa, na kuwasiliana nawe kupitia simu/WhatsApp.",
+        "viewMyBookings": "Tazama Maagizo Yangu"
     },
     "listing": {
         "1": {
@@ -160,24 +210,26 @@
         }
     },
     "reviews": {
-        "eyebrow": "Waandaaji wanatuamini",
-        "title": "Waandaaji wanasemaje kuhusu HEY Events?"
+        "eyebrow": "Ushuhuda wa Waandaaji",
+        "title": "Waandaaji wanasemaje kuhusu HEY Events?",
+        "subtitle": "Jinsi waratibu wa matukio, mashirika na waandaaji wa harusi wanavyokodi vifaa na kuajiri watoa huduma bila madalali.",
+        "verifiedBooking": "Nafasi Iliyothibitishwa"
     },
     "review": {
         "1": {
-            "role": "Mratibu wa harusi",
-            "category": "Sherehe na hafla za kijamii",
-            "content": "Mpangilio wa viti na ufuatiliaji wa majibu ya mialiko ulituokoa wiki kadhaa za kazi. Wageni waliingia kwa urahisi kwa kutumia QR."
+            "role": "Mratibu wa Harusi na Sherehe",
+            "category": "Mahema, Mapambo & Mitambo ya Sauti",
+            "content": "Kukodi mahema ya kisasa, viti vya chiavari na mifumo ya sauti moja kwa moja kutoka kwa wamiliki waliothibitishwa kulituokoa zaidi ya 30% ya bajeti ya harusi ikilinganishwa na madalali. Vifaa vyote vilifika na kufungwa masaa 4 kabla ya wageni kuwasili."
         },
         "2": {
-            "role": "Mkurugenzi wa tamasha",
-            "category": "Burudani na tamasha",
-            "content": "Uingizaji langoni uliendelea vizuri hata mtandao wa simu ulipokatika. Usawazishaji wa nje ya mtandao uliendeleza foleni."
+            "role": "Mkurugenzi wa Mikutano ya Mashirika",
+            "category": "Skrini za LED, Sauti & Jenereta za Dharura",
+            "content": "Kwa mkutano wetu wa wajumbe 600 wa Afrika, kupata mitambo ya sauti ya line-array, skrini za LED na jenereta imara za dharura kupitia HEY Events kulileta amani ya moyo. Uthibitisho wa KYC wa watoa huduma ulirahisisha ukaguzi wetu wa ununuzi."
         },
         "3": {
-            "role": "Makamu wa rais wa kampuni",
-            "category": "Kampuni na biashara",
-            "content": "Ratiba za vipindi, beji za papo hapo na zana za wadhamini zilifanya kongamano letu liwe bora zaidi."
+            "role": "Mwandaaji wa Tamasha na Burudani",
+            "category": "Majukwaa, Taa za Matamasha & Usafiri wa VIP",
+            "content": "Kusimamia vifaa vya tamasha kwenye majukwaa tofauti kulikuwa kero ya kufanya kazi na madalali wasioaminika. Kupitia HEY Events, kukodi taa za kisasa, majukwaa imara na magari ya VIP kulikuwa kwa uwazi na kufanyika kwa wakati."
         }
     },
     "footer": {

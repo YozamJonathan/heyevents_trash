@@ -42,6 +42,12 @@ interface BookedEvent {
     event_type: string;
     services: string[];
     budget?: number | string | null;
+    total_client_amount?: number | string | null;
+    item_quantity?: number;
+    venue_name?: string | null;
+    dispatch_status?: string | null;
+    catalog_item?: any;
+    assigned_provider?: any;
     event_date?: string | null;
     location?: string | null;
     notes?: string | null;
@@ -197,6 +203,50 @@ const formatDate = (dateStr?: string | null) => {
                         </span>
                     </div>
 
+                    <!-- Catalog Item / Multi-item Highlight (if booked from marketplace) -->
+                    <div
+                        v-if="booking.order_items && booking.order_items.length > 0"
+                        class="rounded-xl border border-red-500/20 bg-red-500/5 p-3 space-y-2"
+                    >
+                        <span class="text-[9px] font-bold uppercase tracking-wider text-[#ff545a] block">
+                            Event Package ({{ booking.order_items.length }} Gear Items)
+                        </span>
+                        <div class="space-y-1.5 max-h-28 overflow-y-auto">
+                            <div
+                                v-for="oItem in booking.order_items"
+                                :key="oItem.id"
+                                class="flex items-center justify-between text-[11px]"
+                            >
+                                <span class="font-medium text-foreground">
+                                    <strong class="text-[#ff545a]">{{ oItem.quantity }}x</strong> {{ oItem.title }}
+                                </span>
+                                <span class="text-muted-foreground font-semibold">
+                                    {{ formatCurrency(oItem.subtotal || (oItem.client_price * oItem.quantity)) }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        v-else-if="booking.catalog_item"
+                        class="flex items-center gap-3 rounded-lg border border-red-500/20 bg-red-500/5 p-2.5"
+                    >
+                        <img
+                            :src="booking.catalog_item.image_url || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80'"
+                            class="size-12 rounded-lg object-cover"
+                        />
+                        <div class="min-w-0 flex-1">
+                            <span class="text-[9px] font-bold uppercase tracking-wider text-[#ff545a] block">
+                                Marketplace Equipment
+                            </span>
+                            <h4 class="text-xs font-bold text-foreground truncate">
+                                {{ booking.catalog_item.title }}
+                            </h4>
+                            <span class="text-[11px] text-muted-foreground font-medium">
+                                Qty: {{ booking.item_quantity || 1 }} unit(s)
+                            </span>
+                        </div>
+                    </div>
+
                     <!-- Meta: Date, Location, Budget -->
                     <div class="grid grid-cols-2 gap-3 text-xs">
                         <div class="flex items-center gap-2 text-muted-foreground">
@@ -205,12 +255,12 @@ const formatDate = (dateStr?: string | null) => {
                         </div>
                         <div class="flex items-center gap-2 text-muted-foreground">
                             <MapPin class="size-3.5 text-primary shrink-0" />
-                            <span class="truncate">{{ booking.location || 'Location TBA' }}</span>
+                            <span class="truncate">{{ booking.venue_name ? `${booking.venue_name}, ${booking.location || ''}` : (booking.location || 'Location TBA') }}</span>
                         </div>
-                        <div class="col-span-2 flex items-center gap-2 text-foreground font-medium">
-                            <span class="text-muted-foreground">Proposed Budget:</span>
-                            <span class="font-bold text-emerald-600 dark:text-emerald-400">
-                                {{ formatCurrency(booking.budget) }}
+                        <div class="col-span-2 flex items-center justify-between border-t border-border/40 pt-2 font-medium">
+                            <span class="text-muted-foreground">Client Order Amount:</span>
+                            <span class="font-extrabold text-foreground text-sm">
+                                {{ formatCurrency(booking.total_client_amount || booking.budget) }}
                             </span>
                         </div>
                     </div>

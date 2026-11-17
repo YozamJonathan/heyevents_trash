@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/vue3';
 import LandingNavbar from '@/components/landing/LandingNavbar.vue';
 import LandingHero from '@/components/landing/LandingHero.vue';
 import LandingCategoryCards from '@/components/landing/LandingCategoryCards.vue';
+import LandingExplore from '@/components/landing/LandingExplore.vue';
 import LandingHowItWorks from '@/components/landing/LandingHowItWorks.vue';
 import LandingAbout from '@/components/landing/LandingAbout.vue';
 import LandingReviews from '@/components/landing/LandingReviews.vue';
@@ -10,6 +11,10 @@ import LandingFooter from '@/components/landing/LandingFooter.vue';
 import PwaBanner from '@/components/pwa/PwaBanner.vue';
 import WhatsAppCornerButton from '@/components/WhatsAppCornerButton.vue';
 import { useLanguage } from '@/composables/useLanguage';
+
+const props = defineProps<{
+    featuredItems?: any[];
+}>();
 
 const { t } = useLanguage();
 </script>
@@ -48,6 +53,9 @@ const { t } = useLanguage();
 
                 <!-- The 4 Core Standards (Social, Corporate, Entertainment, Community) -->
                 <LandingCategoryCards />
+
+                <!-- Verified Equipment, Tools & Packages Showcase -->
+                <LandingExplore :featured-items="props.featuredItems" />
 
                 <!-- Streamlined How It Works -->
                 <LandingHowItWorks />

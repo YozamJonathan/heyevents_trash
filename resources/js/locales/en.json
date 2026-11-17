@@ -31,7 +31,9 @@
         "userManagement": "User Management",
         "rolesPermissions": "Roles & Permissions",
         "platformConfig": "Platform Config",
-        "vendorApprovals": "Vendor Approvals (KYC)",
+        "vendorApprovals": "Vendor KYC Approvals",
+        "itemApprovals": "Equipment & Service Approvals",
+        "clientBookings": "Client Bookings & Orders",
         "eventModeration": "Event Moderation",
         "disputeDesk": "Dispute Desk",
         "businessAnalytics": "Business Analytics",
@@ -125,13 +127,61 @@
         }
     },
     "explore": {
-        "eyebrow": "Event directory",
-        "title": "Featured events",
-        "all": "All categories",
-        "social": "Social",
-        "corporate": "Corporate",
-        "entertainment": "Entertainment",
-        "community": "Community"
+        "eyebrow": "Verified Event Inventory & Services",
+        "title": "Every Tool, Equipment & Service for Your Event",
+        "subtitle": "High-quality tents, sound rigs, Chiavari chairs, decor, and catering inspected and guaranteed by HEY Events.",
+        "all": "All Gear & Services",
+        "rentals": "Tents & Chairs",
+        "sound": "Sound & DJ",
+        "venues": "Venues & Halls",
+        "catering": "Catering & Food",
+        "decor": "Decor & Styling",
+        "transport": "VIP Transport",
+        "bookNow": "Book Now",
+        "addToPackage": "+ Add to Event",
+        "inPackage": "Added to Event",
+        "viewAll": "Explore Complete Marketplace",
+        "guarantee": "HEY Events Delivery & Quality Guarantee",
+        "unitsAvailable": "units ready",
+        "basket": {
+            "title": "Your Event Package",
+            "selected": "item(s) in package",
+            "estimate": "Total Estimated Payout",
+            "proceed": "Proceed to Reserve Package",
+            "clear": "Clear All"
+        }
+    },
+    "bookingForm": {
+        "title": "Book Event & Equipment",
+        "subtitle": "Tell us about your event and select the services or gear you need. HEY Events guarantees delivery, physical inspection, and on-time setup.",
+        "backToDashboard": "Back to Dashboard",
+        "directCatalogBooking": "Direct Booking from Catalog",
+        "packageSummaryTitle": "Itemized Event Gear & Package",
+        "guaranteedFulfillment": "Guaranteed fulfillment & on-time setup by HEY Events",
+        "quantity": "Quantity:",
+        "totalEstimate": "Total Estimated Payout",
+        "eventOverview": "1. Event Overview & Delivery Details",
+        "eventOverviewDesc": "Where and when should HEY Events coordinate setup?",
+        "eventName": "Event Name",
+        "eventNamePlaceholder": "e.g. John & Sarah's Wedding Reception",
+        "clientPhone": "Contact Phone / WhatsApp",
+        "eventType": "Event Type",
+        "selectEventType": "Select event type...",
+        "eventDate": "Event Date",
+        "eventCity": "Region / City",
+        "venueName": "Venue / Specific Address",
+        "venuePlaceholder": "e.g. Serena Ballroom, Mbezi Beach, Private Residence",
+        "budget": "Estimated Budget (TZS)",
+        "servicesSection": "2. Additional Services & Add-ons",
+        "servicesSectionDesc": "Select any additional event categories needed.",
+        "notesSection": "3. Special Requests & Instructions",
+        "notesSectionDesc": "Power supply access, delivery schedule, setup guidelines, or VIP notes.",
+        "notesPlaceholder": "Tell us about delivery timing, power outlets, or special requirements...",
+        "submitButton": "Submit Booking to HEY Events",
+        "submitting": "Submitting Order...",
+        "successTitle": "Booking Request Received!",
+        "successMessage": "Thank you! HEY Events management has received your request. We will review gear availability, assign verified dispatch, and contact you via phone/WhatsApp.",
+        "viewMyBookings": "View My Bookings"
     },
     "listing": {
         "1": {
@@ -160,24 +210,26 @@
         }
     },
     "reviews": {
-        "eyebrow": "Trusted by organizers",
-        "title": "What hosts say about HEY Events."
+        "eyebrow": "Verified Host Experiences",
+        "title": "What hosts say about HEY Events.",
+        "subtitle": "How event planners, corporate organizers, and wedding hosts hire verified equipment and talent with zero broker markups.",
+        "verifiedBooking": "Verified Booking"
     },
     "review": {
         "1": {
-            "role": "Wedding coordinator",
-            "category": "Social & celebrations",
-            "content": "The seating planner and digital RSVP tracking saved us weeks of work. Guests checked in smoothly with QR codes."
+            "role": "Wedding & Celebrations Coordinator",
+            "category": "Tents, Decor & Sound Systems",
+            "content": "Booking high-peak tents, luxury chiavari chairs, and full sound equipment directly from verified owners saved our wedding budget over 30% compared to traditional middlemen brokers. Everything arrived and was set up 4 hours ahead of schedule."
         },
         "2": {
-            "role": "Festival director",
-            "category": "Entertainment & festivals",
-            "content": "Gate check-in stayed smooth even when the mobile network dropped. Offline syncing kept everyone moving."
+            "role": "Corporate Summit Director",
+            "category": "LED Screens, Audio & Backup Power",
+            "content": "For our 600-delegate Pan-African summit, securing line-array audio, synchronized LED screens, and heavy-duty backup generators through HEY Events gave us complete confidence. The verified KYC badges made procurement approval instant."
         },
         "3": {
-            "role": "Corporate vice president",
-            "category": "Corporate & business",
-            "content": "Session scheduling, instant badges, and sponsor tools helped make our summit our best-rated conference."
+            "role": "Festival & Entertainment Producer",
+            "category": "Stage Trussing, Lighting & Protocol Fleet",
+            "content": "Managing festival logistics across multiple stages used to mean juggling dozens of unreliable brokers. With HEY Events, hiring stage lighting, concert rigs, and VIP transport convoys was seamless, transparent, and delivered on time."
         }
     },
     "footer": {

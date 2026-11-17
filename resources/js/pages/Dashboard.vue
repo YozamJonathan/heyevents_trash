@@ -25,6 +25,7 @@ defineOptions({
 const {
     stats,
     booked_events = [],
+    all_bookings = [],
     pending_vendors = [],
     verified_vendors = [],
     rejected_vendors = [],
@@ -36,8 +37,10 @@ const {
         permissions_count: number;
         pending_kyc_count?: number;
         verified_vendors_count?: number;
+        bookings_count?: number;
     };
     booked_events?: any[];
+    all_bookings?: any[];
     pending_vendors?: any[];
     verified_vendors?: any[];
     rejected_vendors?: any[];
@@ -204,6 +207,7 @@ const roleBadgeColor = computed(() => {
             >
                 <AdminDashboard
                     :stats="stats"
+                    :all-bookings="all_bookings"
                     :pending-vendors="pending_vendors"
                     :verified-vendors="verified_vendors"
                     :rejected-vendors="rejected_vendors"

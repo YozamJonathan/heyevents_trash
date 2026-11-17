@@ -14,6 +14,9 @@ import {
     BookOpen,
     TrendingUp,
     CalendarPlus,
+    PackageCheck,
+    Truck,
+    ShieldCheck,
 } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
@@ -48,86 +51,56 @@ const mainNavItems = computed<NavItem[]>(() => {
         },
     ];
 
-    // System Administration Permissions (Only shown if user has admin permissions)
-    if (can('view users') || isSuperAdmin.value) {
+    // 1. Admin Moderation & Operations (Super Admin & Staff)
+    if (isSuperAdmin.value || can('verify service providers')) {
+        // A. Vendor KYC Registration Approvals
         items.push({
-            title: t('nav.userManagement'),
-            href: '/admin/users',
-            icon: Users,
-        });
-    }
-
-    if (can('manage roles and permissions') || isSuperAdmin.value) {
-        items.push({
-            title: t('nav.rolesPermissions'),
-            href: '#',
-            icon: Shield,
-        });
-    }
-
-    if (can('manage platform settings') || isSuperAdmin.value) {
-        items.push({
-            title: t('nav.platformConfig'),
-            href: '#',
-            icon: Sliders,
-        });
-    }
-
-    // Operational & Moderation Permissions
-    if (can('verify service providers') || isSuperAdmin.value) {
-        items.push({
-            title: t('nav.vendorApprovals'),
+            title: t('nav.vendorApprovals') || 'Vendor KYC Approvals',
             href: '/admin/vendor-approvals',
-            icon: CheckSquare,
+            icon: ShieldCheck,
         });
-    }
 
-    if (can('moderate events') || isSuperAdmin.value) {
+        // B. Equipment & Services Upload Approvals
         items.push({
-            title: t('nav.eventModeration'),
-            href: '#',
-            icon: Calendar,
+            title: t('nav.itemApprovals') || 'Equipment Upload Approvals',
+            href: '/admin/item-approvals',
+            icon: PackageCheck,
         });
-    }
 
-    if (can('resolve disputes') || isSuperAdmin.value) {
+        // C. Client Event Bookings & Fulfillment Desk
         items.push({
-            title: t('nav.disputeDesk'),
-            href: '#',
-            icon: Shield,
+            title: t('nav.clientBookings') || 'Client Bookings & Orders',
+            href: '/admin/bookings',
+            icon: Truck,
         });
+
+        // D. User Management
+        if (can('view users') || isSuperAdmin.value) {
+            items.push({
+                title: t('nav.userManagement'),
+                href: '/admin/users',
+                icon: Users,
+            });
+        }
     }
 
-    if (can('view platform analytics') || isSuperAdmin.value) {
-        items.push({
-            title: t('nav.businessAnalytics'),
-            href: '#',
-            icon: TrendingUp,
-        });
-    }
-
-    // Navigation based on active workspace mode:
-    // When in Vendor Workspace: show Provider operational links (Services, Schedule, Earnings)
-    // When in Client Mode (or normal client): show Client exploration links (Find Services, Book Event, My Bookings)
+    // 2. Service Provider Workspace (Posting tools & gear)
     if (isServiceProvider.value && !isClientMode.value) {
         items.push({
-            title: t('nav.myServices'),
-            href: '#',
+            title: 'My Equipment & Tools',
+            href: '/provider/services',
             icon: Briefcase,
         });
 
         items.push({
-            title: t('nav.providerSchedule'),
-            href: '#',
-            icon: Calendar,
+            title: t('nav.findServices'),
+            href: '/explore',
+            icon: Search,
         });
+    }
 
-        items.push({
-            title: t('nav.earningsPayouts'),
-            href: '#',
-            icon: DollarSign,
-        });
-    } else {
+    // 3. Client Navigation (Exploring & Booking)
+    if (!isSuperAdmin.value && (!isServiceProvider.value || isClientMode.value)) {
         items.push({
             title: t('nav.findServices'),
             href: '/explore',
